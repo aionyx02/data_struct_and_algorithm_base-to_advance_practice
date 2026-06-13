@@ -1,0 +1,13 @@
+12
+dequeue
+front
+back
+rotate
+empty
+enqueue 5
+rotate
+front
+dequeue
+empty
+clear
+size

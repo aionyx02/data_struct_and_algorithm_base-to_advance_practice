@@ -116,6 +116,9 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f21 F21-csr-sparse-matrix)
     add_catalog_test(catalog_lists_f22 F22-row-major-matrix)
     add_catalog_test(catalog_lists_f23 F23-row-major-tensor)
+    add_catalog_test(catalog_lists_f24 F24-two-stacks-one-array)
+    add_catalog_test(catalog_lists_f25 F25-circular-linked-queue)
+    add_catalog_test(catalog_lists_f26 F26-linked-deque)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -426,6 +429,48 @@ if(BUILD_TESTING AND WIN32)
         1
         "Verdict: WA"
     )
+    add_cli_judge_test(
+        judge_accepts_two_stacks_one_array
+        F24-two-stacks-one-array
+        tests/fixtures/submissions/two_stacks_one_array_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_fixed_stack_partition
+        F24-two-stacks-one-array
+        tests/fixtures/submissions/two_stacks_fixed_partition.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_circular_linked_queue
+        F25-circular-linked-queue
+        tests/fixtures/submissions/circular_linked_queue_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_queue_without_rotate
+        F25-circular-linked-queue
+        tests/fixtures/submissions/circular_linked_queue_no_rotate.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_linked_deque
+        F26-linked-deque
+        tests/fixtures/submissions/linked_deque_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_stale_deque_tail
+        F26-linked-deque
+        tests/fixtures/submissions/linked_deque_stale_tail.cpp
+        1
+        "Verdict: WA"
+    )
 
     add_cli_stress_test(
         stress_accepts_array_adt
@@ -719,6 +764,54 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_wrong_tensor_stride
         F23-row-major-tensor
         tests/fixtures/submissions/row_major_tensor_wrong_stride.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_two_stacks_one_array
+        F24-two-stacks-one-array
+        tests/fixtures/submissions/two_stacks_one_array_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_fixed_stack_partition
+        F24-two-stacks-one-array
+        tests/fixtures/submissions/two_stacks_fixed_partition.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_circular_linked_queue
+        F25-circular-linked-queue
+        tests/fixtures/submissions/circular_linked_queue_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_queue_without_rotate
+        F25-circular-linked-queue
+        tests/fixtures/submissions/circular_linked_queue_no_rotate.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_linked_deque
+        F26-linked-deque
+        tests/fixtures/submissions/linked_deque_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_stale_deque_tail
+        F26-linked-deque
+        tests/fixtures/submissions/linked_deque_stale_tail.cpp
         1
         "Verdict: WA"
         TRUE

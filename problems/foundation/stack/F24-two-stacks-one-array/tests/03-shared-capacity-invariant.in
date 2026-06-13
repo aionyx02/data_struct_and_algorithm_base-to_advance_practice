@@ -1,0 +1,13 @@
+5 12
+push_left 1
+push_left 2
+push_left 3
+push_left 4
+free
+top_left
+push_right 9
+free
+push_right 8
+pop_left
+push_right 8
+top_right

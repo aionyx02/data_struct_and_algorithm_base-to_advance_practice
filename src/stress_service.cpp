@@ -2317,6 +2317,255 @@ GeneratedCase generateRowMajorTensor(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateTwoStacksOneArray(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    const int capacity = randomInt(random, 3, 8);
+    if (operationCount < capacity + 4) {
+        throw std::runtime_error(
+            "F24-two-stacks-one-array operation_limit is too small"
+        );
+    }
+    std::vector<int> left;
+    std::vector<int> right;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << capacity << ' ' << operationCount << '\n';
+
+    for (int index = 0; index < capacity; ++index) {
+        const int value = randomValue(random);
+        input << "push_left " << value << '\n';
+        left.push_back(value);
+    }
+    input << "free\n";
+    appendLine(output, 0);
+    input << "pop_left\n";
+    appendLine(output, left.back());
+    left.pop_back();
+    const int replacement = randomValue(random);
+    input << "push_right " << replacement << '\n';
+    right.push_back(replacement);
+    input << "top_right\n";
+    appendLine(output, replacement);
+
+    for (int operation = capacity + 4;
+         operation < operationCount;
+         ++operation) {
+        switch (randomInt(random, 0, 9)) {
+            case 0:
+            case 1: {
+                const bool pushLeft = randomInt(random, 0, 1) == 0;
+                const int value = randomValue(random);
+                input << (pushLeft ? "push_left " : "push_right ")
+                      << value << '\n';
+                if (static_cast<int>(left.size() + right.size()) == capacity) {
+                    appendLine(output, "FULL");
+                } else if (pushLeft) {
+                    left.push_back(value);
+                } else {
+                    right.push_back(value);
+                }
+                break;
+            }
+            case 2:
+            case 3: {
+                const bool popLeft = randomInt(random, 0, 1) == 0;
+                input << (popLeft ? "pop_left\n" : "pop_right\n");
+                auto& stack = popLeft ? left : right;
+                if (stack.empty()) appendLine(output, "EMPTY");
+                else {
+                    appendLine(output, stack.back());
+                    stack.pop_back();
+                }
+                break;
+            }
+            case 4:
+            case 5: {
+                const bool topLeft = randomInt(random, 0, 1) == 0;
+                input << (topLeft ? "top_left\n" : "top_right\n");
+                const auto& stack = topLeft ? left : right;
+                if (stack.empty()) appendLine(output, "EMPTY");
+                else appendLine(output, stack.back());
+                break;
+            }
+            case 6:
+                input << "size_left\n";
+                appendLine(output, static_cast<int>(left.size()));
+                break;
+            case 7:
+                input << "size_right\n";
+                appendLine(output, static_cast<int>(right.size()));
+                break;
+            case 8:
+                input << "free\n";
+                appendLine(
+                    output,
+                    capacity -
+                        static_cast<int>(left.size() + right.size())
+                );
+                break;
+            default:
+                input << "clear\n";
+                left.clear();
+                right.clear();
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateCircularLinkedQueue(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 6) {
+        throw std::runtime_error(
+            "F25-circular-linked-queue operation_limit is too small"
+        );
+    }
+    std::deque<int> values;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << operationCount << '\n';
+
+    const int first = randomValue(random);
+    const int second = randomValue(random);
+    const int third = randomValue(random);
+    input << "enqueue " << first << "\nenqueue " << second << "\nenqueue "
+          << third << "\nrotate\nfront\nback\n";
+    values = {second, third, first};
+    appendLine(output, second);
+    appendLine(output, first);
+
+    for (int operation = 6; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 7)) {
+            case 0:
+            case 1: {
+                const int value = randomValue(random);
+                input << "enqueue " << value << '\n';
+                values.push_back(value);
+                break;
+            }
+            case 2:
+                input << "dequeue\n";
+                if (values.empty()) appendLine(output, "EMPTY");
+                else {
+                    appendLine(output, values.front());
+                    values.pop_front();
+                }
+                break;
+            case 3:
+                input << "front\n";
+                if (values.empty()) appendLine(output, "EMPTY");
+                else appendLine(output, values.front());
+                break;
+            case 4:
+                input << "back\n";
+                if (values.empty()) appendLine(output, "EMPTY");
+                else appendLine(output, values.back());
+                break;
+            case 5:
+                input << "rotate\n";
+                if (values.empty()) appendLine(output, "EMPTY");
+                else {
+                    values.push_back(values.front());
+                    values.pop_front();
+                }
+                break;
+            case 6:
+                if (randomInt(random, 0, 1) == 0) {
+                    input << "size\n";
+                    appendLine(output, static_cast<int>(values.size()));
+                } else {
+                    input << "empty\n";
+                    appendLine(output, values.empty() ? "true" : "false");
+                }
+                break;
+            default:
+                input << "clear\n";
+                values.clear();
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateLinkedDeque(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "F26-linked-deque operation_limit is too small"
+        );
+    }
+    std::deque<int> values;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << operationCount << '\n';
+
+    const int first = randomValue(random);
+    const int second = randomValue(random);
+    input << "push_back " << first << "\npop_front\npush_front " << second
+          << "\nback\n";
+    appendLine(output, first);
+    appendLine(output, second);
+    values.push_back(second);
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 8)) {
+            case 0:
+            case 1: {
+                const bool front = randomInt(random, 0, 1) == 0;
+                const int value = randomValue(random);
+                input << (front ? "push_front " : "push_back ") << value
+                      << '\n';
+                if (front) values.push_front(value);
+                else values.push_back(value);
+                break;
+            }
+            case 2:
+            case 3: {
+                const bool front = randomInt(random, 0, 1) == 0;
+                input << (front ? "pop_front\n" : "pop_back\n");
+                if (values.empty()) appendLine(output, "EMPTY");
+                else if (front) {
+                    appendLine(output, values.front());
+                    values.pop_front();
+                } else {
+                    appendLine(output, values.back());
+                    values.pop_back();
+                }
+                break;
+            }
+            case 4:
+                input << "front\n";
+                if (values.empty()) appendLine(output, "EMPTY");
+                else appendLine(output, values.front());
+                break;
+            case 5:
+                input << "back\n";
+                if (values.empty()) appendLine(output, "EMPTY");
+                else appendLine(output, values.back());
+                break;
+            case 6:
+                input << "size\n";
+                appendLine(output, static_cast<int>(values.size()));
+                break;
+            case 7:
+                input << "empty\n";
+                appendLine(output, values.empty() ? "true" : "false");
+                break;
+            default:
+                input << "clear\n";
+                values.clear();
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 GeneratedCase generateCase(
     const std::string& problemId,
     std::uint64_t seed,
@@ -2391,6 +2640,15 @@ GeneratedCase generateCase(
     }
     if (problemId == "F23-row-major-tensor") {
         return generateRowMajorTensor(random, operationCount);
+    }
+    if (problemId == "F24-two-stacks-one-array") {
+        return generateTwoStacksOneArray(random, operationCount);
+    }
+    if (problemId == "F25-circular-linked-queue") {
+        return generateCircularLinkedQueue(random, operationCount);
+    }
+    if (problemId == "F26-linked-deque") {
+        return generateLinkedDeque(random, operationCount);
     }
     throw std::runtime_error(
         "stress generator is not available for problem: " + problemId

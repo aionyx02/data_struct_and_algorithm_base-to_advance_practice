@@ -1,0 +1,14 @@
+13
+enqueue 1
+enqueue 2
+enqueue 3
+front
+back
+rotate
+front
+back
+dequeue
+size
+rotate
+front
+back

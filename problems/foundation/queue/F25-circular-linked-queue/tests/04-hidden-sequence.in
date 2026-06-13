@@ -1,0 +1,17 @@
+16
+enqueue -1
+enqueue -2
+rotate
+enqueue -3
+front
+back
+rotate
+dequeue
+front
+dequeue
+dequeue
+empty
+enqueue 7
+back
+clear
+empty

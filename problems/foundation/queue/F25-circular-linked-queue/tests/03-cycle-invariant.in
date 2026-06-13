@@ -1,0 +1,15 @@
+14
+enqueue 10
+enqueue 20
+enqueue 30
+enqueue 40
+rotate
+rotate
+front
+back
+dequeue
+dequeue
+front
+back
+size
+empty

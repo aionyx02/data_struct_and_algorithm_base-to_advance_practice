@@ -1,0 +1,11 @@
+1 10
+pop_left
+top_right
+push_left 5
+push_right 6
+free
+pop_left
+push_right 7
+top_right
+clear
+free

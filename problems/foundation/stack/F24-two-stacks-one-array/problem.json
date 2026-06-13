@@ -1,0 +1,16 @@
+{
+  "id": "F24-two-stacks-one-array",
+  "title": "Two Stacks In One Array",
+  "stage": "F",
+  "difficulty": "D2",
+  "judge_mode": "stdio",
+  "time_limit_ms": 300,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(1) per operation",
+  "expected_space": "O(capacity)",
+  "forbidden_symbols": ["std::stack", "std::vector", "std::deque", "std::array"],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}

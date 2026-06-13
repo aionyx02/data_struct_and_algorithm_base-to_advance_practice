@@ -1,0 +1,17 @@
+16
+push_front 0
+push_back 1
+push_front -1
+pop_back
+back
+pop_front
+front
+clear
+empty
+push_back 8
+front
+back
+pop_front
+push_front 9
+size
+pop_back

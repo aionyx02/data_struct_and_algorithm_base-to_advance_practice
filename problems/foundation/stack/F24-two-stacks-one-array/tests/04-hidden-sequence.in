@@ -1,0 +1,15 @@
+4 14
+push_right 10
+push_right 20
+push_right 30
+size_right
+free
+push_left 1
+push_left 2
+top_left
+pop_right
+push_left 2
+top_left
+pop_left
+pop_left
+size_right
