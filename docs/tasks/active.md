@@ -11,7 +11,7 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.009 - Complete BST Foundations
+### TASK.CURRICULUM.010 - Complete Forest And Union-Find Foundations
 
 - Status: todo
 - Priority: P0
@@ -20,13 +20,14 @@ owner: project
   - `docs/learning-roadmap.md`
   - `docs/judge-requirements.md`
 - Acceptance criteria:
-  - [ ] Add six BST exercises to complete the 14-problem CH5-1 allocation.
-  - [ ] Cover insert/search, deletion cases, predecessor/successor, range views, and validation.
-  - [ ] Make parent links and replacement-node transitions observable.
+  - [ ] Add six exercises to complete the CH5-2 allocation.
+  - [ ] Cover parent-array and child-sibling forest representations.
+  - [ ] Cover basic union, weighting, and path compression.
+  - [ ] Make root, depth, component size, and parent transitions observable.
   - [ ] Preserve explicit complexity and storage contracts.
 - Validation:
   - [ ] Known correct submissions pass deterministic and seeded stress tests.
-  - [ ] Known duplicate, deletion, and ordering mistakes receive non-AC verdicts.
+  - [ ] Known stale-root, reversed-weight, and missing-compression mistakes receive non-AC verdicts.
 
 ## Strategy
 

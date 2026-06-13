@@ -203,6 +203,23 @@ CH5-1 的第二批讓 traversal 與 heap shape transition 可被直接觀察：
 固定 stress 前綴會區分 DFS 與 BFS、Floyd build 與 repeated push，以及移除後有無
 sift-down。這些走訪只用於觀察樹 ADT，不擴張成一般演算法章節。
 
+### Foundation 09：Binary Search Tree Foundations
+
+CH5-1 的最後六題完成 BST 的查找、更新與結構驗證：
+
+| ID | 題目 | 難度 | 核心能力 |
+|---|---|---|---|
+| `F35-bst-insert-search` | Binary Search Tree Insert And Search | D2 | unique keys、parent links、search path |
+| `F36-bst-deletion-cases` | Binary Search Tree Deletion Cases | D2 | leaf、one-child、two-child deletion |
+| `F37-bst-predecessor-successor` | BST Predecessor And Successor | D2 | subtree extrema、ancestor climb |
+| `F38-bst-range-view` | Binary Search Tree Range View | D2 | inclusive range、lower/upper bound |
+| `F39-bst-structural-validation` | Binary Search Tree Structural Validation | D3 | global key bounds、reachability、backlinks |
+| `F40-bst-replacement-trace` | BST Replacement Node Trace | D3 | physical successor transplant、node identity |
+
+固定 stress 前綴涵蓋 duplicate overwrite、predecessor 取代 successor、只看 immediate
+parent 的鄰居查詢、排除 range endpoint、只驗證 local ordering，以及只複製 successor
+key 的刪除。至此 CH5-1 規劃的 14 題全部完成。
+
 ### 暫緩的教材內容
 
 - CH1 Selection Sort、Binary Search 演算法題。

@@ -17,9 +17,9 @@ owner: project
 
 ## Current Focus
 
-- Active priority: complete the BST foundation family.
-- Current phase: final CH5-1 foundation slice.
-- Current owner / handoff state: `TASK.CURRICULUM.009` is ready for `shawn`.
+- Active priority: complete the forest and Union-Find foundation family.
+- Current phase: CH5-2 representation and disjoint-set slice.
+- Current owner / handoff state: `TASK.CURRICULUM.010` is ready for `shawn`.
 
 ## Important Constraints
 
@@ -30,15 +30,16 @@ owner: project
 
 ## Next Step
 
-- Add six BST structure exercises covering insert/search, deletion cases,
-  predecessor/successor, range views, and structural validation.
+- Add six forest and Union-Find exercises covering parent arrays,
+  child-sibling links, forest views, weighting, and path compression.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-13.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 159 Judge integration tests passed. F31 through F34 each passed
+- Result: all 189 Judge integration tests passed. F35 through F40 each passed
   10,000 differential operations with seed `20260613`.
-- Known wrong traversal order, DFS-as-BFS, repeated-push construction, and
-  missing removal sift-down mistakes produced reproducible `WA` verdicts.
+- Known duplicate overwrite, predecessor replacement, parent-only neighbor,
+  exclusive range, local-only validation, and key-copy replacement mistakes
+  produced reproducible `WA` verdicts.
 - Known failing checks: none.

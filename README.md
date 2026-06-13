@@ -117,6 +117,17 @@ ctest --preset dev
 | `F33-bottom-up-min-heap-build` | Bottom-Up Binary Min Heap Build | D2 |
 | `F34-min-heap-removal-trace` | Binary Min Heap Removal Trace | D2 |
 
+第九組 Binary Search Tree Foundations：
+
+| ID | 題目 | 難度 |
+|---|---|---|
+| `F35-bst-insert-search` | Binary Search Tree Insert And Search | D2 |
+| `F36-bst-deletion-cases` | Binary Search Tree Deletion Cases | D2 |
+| `F37-bst-predecessor-successor` | BST Predecessor And Successor | D2 |
+| `F38-bst-range-view` | Binary Search Tree Range View | D2 |
+| `F39-bst-structural-validation` | Binary Search Tree Structural Validation | D3 |
+| `F40-bst-replacement-trace` | BST Replacement Node Trace | D3 |
+
 CLI 範例：
 
 ```powershell
