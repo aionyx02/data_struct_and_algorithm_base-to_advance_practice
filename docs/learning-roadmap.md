@@ -189,6 +189,20 @@ CH5-1 的第一批先建立四種核心表示法：
 Generator 固定包含零基索引、parent backlink、非 ID 順序的 inorder threads，以及
 heap key 增值後下沉，確保表示法錯誤不依賴隨機運氣。
 
+### Foundation 08：Tree Traversal And Heap Views
+
+CH5-1 的第二批讓 traversal 與 heap shape transition 可被直接觀察：
+
+| ID | 題目 | 難度 | 核心能力 |
+|---|---|---|---|
+| `F31-binary-tree-traversal-views` | Binary Tree Traversal Views | D2 | preorder/inorder/postorder visit timing |
+| `F32-level-order-tree-view` | Level-Order Binary Tree View | D2 | manual queue、depth、width、queue peak |
+| `F33-bottom-up-min-heap-build` | Bottom-Up Binary Min Heap Build | D2 | Floyd `O(n)` construction、exact array shape |
+| `F34-min-heap-removal-trace` | Binary Min Heap Removal Trace | D2 | replacement root、sift-down transitions |
+
+固定 stress 前綴會區分 DFS 與 BFS、Floyd build 與 repeated push，以及移除後有無
+sift-down。這些走訪只用於觀察樹 ADT，不擴張成一般演算法章節。
+
 ### 暫緩的教材內容
 
 - CH1 Selection Sort、Binary Search 演算法題。

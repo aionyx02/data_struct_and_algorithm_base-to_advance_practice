@@ -108,6 +108,15 @@ ctest --preset dev
 | `F29-inorder-threaded-tree` | Inorder Threaded Binary Tree | D3 |
 | `F30-binary-min-heap` | Fixed Capacity Binary Min Heap | D2 |
 
+第八組 Tree Traversal And Heap Views：
+
+| ID | 題目 | 難度 |
+|---|---|---|
+| `F31-binary-tree-traversal-views` | Binary Tree Traversal Views | D2 |
+| `F32-level-order-tree-view` | Level-Order Binary Tree View | D2 |
+| `F33-bottom-up-min-heap-build` | Bottom-Up Binary Min Heap Build | D2 |
+| `F34-min-heap-removal-trace` | Binary Min Heap Removal Trace | D2 |
+
 CLI 範例：
 
 ```powershell

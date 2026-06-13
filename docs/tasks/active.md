@@ -11,7 +11,7 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.008 - Expand Tree Traversal And Heap Views
+### TASK.CURRICULUM.009 - Complete BST Foundations
 
 - Status: todo
 - Priority: P0
@@ -20,13 +20,13 @@ owner: project
   - `docs/learning-roadmap.md`
   - `docs/judge-requirements.md`
 - Acceptance criteria:
-  - [ ] Add traversal views, level-order representation, and heap construction/removal traces.
-  - [ ] Keep traversal work scoped to core tree ADT observation.
-  - [ ] Make visit order, queue state, and heap shape transitions observable.
+  - [ ] Add six BST exercises to complete the 14-problem CH5-1 allocation.
+  - [ ] Cover insert/search, deletion cases, predecessor/successor, range views, and validation.
+  - [ ] Make parent links and replacement-node transitions observable.
   - [ ] Preserve explicit complexity and storage contracts.
 - Validation:
   - [ ] Known correct submissions pass deterministic and seeded stress tests.
-  - [ ] Known visit-order and heap-transition mistakes receive non-AC verdicts.
+  - [ ] Known duplicate, deletion, and ordering mistakes receive non-AC verdicts.
 
 ## Strategy
 

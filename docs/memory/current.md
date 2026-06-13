@@ -17,9 +17,9 @@ owner: project
 
 ## Current Focus
 
-- Active priority: expand tree traversal and heap representations.
-- Current phase: second CH5-1 foundation slice.
-- Current owner / handoff state: `TASK.CURRICULUM.008` is ready for `shawn`.
+- Active priority: complete the BST foundation family.
+- Current phase: final CH5-1 foundation slice.
+- Current owner / handoff state: `TASK.CURRICULUM.009` is ready for `shawn`.
 
 ## Important Constraints
 
@@ -30,15 +30,15 @@ owner: project
 
 ## Next Step
 
-- Add traversal views, level-order representation, heap construction, and
-  heap removal traces while keeping the curriculum data-structure-only.
+- Add six BST structure exercises covering insert/search, deletion cases,
+  predecessor/successor, range views, and structural validation.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-13.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 139 Judge integration tests passed. F27 through F30 each passed
+- Result: all 159 Judge integration tests passed. F31 through F34 each passed
   10,000 differential operations with seed `20260613`.
-- Known one-based indexing, missing parent links, ID-neighbor threads, and
-  missing heap sift-down mistakes produced reproducible `WA` verdicts.
+- Known wrong traversal order, DFS-as-BFS, repeated-push construction, and
+  missing removal sift-down mistakes produced reproducible `WA` verdicts.
 - Known failing checks: none.
