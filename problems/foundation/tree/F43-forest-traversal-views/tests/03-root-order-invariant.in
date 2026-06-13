@@ -1,0 +1,11 @@
+7 9
+-1 -1 0 0 1 4 1
+preorder
+postorder
+levelorder
+roots
+tree_preorder 1
+tree_postorder 1
+depth 5
+height 1
+height 0

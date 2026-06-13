@@ -1,0 +1,14 @@
+7 12
+0 0 1 2 3 4 5
+parent 6
+find 6
+parent 6
+parent 5
+parent 4
+snapshot
+component_size 3
+snapshot
+connected 2 6
+snapshot
+components
+unite 1 6

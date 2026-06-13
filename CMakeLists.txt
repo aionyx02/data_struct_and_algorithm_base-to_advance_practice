@@ -133,6 +133,12 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f38 F38-bst-range-view)
     add_catalog_test(catalog_lists_f39 F39-bst-structural-validation)
     add_catalog_test(catalog_lists_f40 F40-bst-replacement-trace)
+    add_catalog_test(catalog_lists_f41 F41-parent-array-forest)
+    add_catalog_test(catalog_lists_f42 F42-child-sibling-forest)
+    add_catalog_test(catalog_lists_f43 F43-forest-traversal-views)
+    add_catalog_test(catalog_lists_f44 F44-quick-union-disjoint-set)
+    add_catalog_test(catalog_lists_f45 F45-weighted-union-disjoint-set)
+    add_catalog_test(catalog_lists_f46 F46-path-compression-trace)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -678,6 +684,90 @@ if(BUILD_TESTING AND WIN32)
         judge_rejects_bst_key_copy_replacement
         F40-bst-replacement-trace
         tests/fixtures/submissions/bst_replacement_trace_copies_key.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_parent_array_forest
+        F41-parent-array-forest
+        tests/fixtures/submissions/parent_array_forest_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_one_hop_forest_root
+        F41-parent-array-forest
+        tests/fixtures/submissions/parent_array_forest_one_hop_root.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_child_sibling_forest
+        F42-child-sibling-forest
+        tests/fixtures/submissions/child_sibling_forest_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_first_child_only_forest
+        F42-child-sibling-forest
+        tests/fixtures/submissions/child_sibling_forest_first_child_only.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_forest_traversal_views
+        F43-forest-traversal-views
+        tests/fixtures/submissions/forest_traversal_views_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_first_root_only_traversal
+        F43-forest-traversal-views
+        tests/fixtures/submissions/forest_traversal_views_first_root_only.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_quick_union_disjoint_set
+        F44-quick-union-disjoint-set
+        tests/fixtures/submissions/quick_union_disjoint_set_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_non_root_union_attach
+        F44-quick-union-disjoint-set
+        tests/fixtures/submissions/quick_union_non_root_attach.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_weighted_union_disjoint_set
+        F45-weighted-union-disjoint-set
+        tests/fixtures/submissions/weighted_union_disjoint_set_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_reversed_union_weight
+        F45-weighted-union-disjoint-set
+        tests/fixtures/submissions/weighted_union_reversed_size.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_path_compression_trace
+        F46-path-compression-trace
+        tests/fixtures/submissions/path_compression_trace_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_missing_path_compression
+        F46-path-compression-trace
+        tests/fixtures/submissions/path_compression_trace_no_compression.cpp
         1
         "Verdict: WA"
     )
@@ -1246,6 +1336,102 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_bst_key_copy_replacement
         F40-bst-replacement-trace
         tests/fixtures/submissions/bst_replacement_trace_copies_key.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_parent_array_forest
+        F41-parent-array-forest
+        tests/fixtures/submissions/parent_array_forest_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_one_hop_forest_root
+        F41-parent-array-forest
+        tests/fixtures/submissions/parent_array_forest_one_hop_root.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_child_sibling_forest
+        F42-child-sibling-forest
+        tests/fixtures/submissions/child_sibling_forest_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_first_child_only_forest
+        F42-child-sibling-forest
+        tests/fixtures/submissions/child_sibling_forest_first_child_only.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_forest_traversal_views
+        F43-forest-traversal-views
+        tests/fixtures/submissions/forest_traversal_views_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_first_root_only_traversal
+        F43-forest-traversal-views
+        tests/fixtures/submissions/forest_traversal_views_first_root_only.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_quick_union_disjoint_set
+        F44-quick-union-disjoint-set
+        tests/fixtures/submissions/quick_union_disjoint_set_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_non_root_union_attach
+        F44-quick-union-disjoint-set
+        tests/fixtures/submissions/quick_union_non_root_attach.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_weighted_union_disjoint_set
+        F45-weighted-union-disjoint-set
+        tests/fixtures/submissions/weighted_union_disjoint_set_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_reversed_union_weight
+        F45-weighted-union-disjoint-set
+        tests/fixtures/submissions/weighted_union_reversed_size.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_path_compression_trace
+        F46-path-compression-trace
+        tests/fixtures/submissions/path_compression_trace_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_missing_path_compression
+        F46-path-compression-trace
+        tests/fixtures/submissions/path_compression_trace_no_compression.cpp
         1
         "Verdict: WA"
         TRUE

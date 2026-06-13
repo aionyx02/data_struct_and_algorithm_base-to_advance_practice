@@ -1,0 +1,14 @@
+7 13
+unite 0 1
+unite 2 3
+unite 4 5
+unite 1 3
+unite 3 5
+snapshot
+parent 5
+parent 4
+find 5
+component_size 4
+components
+connected 1 5
+parent 3

@@ -1,0 +1,10 @@
+1 9
+components
+snapshot
+find 0
+parent 0
+component_size 0
+connected 0 0
+unite 0 0
+find 1
+unite -1 0

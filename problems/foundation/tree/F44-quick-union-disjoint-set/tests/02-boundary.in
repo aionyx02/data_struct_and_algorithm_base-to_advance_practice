@@ -1,0 +1,8 @@
+0 7
+components
+snapshot
+find 0
+parent -1
+connected 0 0
+unite 0 1
+component_size 2

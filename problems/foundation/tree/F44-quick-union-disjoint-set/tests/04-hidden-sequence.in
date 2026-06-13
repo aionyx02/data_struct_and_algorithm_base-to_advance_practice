@@ -1,0 +1,12 @@
+5 11
+unite 4 3
+unite 3 2
+unite 2 1
+find 1
+snapshot
+parent 3
+component_size 4
+unite 0 1
+find 4
+components
+snapshot

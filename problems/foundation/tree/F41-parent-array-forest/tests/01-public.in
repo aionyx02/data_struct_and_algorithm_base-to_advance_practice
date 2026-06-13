@@ -1,0 +1,14 @@
+7 12
+-1 0 0 1 1 -1 5
+roots
+root 4
+depth 4
+parent 4
+children 0
+children 1
+children 5
+parent 0
+size
+root 6
+depth 6
+children 4
