@@ -120,6 +120,21 @@ Topological Sort、Critical Path 等演算法內容。
 每題都有 seeded differential stress tests。F08 與 F10 的 generator 包含固定 invariant
 前綴，確保 stale tail 與遺漏環狀旋轉的錯誤不依賴隨機運氣。
 
+### Foundation 03：List Transformations And Node Management
+
+第三章將基本 linked ADT 擴充到 ownership transfer 與儲存管理：
+
+| ID | 題目 | 難度 | 核心能力 |
+|---|---|---|---|
+| `F11-singly-list-reverse` | Reverse A Singly Linked List | D2 | `O(1)` 額外空間反轉與 tail 更新 |
+| `F12-singly-list-concatenate` | Concatenate Singly Linked Lists | D2 | `O(1)` ownership transfer |
+| `F13-singly-list-split` | Split Singly Linked Lists | D2 | suffix detach 與兩組 head/tail |
+| `F14-doubly-list-splice` | Splice Doubly Linked Lists | D3 | 範圍 relink 與 backlink consistency |
+| `F15-fixed-node-pool-list` | Fixed Node Pool List | D3 | free list 與 erased-node reuse |
+
+Generator 對 concat、splice 與 node pool 加入固定前綴，讓 source reuse、逆向刪除與
+容量填滿後重用都成為每個 seed 必測的 invariant。
+
 ### 暫緩的教材內容
 
 - CH1 Selection Sort、Binary Search 演算法題。

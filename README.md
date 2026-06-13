@@ -63,6 +63,16 @@ ctest --preset dev
 | `F09-doubly-linked-list` | Doubly Linked List | D2 |
 | `F10-circular-linked-list` | Circular Singly Linked List | D2 |
 
+第三章 List Transformations And Node Management：
+
+| ID | 題目 | 難度 |
+|---|---|---|
+| `F11-singly-list-reverse` | Reverse A Singly Linked List | D2 |
+| `F12-singly-list-concatenate` | Concatenate Singly Linked Lists | D2 |
+| `F13-singly-list-split` | Split Singly Linked Lists | D2 |
+| `F14-doubly-list-splice` | Splice Doubly Linked Lists | D3 |
+| `F15-fixed-node-pool-list` | Fixed Node Pool List | D3 |
+
 CLI 範例：
 
 ```powershell

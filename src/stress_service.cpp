@@ -855,6 +855,574 @@ GeneratedCase generateCircularLinkedList(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateSinglyListReverse(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    std::vector<int> values;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << operationCount << '\n';
+
+    for (int operation = 0; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 7)) {
+            case 0: {
+                const int value = randomValue(random);
+                input << "push_front " << value << '\n';
+                values.insert(values.begin(), value);
+                break;
+            }
+            case 1: {
+                const int value = randomValue(random);
+                input << "push_back " << value << '\n';
+                values.push_back(value);
+                break;
+            }
+            case 2:
+                input << "reverse\n";
+                std::reverse(values.begin(), values.end());
+                break;
+            case 3: {
+                const int index =
+                    randomInt(random, -2, static_cast<int>(values.size()) + 1);
+                input << "get " << index << '\n';
+                if (index < 0 || index >= static_cast<int>(values.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    appendLine(output, values[static_cast<std::size_t>(index)]);
+                }
+                break;
+            }
+            case 4:
+                input << "front\n";
+                if (values.empty()) {
+                    appendLine(output, "EMPTY");
+                } else {
+                    appendLine(output, values.front());
+                }
+                break;
+            case 5:
+                input << "back\n";
+                if (values.empty()) {
+                    appendLine(output, "EMPTY");
+                } else {
+                    appendLine(output, values.back());
+                }
+                break;
+            case 6:
+                input << "size\n";
+                appendLine(output, static_cast<int>(values.size()));
+                break;
+            default:
+                if (randomInt(random, 0, 1) == 0) {
+                    input << "empty\n";
+                    appendLine(output, values.empty() ? "true" : "false");
+                } else {
+                    input << "clear\n";
+                    values.clear();
+                }
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+void concatenateOperation(
+    std::mt19937_64& random,
+    std::deque<int>& a,
+    std::deque<int>& b,
+    std::ostringstream& input,
+    std::ostringstream& output
+) {
+    switch (randomInt(random, 0, 15)) {
+        case 0: {
+            const int value = randomValue(random);
+            input << "push_a " << value << '\n';
+            a.push_back(value);
+            break;
+        }
+        case 1: {
+            const int value = randomValue(random);
+            input << "push_b " << value << '\n';
+            b.push_back(value);
+            break;
+        }
+        case 2:
+            input << "concat_ab\n";
+            a.insert(a.end(), b.begin(), b.end());
+            b.clear();
+            break;
+        case 3:
+            input << "concat_ba\n";
+            b.insert(b.end(), a.begin(), a.end());
+            a.clear();
+            break;
+        case 4:
+            input << "pop_a\n";
+            if (a.empty()) {
+                appendLine(output, "EMPTY");
+            } else {
+                appendLine(output, a.front());
+                a.pop_front();
+            }
+            break;
+        case 5:
+            input << "pop_b\n";
+            if (b.empty()) {
+                appendLine(output, "EMPTY");
+            } else {
+                appendLine(output, b.front());
+                b.pop_front();
+            }
+            break;
+        case 6:
+            input << "front_a\n";
+            if (a.empty()) {
+                appendLine(output, "EMPTY");
+            } else {
+                appendLine(output, a.front());
+            }
+            break;
+        case 7:
+            input << "back_a\n";
+            if (a.empty()) {
+                appendLine(output, "EMPTY");
+            } else {
+                appendLine(output, a.back());
+            }
+            break;
+        case 8:
+            input << "front_b\n";
+            if (b.empty()) {
+                appendLine(output, "EMPTY");
+            } else {
+                appendLine(output, b.front());
+            }
+            break;
+        case 9:
+            input << "back_b\n";
+            if (b.empty()) {
+                appendLine(output, "EMPTY");
+            } else {
+                appendLine(output, b.back());
+            }
+            break;
+        case 10:
+            input << "size_a\n";
+            appendLine(output, static_cast<int>(a.size()));
+            break;
+        case 11:
+            input << "size_b\n";
+            appendLine(output, static_cast<int>(b.size()));
+            break;
+        case 12:
+            input << "empty_a\n";
+            appendLine(output, a.empty() ? "true" : "false");
+            break;
+        case 13:
+            input << "empty_b\n";
+            appendLine(output, b.empty() ? "true" : "false");
+            break;
+        case 14:
+            input << "clear_a\n";
+            a.clear();
+            break;
+        default:
+            input << "clear_b\n";
+            b.clear();
+            break;
+    }
+}
+
+GeneratedCase generateSinglyListConcatenate(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 8) {
+        throw std::runtime_error(
+            "F12-singly-list-concatenate requires operation_limit of at least 8"
+        );
+    }
+    std::deque<int> a;
+    std::deque<int> b;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << operationCount << '\n';
+
+    const int first = randomValue(random);
+    const int second = randomValue(random);
+    input << "push_a " << first << '\n';
+    a.push_back(first);
+    input << "push_b " << second << '\n';
+    b.push_back(second);
+    input << "concat_ab\n";
+    a.insert(a.end(), b.begin(), b.end());
+    b.clear();
+    const int third = randomValue(random);
+    input << "push_b " << third << '\n';
+    b.push_back(third);
+    input << "back_a\n";
+    appendLine(output, a.back());
+    input << "empty_b\n";
+    appendLine(output, "false");
+    input << "concat_ba\n";
+    b.insert(b.end(), a.begin(), a.end());
+    a.clear();
+    input << "empty_a\n";
+    appendLine(output, "true");
+
+    for (int operation = 8; operation < operationCount; ++operation) {
+        concatenateOperation(random, a, b, input, output);
+    }
+    return {input.str(), output.str()};
+}
+
+void splitOperation(
+    std::mt19937_64& random,
+    std::vector<int>& a,
+    std::vector<int>& b,
+    std::ostringstream& input,
+    std::ostringstream& output
+) {
+    switch (randomInt(random, 0, 11)) {
+        case 0: {
+            const int value = randomValue(random);
+            input << "push_a " << value << '\n';
+            a.push_back(value);
+            break;
+        }
+        case 1: {
+            const int value = randomValue(random);
+            input << "push_b " << value << '\n';
+            b.push_back(value);
+            break;
+        }
+        case 2:
+        case 3: {
+            const bool fromA = randomInt(random, 0, 1) == 0;
+            std::vector<int>& source = fromA ? a : b;
+            std::vector<int>& target = fromA ? b : a;
+            const int index =
+                randomInt(random, -2, static_cast<int>(source.size()) + 2);
+            input << (fromA ? "split_a " : "split_b ") << index << '\n';
+            if (index < 0 || index > static_cast<int>(source.size())) {
+                appendLine(output, "OUT_OF_RANGE");
+            } else if (!target.empty()) {
+                appendLine(output, "TARGET_NOT_EMPTY");
+            } else {
+                target.assign(source.begin() + index, source.end());
+                source.erase(source.begin() + index, source.end());
+            }
+            break;
+        }
+        case 4:
+            input << "front_a\n";
+            if (a.empty()) appendLine(output, "EMPTY");
+            else appendLine(output, a.front());
+            break;
+        case 5:
+            input << "back_a\n";
+            if (a.empty()) appendLine(output, "EMPTY");
+            else appendLine(output, a.back());
+            break;
+        case 6:
+            input << "front_b\n";
+            if (b.empty()) appendLine(output, "EMPTY");
+            else appendLine(output, b.front());
+            break;
+        case 7:
+            input << "back_b\n";
+            if (b.empty()) appendLine(output, "EMPTY");
+            else appendLine(output, b.back());
+            break;
+        case 8:
+            input << "size_a\n";
+            appendLine(output, static_cast<int>(a.size()));
+            break;
+        case 9:
+            input << "size_b\n";
+            appendLine(output, static_cast<int>(b.size()));
+            break;
+        case 10:
+            if (randomInt(random, 0, 1) == 0) {
+                input << "empty_a\n";
+                appendLine(output, a.empty() ? "true" : "false");
+            } else {
+                input << "clear_a\n";
+                a.clear();
+            }
+            break;
+        default:
+            if (randomInt(random, 0, 1) == 0) {
+                input << "empty_b\n";
+                appendLine(output, b.empty() ? "true" : "false");
+            } else {
+                input << "clear_b\n";
+                b.clear();
+            }
+            break;
+    }
+}
+
+GeneratedCase generateSinglyListSplit(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    std::vector<int> a;
+    std::vector<int> b;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << operationCount << '\n';
+    for (int operation = 0; operation < operationCount; ++operation) {
+        splitOperation(random, a, b, input, output);
+    }
+    return {input.str(), output.str()};
+}
+
+void spliceOperation(
+    std::mt19937_64& random,
+    std::vector<int>& a,
+    std::vector<int>& b,
+    std::ostringstream& input,
+    std::ostringstream& output
+) {
+    switch (randomInt(random, 0, 13)) {
+        case 0:
+        case 1:
+        case 2:
+        case 3: {
+            const bool listA = randomInt(random, 0, 1) == 0;
+            const bool front = randomInt(random, 0, 1) == 0;
+            const int value = randomValue(random);
+            input << (front ? "push_front_" : "push_back_")
+                  << (listA ? 'a' : 'b') << ' ' << value << '\n';
+            std::vector<int>& list = listA ? a : b;
+            if (front) list.insert(list.begin(), value);
+            else list.push_back(value);
+            break;
+        }
+        case 4:
+        case 5: {
+            const bool toA = randomInt(random, 0, 1) == 0;
+            std::vector<int>& destination = toA ? a : b;
+            std::vector<int>& source = toA ? b : a;
+            const int index =
+                randomInt(random, -2, static_cast<int>(destination.size()) + 2);
+            input << (toA ? "splice_b_to_a " : "splice_a_to_b ")
+                  << index << '\n';
+            if (index < 0 || index > static_cast<int>(destination.size())) {
+                appendLine(output, "OUT_OF_RANGE");
+            } else {
+                destination.insert(
+                    destination.begin() + index,
+                    source.begin(),
+                    source.end()
+                );
+                source.clear();
+            }
+            break;
+        }
+        case 6:
+        case 7:
+        case 8:
+        case 9: {
+            const bool listA = randomInt(random, 0, 1) == 0;
+            const bool front = randomInt(random, 0, 1) == 0;
+            input << (front ? "pop_front_" : "pop_back_")
+                  << (listA ? 'a' : 'b') << '\n';
+            std::vector<int>& list = listA ? a : b;
+            if (list.empty()) {
+                appendLine(output, "EMPTY");
+            } else if (front) {
+                appendLine(output, list.front());
+                list.erase(list.begin());
+            } else {
+                appendLine(output, list.back());
+                list.pop_back();
+            }
+            break;
+        }
+        case 10:
+        case 11: {
+            const bool listA = randomInt(random, 0, 1) == 0;
+            std::vector<int>& list = listA ? a : b;
+            const int index =
+                randomInt(random, -2, static_cast<int>(list.size()) + 1);
+            input << (listA ? "get_a " : "get_b ") << index << '\n';
+            if (index < 0 || index >= static_cast<int>(list.size())) {
+                appendLine(output, "OUT_OF_RANGE");
+            } else {
+                appendLine(output, list[static_cast<std::size_t>(index)]);
+            }
+            break;
+        }
+        case 12:
+            if (randomInt(random, 0, 1) == 0) {
+                input << "size_a\n";
+                appendLine(output, static_cast<int>(a.size()));
+            } else {
+                input << "empty_a\n";
+                appendLine(output, a.empty() ? "true" : "false");
+            }
+            break;
+        default:
+            if (randomInt(random, 0, 1) == 0) {
+                input << "size_b\n";
+                appendLine(output, static_cast<int>(b.size()));
+            } else {
+                input << "empty_b\n";
+                appendLine(output, b.empty() ? "true" : "false");
+            }
+            break;
+    }
+}
+
+GeneratedCase generateDoublyListSplice(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 7) {
+        throw std::runtime_error(
+            "F14-doubly-list-splice requires operation_limit of at least 7"
+        );
+    }
+    std::vector<int> a;
+    std::vector<int> b;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << operationCount << '\n';
+
+    const int first = randomValue(random);
+    const int second = randomValue(random);
+    const int third = randomValue(random);
+    const int fourth = randomValue(random);
+    input << "push_back_a " << first << '\n';
+    input << "push_back_a " << fourth << '\n';
+    input << "push_back_b " << second << '\n';
+    input << "push_back_b " << third << '\n';
+    a = {first, fourth};
+    b = {second, third};
+    input << "splice_b_to_a 1\n";
+    a.insert(a.begin() + 1, b.begin(), b.end());
+    b.clear();
+    input << "pop_back_a\n";
+    appendLine(output, a.back());
+    a.pop_back();
+    input << "pop_back_a\n";
+    appendLine(output, a.back());
+    a.pop_back();
+
+    for (int operation = 7; operation < operationCount; ++operation) {
+        spliceOperation(random, a, b, input, output);
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateFixedNodePoolList(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    const int capacity = randomInt(random, 1, 8);
+    if (operationCount < capacity + 4) {
+        throw std::runtime_error(
+            "F15-fixed-node-pool-list operation_limit is too small"
+        );
+    }
+    std::vector<int> values;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << capacity << ' ' << operationCount << '\n';
+
+    for (int index = 0; index < capacity; ++index) {
+        const int value = randomValue(random);
+        input << "insert " << index << ' ' << value << '\n';
+        values.push_back(value);
+    }
+    input << "erase 0\n";
+    appendLine(output, values.front());
+    values.erase(values.begin());
+    const int replacement = randomValue(random);
+    input << "insert " << values.size() << ' ' << replacement << '\n';
+    values.push_back(replacement);
+    input << "free\n";
+    appendLine(output, 0);
+    input << "back\n";
+    appendLine(output, values.back());
+
+    for (int operation = capacity + 4;
+         operation < operationCount;
+         ++operation) {
+        switch (randomInt(random, 0, 8)) {
+            case 0:
+            case 1: {
+                const int index =
+                    randomInt(random, -2, static_cast<int>(values.size()) + 2);
+                const int value = randomValue(random);
+                input << "insert " << index << ' ' << value << '\n';
+                if (index < 0 || index > static_cast<int>(values.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else if (static_cast<int>(values.size()) == capacity) {
+                    appendLine(output, "FULL");
+                } else {
+                    values.insert(values.begin() + index, value);
+                }
+                break;
+            }
+            case 2: {
+                const int index =
+                    randomInt(random, -2, static_cast<int>(values.size()) + 1);
+                input << "erase " << index << '\n';
+                if (index < 0 || index >= static_cast<int>(values.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    appendLine(output, values[static_cast<std::size_t>(index)]);
+                    values.erase(values.begin() + index);
+                }
+                break;
+            }
+            case 3: {
+                const int index =
+                    randomInt(random, -2, static_cast<int>(values.size()) + 1);
+                input << "get " << index << '\n';
+                if (index < 0 || index >= static_cast<int>(values.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    appendLine(output, values[static_cast<std::size_t>(index)]);
+                }
+                break;
+            }
+            case 4:
+                input << "front\n";
+                if (values.empty()) appendLine(output, "EMPTY");
+                else appendLine(output, values.front());
+                break;
+            case 5:
+                input << "back\n";
+                if (values.empty()) appendLine(output, "EMPTY");
+                else appendLine(output, values.back());
+                break;
+            case 6:
+                input << "size\n";
+                appendLine(output, static_cast<int>(values.size()));
+                break;
+            case 7:
+                input << "free\n";
+                appendLine(output, capacity - static_cast<int>(values.size()));
+                break;
+            default:
+                if (randomInt(random, 0, 1) == 0) {
+                    input << "empty\n";
+                    appendLine(output, values.empty() ? "true" : "false");
+                } else {
+                    input << "clear\n";
+                    values.clear();
+                }
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 GeneratedCase generateCase(
     const std::string& problemId,
     std::uint64_t seed,
@@ -890,6 +1458,21 @@ GeneratedCase generateCase(
     }
     if (problemId == "F10-circular-linked-list") {
         return generateCircularLinkedList(random, operationCount);
+    }
+    if (problemId == "F11-singly-list-reverse") {
+        return generateSinglyListReverse(random, operationCount);
+    }
+    if (problemId == "F12-singly-list-concatenate") {
+        return generateSinglyListConcatenate(random, operationCount);
+    }
+    if (problemId == "F13-singly-list-split") {
+        return generateSinglyListSplit(random, operationCount);
+    }
+    if (problemId == "F14-doubly-list-splice") {
+        return generateDoublyListSplice(random, operationCount);
+    }
+    if (problemId == "F15-fixed-node-pool-list") {
+        return generateFixedNodePoolList(random, operationCount);
     }
     throw std::runtime_error(
         "stress generator is not available for problem: " + problemId

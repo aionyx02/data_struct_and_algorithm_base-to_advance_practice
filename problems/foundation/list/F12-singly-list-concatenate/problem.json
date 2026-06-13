@@ -1,0 +1,21 @@
+{
+  "id": "F12-singly-list-concatenate",
+  "title": "Concatenate Singly Linked Lists",
+  "stage": "F",
+  "difficulty": "D2",
+  "judge_mode": "stdio",
+  "time_limit_ms": 400,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(1) concatenation and end operations",
+  "expected_space": "O(total nodes)",
+  "forbidden_symbols": [
+    "std::deque",
+    "std::forward_list",
+    "std::list",
+    "std::vector"
+  ],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}

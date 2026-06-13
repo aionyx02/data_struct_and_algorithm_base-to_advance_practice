@@ -103,6 +103,11 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f08 F08-linked-queue)
     add_catalog_test(catalog_lists_f09 F09-doubly-linked-list)
     add_catalog_test(catalog_lists_f10 F10-circular-linked-list)
+    add_catalog_test(catalog_lists_f11 F11-singly-list-reverse)
+    add_catalog_test(catalog_lists_f12 F12-singly-list-concatenate)
+    add_catalog_test(catalog_lists_f13 F13-singly-list-split)
+    add_catalog_test(catalog_lists_f14 F14-doubly-list-splice)
+    add_catalog_test(catalog_lists_f15 F15-fixed-node-pool-list)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -245,6 +250,62 @@ if(BUILD_TESTING AND WIN32)
         1
         "Verdict: WA"
     )
+    add_cli_judge_test(
+        judge_accepts_singly_list_reverse
+        F11-singly-list-reverse
+        tests/fixtures/submissions/singly_list_reverse_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_lost_reverse_tail
+        F11-singly-list-reverse
+        tests/fixtures/submissions/singly_list_reverse_lost_tail.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_singly_list_concatenate
+        F12-singly-list-concatenate
+        tests/fixtures/submissions/singly_list_concatenate_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_accepts_singly_list_split
+        F13-singly-list-split
+        tests/fixtures/submissions/singly_list_split_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_accepts_doubly_list_splice
+        F14-doubly-list-splice
+        tests/fixtures/submissions/doubly_list_splice_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_broken_splice_backlink
+        F14-doubly-list-splice
+        tests/fixtures/submissions/doubly_list_splice_broken_backlink.cpp
+        1
+        "Verdict: RE"
+    )
+    add_cli_judge_test(
+        judge_accepts_fixed_node_pool
+        F15-fixed-node-pool-list
+        tests/fixtures/submissions/fixed_node_pool_list_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_pool_without_reuse
+        F15-fixed-node-pool-list
+        tests/fixtures/submissions/fixed_node_pool_list_no_reuse.cpp
+        1
+        "Verdict: WA"
+    )
 
     add_cli_stress_test(
         stress_accepts_array_adt
@@ -346,6 +407,70 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_missing_circular_rotation
         F10-circular-linked-list
         tests/fixtures/submissions/circular_linked_list_no_rotate.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_singly_list_reverse
+        F11-singly-list-reverse
+        tests/fixtures/submissions/singly_list_reverse_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_lost_reverse_tail
+        F11-singly-list-reverse
+        tests/fixtures/submissions/singly_list_reverse_lost_tail.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_singly_list_concatenate
+        F12-singly-list-concatenate
+        tests/fixtures/submissions/singly_list_concatenate_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_accepts_singly_list_split
+        F13-singly-list-split
+        tests/fixtures/submissions/singly_list_split_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_accepts_doubly_list_splice
+        F14-doubly-list-splice
+        tests/fixtures/submissions/doubly_list_splice_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_broken_splice_backlink
+        F14-doubly-list-splice
+        tests/fixtures/submissions/doubly_list_splice_broken_backlink.cpp
+        1
+        "Verdict: RE"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_fixed_node_pool
+        F15-fixed-node-pool-list
+        tests/fixtures/submissions/fixed_node_pool_list_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_pool_without_reuse
+        F15-fixed-node-pool-list
+        tests/fixtures/submissions/fixed_node_pool_list_no_reuse.cpp
         1
         "Verdict: WA"
         TRUE

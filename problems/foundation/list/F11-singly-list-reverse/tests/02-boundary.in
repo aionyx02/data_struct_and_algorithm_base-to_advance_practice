@@ -1,0 +1,11 @@
+10
+reverse
+front
+back
+get 0
+push_back 5
+reverse
+front
+back
+size
+empty

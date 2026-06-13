@@ -44,7 +44,7 @@ When using a Visual Studio multi-config build directory instead of the preset, p
 | Benchmark tests | Measure `n`, `2n`, and `4n` growth and operation counts |
 | End-to-end tests | Compile and judge known AC, WA, TLE, RE, API, and invariant-breaking submissions |
 
-The first ten foundation problems support seeded differential stress tests:
+The first fifteen foundation problems support seeded differential stress tests:
 
 ```powershell
 .\build\mingw-debug\algo.exe stress F04-circular-queue `

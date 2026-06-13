@@ -17,9 +17,9 @@ owner: project
 
 ## Current Focus
 
-- Active priority: implement list transformations and ownership-focused exercises.
-- Current phase: third foundation curriculum chapter.
-- Current owner / handoff state: `TASK.CURRICULUM.003` is ready for `shawn`.
+- Active priority: complete the remaining list representations.
+- Current phase: final CH4 foundation chapter.
+- Current owner / handoff state: `TASK.CURRICULUM.004` is ready for `shawn`.
 
 ## Important Constraints
 
@@ -30,13 +30,13 @@ owner: project
 
 ## Next Step
 
-- Define stable IDs for reversal, concatenation or splice, split, and node-reuse exercises.
+- Implement sentinel doubly linked list and cursor linked list as F16 and F17.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-13.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 43 Judge integration tests passed. F06 through F10 each passed 10,000
+- Result: all 64 Judge integration tests passed. F11 through F15 each passed 10,000
   differential operations with seed `20260613`, for 50,000 new operations total.
-- Known faulty stale-tail and missing-rotate submissions produced reproducible WA.
+- Known lost-tail, broken-backlink, and no-reuse submissions produced reproducible non-AC verdicts.
 - Known failing checks: none.

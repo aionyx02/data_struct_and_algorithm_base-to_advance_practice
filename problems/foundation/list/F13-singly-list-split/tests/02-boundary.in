@@ -1,0 +1,15 @@
+14
+split_a 0
+empty_a
+empty_b
+push_a 5
+split_a 1
+back_a
+empty_b
+split_a -1
+split_a 2
+push_b 7
+split_a 0
+clear_a
+split_b 0
+empty_b

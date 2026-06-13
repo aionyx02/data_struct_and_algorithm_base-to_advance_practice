@@ -1,0 +1,16 @@
+2 15
+insert 0 1
+insert 1 2
+erase 0
+insert 1 3
+get 0
+get 1
+erase 1
+erase 0
+free
+insert 0 4
+insert 1 5
+front
+back
+size
+free

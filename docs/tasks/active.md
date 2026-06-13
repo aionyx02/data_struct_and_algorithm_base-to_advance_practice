@@ -11,7 +11,7 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.003 - Implement List Transformations And Node Management
+### TASK.CURRICULUM.004 - Complete List Representations
 
 - Status: todo
 - Priority: P0
@@ -21,13 +21,13 @@ owner: project
   - `docs/learning-roadmap.md`
   - `docs/judge-requirements.md`
 - Acceptance criteria:
-  - [ ] Define stable IDs for list transformations and ownership-focused exercises.
-  - [ ] Cover reversal, concatenation or splice, split, and node-reuse edge cases.
-  - [ ] Keep the chapter focused on data-structure operations rather than general algorithms.
-  - [ ] Require explicit complexity and ownership contracts.
+  - [ ] Add sentinel-based and cursor-based linked-list representations.
+  - [ ] Complete the ten-problem CH4 list allocation.
+  - [ ] Compare pointer and array-index link representations explicitly.
+  - [ ] Preserve lifecycle, boundary, and node-reuse coverage.
 - Validation:
   - [ ] Known correct submissions pass deterministic and seeded stress tests.
-  - [ ] Known cycle, lost-tail, or broken-backlink mistakes receive non-AC verdicts.
+  - [ ] Known sentinel or free-list mistakes receive non-AC verdicts.
 
 ## Strategy
 

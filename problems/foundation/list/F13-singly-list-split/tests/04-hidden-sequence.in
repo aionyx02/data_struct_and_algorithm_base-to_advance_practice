@@ -1,0 +1,17 @@
+16
+push_b 1
+push_b 2
+push_b 3
+split_b 2
+front_a
+back_b
+clear_b
+split_a 0
+empty_a
+front_b
+clear_b
+push_a 8
+split_a 0
+empty_a
+back_b
+size_b

@@ -1,0 +1,15 @@
+14
+splice_b_to_a 0
+empty_a
+empty_b
+push_back_b 5
+splice_b_to_a 1
+splice_b_to_a 0
+get_a 0
+empty_b
+push_back_a 6
+splice_a_to_b 0
+get_b 0
+get_b 1
+empty_a
+size_b

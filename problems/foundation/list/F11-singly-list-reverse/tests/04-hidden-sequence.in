@@ -1,0 +1,15 @@
+14
+push_front 2
+push_front 1
+push_back 3
+reverse
+get 0
+get 2
+clear
+reverse
+empty
+push_back 8
+push_back 9
+reverse
+front
+back

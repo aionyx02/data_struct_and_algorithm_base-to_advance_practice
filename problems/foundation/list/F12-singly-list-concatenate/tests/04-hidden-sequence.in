@@ -1,0 +1,16 @@
+15
+push_a 1
+push_a 2
+push_b 3
+concat_ba
+empty_a
+front_b
+back_b
+clear_b
+empty_b
+push_a 8
+push_b 9
+concat_ab
+front_a
+back_a
+size_a

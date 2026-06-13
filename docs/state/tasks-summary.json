@@ -1,7 +1,7 @@
 {
   "type": "tasks_summary",
   "updated": "2026-06-13",
-  "current_task": "TASK.CURRICULUM.003",
+  "current_task": "TASK.CURRICULUM.004",
   "progress": [
     {
       "id": "TASK.CONTEXT.001",
@@ -22,11 +22,16 @@
       "id": "TASK.CURRICULUM.002",
       "status": "done",
       "owner": "shawn"
+    },
+    {
+      "id": "TASK.CURRICULUM.003",
+      "status": "done",
+      "owner": "shawn"
     }
   ],
   "open_tasks": [
     {
-      "id": "TASK.CURRICULUM.003",
+      "id": "TASK.CURRICULUM.004",
       "status": "todo",
       "owner": "shawn"
     }

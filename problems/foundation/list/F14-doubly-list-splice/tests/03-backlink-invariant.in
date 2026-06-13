@@ -1,0 +1,18 @@
+17
+push_back_a 1
+push_back_a 4
+push_front_b 3
+push_front_b 2
+splice_b_to_a 1
+pop_back_a
+pop_back_a
+pop_back_a
+pop_back_a
+empty_a
+push_back_b 7
+push_back_a 8
+splice_a_to_b 1
+pop_front_b
+pop_back_b
+pop_back_b
+empty_b

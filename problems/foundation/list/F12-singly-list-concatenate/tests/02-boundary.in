@@ -1,0 +1,15 @@
+14
+concat_ab
+empty_a
+empty_b
+push_b 7
+concat_ab
+front_a
+empty_b
+concat_ab
+pop_a
+pop_a
+push_a 8
+concat_ba
+back_b
+empty_a

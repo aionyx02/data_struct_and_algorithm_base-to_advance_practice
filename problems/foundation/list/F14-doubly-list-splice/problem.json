@@ -1,0 +1,21 @@
+{
+  "id": "F14-doubly-list-splice",
+  "title": "Splice Doubly Linked Lists",
+  "stage": "F",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 500,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(min(index, n-index)) locate and O(1) relink",
+  "expected_space": "O(total nodes)",
+  "forbidden_symbols": [
+    "std::deque",
+    "std::forward_list",
+    "std::list",
+    "std::vector"
+  ],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}

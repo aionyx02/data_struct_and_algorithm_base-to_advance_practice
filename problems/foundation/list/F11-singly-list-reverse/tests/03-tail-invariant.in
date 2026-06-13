@@ -1,0 +1,13 @@
+12
+push_back 1
+push_back 2
+reverse
+push_back 3
+front
+back
+get 1
+reverse
+push_front 4
+front
+back
+get 2
