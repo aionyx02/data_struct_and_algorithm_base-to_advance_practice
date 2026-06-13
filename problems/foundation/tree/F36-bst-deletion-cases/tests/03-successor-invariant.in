@@ -1,0 +1,19 @@
+18
+insert 40
+insert 20
+insert 60
+insert 10
+insert 30
+insert 50
+insert 70
+insert 45
+insert 55
+erase 40
+root
+parent 50
+parent 20
+inorder
+erase 60
+parent 50
+parent 70
+size

@@ -1,0 +1,19 @@
+18
+insert 10 1
+insert 20 2
+insert 30 3
+insert 25 4
+insert 5 5
+parent 20
+parent 30
+parent 25
+contains 25
+value 25
+root
+size
+parent 5
+contains 15
+insert 20 9
+clear
+contains 10
+root

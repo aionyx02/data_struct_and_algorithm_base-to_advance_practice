@@ -1,0 +1,17 @@
+16
+insert 8
+insert 3
+insert 10
+insert 1
+insert 6
+insert 14
+insert 4
+insert 7
+insert 13
+range 4 13
+count 4 13
+lower 5
+upper 7
+range 2 2
+count 1 14
+size

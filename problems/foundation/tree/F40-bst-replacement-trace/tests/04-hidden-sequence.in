@@ -1,0 +1,17 @@
+16
+insert 1 10
+insert 2 5
+insert 1 7
+insert 3 10
+size
+find 10
+find 5
+key 1
+parent 2
+erase 99
+erase 10
+root
+parent 2
+insert 1 7
+right 2
+inorder

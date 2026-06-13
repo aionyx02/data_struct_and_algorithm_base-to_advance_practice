@@ -1,0 +1,20 @@
+19
+insert 50
+insert 30
+insert 70
+insert 20
+insert 40
+insert 60
+insert 80
+predecessor 50
+successor 50
+predecessor 20
+successor 80
+predecessor 70
+successor 30
+min
+max
+size
+predecessor 999
+insert 40
+clear

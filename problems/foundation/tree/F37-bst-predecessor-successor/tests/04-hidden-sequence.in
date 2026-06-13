@@ -1,0 +1,17 @@
+16
+insert 0
+insert -10
+insert 10
+insert -5
+insert 5
+insert 20
+predecessor -5
+successor -5
+predecessor 0
+successor 0
+predecessor 20
+successor -10
+min
+max
+clear
+size

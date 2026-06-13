@@ -1,0 +1,21 @@
+20
+insert 10 50
+insert 20 30
+insert 30 70
+insert 40 20
+insert 50 40
+insert 60 60
+insert 70 80
+root
+erase 50
+root
+parent 20
+parent 30
+left 60
+right 60
+find 60
+key 60
+inorder
+size
+key 10
+find 50

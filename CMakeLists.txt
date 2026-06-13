@@ -127,6 +127,12 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f32 F32-level-order-tree-view)
     add_catalog_test(catalog_lists_f33 F33-bottom-up-min-heap-build)
     add_catalog_test(catalog_lists_f34 F34-min-heap-removal-trace)
+    add_catalog_test(catalog_lists_f35 F35-bst-insert-search)
+    add_catalog_test(catalog_lists_f36 F36-bst-deletion-cases)
+    add_catalog_test(catalog_lists_f37 F37-bst-predecessor-successor)
+    add_catalog_test(catalog_lists_f38 F38-bst-range-view)
+    add_catalog_test(catalog_lists_f39 F39-bst-structural-validation)
+    add_catalog_test(catalog_lists_f40 F40-bst-replacement-trace)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -588,6 +594,90 @@ if(BUILD_TESTING AND WIN32)
         judge_rejects_removal_without_sift_down
         F34-min-heap-removal-trace
         tests/fixtures/submissions/min_heap_removal_trace_no_sift_down.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_bst_insert_search
+        F35-bst-insert-search
+        tests/fixtures/submissions/bst_insert_search_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_bst_duplicate_overwrite
+        F35-bst-insert-search
+        tests/fixtures/submissions/bst_insert_search_overwrites_duplicate.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_bst_deletion_cases
+        F36-bst-deletion-cases
+        tests/fixtures/submissions/bst_deletion_cases_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_bst_predecessor_replacement
+        F36-bst-deletion-cases
+        tests/fixtures/submissions/bst_deletion_uses_predecessor.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_bst_predecessor_successor
+        F37-bst-predecessor-successor
+        tests/fixtures/submissions/bst_predecessor_successor_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_bst_parent_only_neighbors
+        F37-bst-predecessor-successor
+        tests/fixtures/submissions/bst_predecessor_successor_parent_only.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_bst_range_view
+        F38-bst-range-view
+        tests/fixtures/submissions/bst_range_view_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_bst_exclusive_range
+        F38-bst-range-view
+        tests/fixtures/submissions/bst_range_view_excludes_endpoints.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_bst_structural_validation
+        F39-bst-structural-validation
+        tests/fixtures/submissions/bst_structural_validation_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_bst_local_only_validation
+        F39-bst-structural-validation
+        tests/fixtures/submissions/bst_structural_validation_local_only.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_bst_replacement_trace
+        F40-bst-replacement-trace
+        tests/fixtures/submissions/bst_replacement_trace_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_bst_key_copy_replacement
+        F40-bst-replacement-trace
+        tests/fixtures/submissions/bst_replacement_trace_copies_key.cpp
         1
         "Verdict: WA"
     )
@@ -1060,6 +1150,102 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_removal_without_sift_down
         F34-min-heap-removal-trace
         tests/fixtures/submissions/min_heap_removal_trace_no_sift_down.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_bst_insert_search
+        F35-bst-insert-search
+        tests/fixtures/submissions/bst_insert_search_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_bst_duplicate_overwrite
+        F35-bst-insert-search
+        tests/fixtures/submissions/bst_insert_search_overwrites_duplicate.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_bst_deletion_cases
+        F36-bst-deletion-cases
+        tests/fixtures/submissions/bst_deletion_cases_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_bst_predecessor_replacement
+        F36-bst-deletion-cases
+        tests/fixtures/submissions/bst_deletion_uses_predecessor.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_bst_predecessor_successor
+        F37-bst-predecessor-successor
+        tests/fixtures/submissions/bst_predecessor_successor_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_bst_parent_only_neighbors
+        F37-bst-predecessor-successor
+        tests/fixtures/submissions/bst_predecessor_successor_parent_only.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_bst_range_view
+        F38-bst-range-view
+        tests/fixtures/submissions/bst_range_view_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_bst_exclusive_range
+        F38-bst-range-view
+        tests/fixtures/submissions/bst_range_view_excludes_endpoints.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_bst_structural_validation
+        F39-bst-structural-validation
+        tests/fixtures/submissions/bst_structural_validation_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_bst_local_only_validation
+        F39-bst-structural-validation
+        tests/fixtures/submissions/bst_structural_validation_local_only.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_bst_replacement_trace
+        F40-bst-replacement-trace
+        tests/fixtures/submissions/bst_replacement_trace_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_bst_key_copy_replacement
+        F40-bst-replacement-trace
+        tests/fixtures/submissions/bst_replacement_trace_copies_key.cpp
         1
         "Verdict: WA"
         TRUE

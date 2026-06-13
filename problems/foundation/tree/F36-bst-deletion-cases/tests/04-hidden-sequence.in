@@ -1,0 +1,16 @@
+15
+insert 10
+insert 5
+insert 15
+insert 12
+erase 15
+parent 12
+erase 5
+parent 12
+root
+inorder
+erase 10
+root
+parent 12
+size
+contains 10

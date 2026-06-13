@@ -1,0 +1,13 @@
+12
+root
+contains 0
+value 0
+parent 0
+insert 0 -5
+root
+parent 0
+insert 0 8
+insert -10 -1
+insert 10 1
+parent -10
+size

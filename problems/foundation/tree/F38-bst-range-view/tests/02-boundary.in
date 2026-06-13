@@ -1,0 +1,12 @@
+11
+range 0 10
+count 0 10
+lower 0
+upper 0
+size
+insert 5
+range 6 4
+count 6 4
+lower 5
+upper 5
+range 5 5

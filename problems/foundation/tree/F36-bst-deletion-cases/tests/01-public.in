@@ -1,0 +1,22 @@
+21
+insert 50
+insert 30
+insert 70
+insert 20
+insert 40
+insert 60
+insert 80
+inorder
+erase 20
+parent 40
+erase 30
+parent 40
+erase 50
+root
+parent 70
+inorder
+size
+contains 50
+erase 999
+contains 60
+parent 60

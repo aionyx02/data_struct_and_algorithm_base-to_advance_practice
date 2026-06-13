@@ -1,0 +1,16 @@
+{
+  "id": "F39-bst-structural-validation",
+  "title": "Binary Search Tree Structural Validation",
+  "stage": "F",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 500,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(n) validation and O(1) identifier lookup",
+  "expected_space": "O(n) nodes plus O(h) validation stack",
+  "forbidden_symbols": ["std::map", "std::unordered_map", "std::set", "std::vector", "std::list"],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}

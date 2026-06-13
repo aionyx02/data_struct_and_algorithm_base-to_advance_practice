@@ -1,0 +1,14 @@
+13
+root
+erase 1
+insert 5
+erase 5
+root
+size
+insert 5
+insert 5
+insert 3
+erase 5
+root
+parent 3
+inorder

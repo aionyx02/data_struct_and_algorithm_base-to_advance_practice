@@ -1,0 +1,18 @@
+17
+insert 10 10
+insert 20 5
+insert 30 15
+insert 40 12
+erase 5
+left 10
+erase 15
+right 10
+parent 40
+erase 10
+root
+parent 40
+size
+inorder
+erase 12
+root
+size

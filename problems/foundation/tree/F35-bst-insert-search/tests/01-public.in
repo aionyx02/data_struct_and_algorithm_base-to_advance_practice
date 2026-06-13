@@ -1,0 +1,21 @@
+20
+insert 50 500
+insert 30 300
+insert 70 700
+insert 20 200
+insert 40 400
+contains 40
+contains 60
+value 30
+parent 30
+parent 50
+root
+size
+insert 30 999
+value 30
+clear
+root
+size
+value 50
+insert 10 100
+root

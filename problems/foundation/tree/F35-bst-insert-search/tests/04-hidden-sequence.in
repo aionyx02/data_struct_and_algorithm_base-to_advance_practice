@@ -1,0 +1,17 @@
+16
+insert 0 100
+insert -5 200
+insert 5 300
+insert -10 400
+insert -3 500
+value -3
+parent -10
+parent -3
+contains 5
+contains 6
+root
+size
+clear
+insert 7 700
+parent 7
+value 7
