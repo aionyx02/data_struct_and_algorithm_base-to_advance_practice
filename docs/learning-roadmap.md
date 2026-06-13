@@ -147,6 +147,22 @@ Generator 對 concat、splice 與 node pool 加入固定前綴，讓 source reus
 至此能直接比較 raw pointer、sentinel、circular、fixed pool 與 cursor 五種 linked
 representation，並說明其邊界處理與記憶體管理取捨。
 
+### Foundation 05：Arrays And Structures
+
+這六題搭配 `F01` 與 `F02`，補齊 CH2 的八題配置：
+
+| ID | 題目 | 難度 | 核心能力 |
+|---|---|---|---|
+| `F18-record-table` | Fixed Capacity Record Table | D1 | record array、unique key、slot reuse |
+| `F19-sparse-polynomial` | Sparse Polynomial Terms | D2 | descending terms、zero removal |
+| `F20-triplet-sparse-matrix` | Triplet Sparse Matrix | D2 | row-major triplets、ordered update |
+| `F21-csr-sparse-matrix` | Compressed Sparse Row Matrix | D3 | row offsets、compressed columns |
+| `F22-row-major-matrix` | Two-Dimensional Row-Major Array | D1 | contiguous storage、2D linearization |
+| `F23-row-major-tensor` | Three-Dimensional Row-Major Array | D2 | multidimensional strides、inverse mapping |
+
+固定測資與 seeded stress 都直接觀察 term order、CSR row offsets 與 row-major index，
+避免只驗證 lookup 結果而漏掉錯誤的底層表示法。
+
 ### 暫緩的教材內容
 
 - CH1 Selection Sort、Binary Search 演算法題。

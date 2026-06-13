@@ -80,6 +80,17 @@ ctest --preset dev
 | `F16-sentinel-doubly-list` | Sentinel Doubly Linked List | D2 |
 | `F17-cursor-doubly-list` | Cursor Doubly Linked List | D3 |
 
+第五組 Arrays And Structures：
+
+| ID | 題目 | 難度 |
+|---|---|---|
+| `F18-record-table` | Fixed Capacity Record Table | D1 |
+| `F19-sparse-polynomial` | Sparse Polynomial Terms | D2 |
+| `F20-triplet-sparse-matrix` | Triplet Sparse Matrix | D2 |
+| `F21-csr-sparse-matrix` | Compressed Sparse Row Matrix | D3 |
+| `F22-row-major-matrix` | Two-Dimensional Row-Major Array | D1 |
+| `F23-row-major-tensor` | Three-Dimensional Row-Major Array | D2 |
+
 CLI 範例：
 
 ```powershell

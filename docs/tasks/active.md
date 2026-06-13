@@ -11,23 +11,22 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.005 - Complete Arrays And Structures
+### TASK.CURRICULUM.006 - Complete Stack And Queue Representations
 
 - Status: todo
 - Priority: P0
 - Owner: shawn
-- Started: not started
 - Related docs:
   - `docs/learning-roadmap.md`
   - `docs/judge-requirements.md`
 - Acceptance criteria:
-  - [ ] Add records, polynomial, sparse-matrix, and multidimensional-array representations.
-  - [ ] Complete the eight-problem CH2 allocation without adding general algorithms.
-  - [ ] Make row-major indexing and sparse storage invariants observable.
+  - [ ] Add two stacks in one array, a circular linked queue, and a linked deque.
+  - [ ] Complete the eight-problem CH3 allocation without adding general algorithms.
+  - [ ] Make shared-capacity, circular-link, and bidirectional-end invariants observable.
   - [ ] Preserve explicit complexity and storage contracts.
 - Validation:
   - [ ] Known correct submissions pass deterministic and seeded stress tests.
-  - [ ] Known indexing or representation mistakes receive non-AC verdicts.
+  - [ ] Known capacity and link-invariant mistakes receive non-AC verdicts.
 
 ## Strategy
 

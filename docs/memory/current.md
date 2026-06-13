@@ -17,9 +17,9 @@ owner: project
 
 ## Current Focus
 
-- Active priority: complete Arrays and Structures.
-- Current phase: remaining CH2 foundation problems.
-- Current owner / handoff state: `TASK.CURRICULUM.005` is ready for `shawn`.
+- Active priority: complete Stack and Queue representations.
+- Current phase: remaining CH3 foundation problems.
+- Current owner / handoff state: `TASK.CURRICULUM.006` is ready for `shawn`.
 
 ## Important Constraints
 
@@ -30,14 +30,15 @@ owner: project
 
 ## Next Step
 
-- Define F18 onward for records, polynomial representation, sparse matrices, and
-  multidimensional row-major storage.
+- Add two-stacks-in-one-array, circular linked queue, and linked deque exercises
+  without adding expression parsing, maze solving, or other general algorithms.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-13.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 74 Judge integration tests passed. F16 and F17 each passed 10,000
-  differential operations with seed `20260613`.
-- Known sentinel-backlink and cursor-no-reuse submissions produced reproducible non-AC verdicts.
+- Result: all 104 Judge integration tests passed. F18 through F23 each passed
+  10,000 differential operations with seed `20260613`.
+- Known slot-reuse, ordering, CSR-offset, and row-major-stride mistakes produced
+  reproducible non-AC verdicts.
 - Known failing checks: none.
