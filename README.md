@@ -99,6 +99,15 @@ ctest --preset dev
 | `F25-circular-linked-queue` | Circular Linked Queue | D2 |
 | `F26-linked-deque` | Linked Deque | D2 |
 
+第七組 Core Tree Representations：
+
+| ID | 題目 | 難度 |
+|---|---|---|
+| `F27-array-binary-tree` | Array Binary Tree | D2 |
+| `F28-linked-binary-tree` | Linked Binary Tree | D2 |
+| `F29-inorder-threaded-tree` | Inorder Threaded Binary Tree | D3 |
+| `F30-binary-min-heap` | Fixed Capacity Binary Min Heap | D2 |
+
 CLI 範例：
 
 ```powershell

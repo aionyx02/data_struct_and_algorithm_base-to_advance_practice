@@ -17,9 +17,9 @@ owner: project
 
 ## Current Focus
 
-- Active priority: begin core tree representations.
-- Current phase: first CH5-1 foundation slice.
-- Current owner / handoff state: `TASK.CURRICULUM.007` is ready for `shawn`.
+- Active priority: expand tree traversal and heap representations.
+- Current phase: second CH5-1 foundation slice.
+- Current owner / handoff state: `TASK.CURRICULUM.008` is ready for `shawn`.
 
 ## Important Constraints
 
@@ -30,15 +30,15 @@ owner: project
 
 ## Next Step
 
-- Define array-based binary trees, linked binary trees, threaded trees, and
-  binary heaps as data-structure exercises.
+- Add traversal views, level-order representation, heap construction, and
+  heap removal traces while keeping the curriculum data-structure-only.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-13.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 119 Judge integration tests passed. F24 through F26 each passed
+- Result: all 139 Judge integration tests passed. F27 through F30 each passed
   10,000 differential operations with seed `20260613`.
-- Known fixed-partition, missing-rotate, and stale-endpoint mistakes produced
-  reproducible `WA` verdicts.
+- Known one-based indexing, missing parent links, ID-neighbor threads, and
+  missing heap sift-down mistakes produced reproducible `WA` verdicts.
 - Known failing checks: none.

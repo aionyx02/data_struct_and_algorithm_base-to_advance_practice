@@ -11,7 +11,7 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.007 - Build Core Tree Representations
+### TASK.CURRICULUM.008 - Expand Tree Traversal And Heap Views
 
 - Status: todo
 - Priority: P0
@@ -20,13 +20,13 @@ owner: project
   - `docs/learning-roadmap.md`
   - `docs/judge-requirements.md`
 - Acceptance criteria:
-  - [ ] Add array and linked binary-tree representations, a threaded tree, and a binary heap.
-  - [ ] Keep the slice focused on data-structure representation and core ADT operations.
-  - [ ] Make parent/child indexing, links, threads, and heap shape invariants observable.
+  - [ ] Add traversal views, level-order representation, and heap construction/removal traces.
+  - [ ] Keep traversal work scoped to core tree ADT observation.
+  - [ ] Make visit order, queue state, and heap shape transitions observable.
   - [ ] Preserve explicit complexity and storage contracts.
 - Validation:
   - [ ] Known correct submissions pass deterministic and seeded stress tests.
-  - [ ] Known index, link, thread, and heap-invariant mistakes receive non-AC verdicts.
+  - [ ] Known visit-order and heap-transition mistakes receive non-AC verdicts.
 
 ## Strategy
 

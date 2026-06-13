@@ -175,6 +175,20 @@ representation，並說明其邊界處理與記憶體管理取捨。
 
 本章只處理 ADT 與表示法；maze、expression parsing 等應用演算法仍維持暫緩。
 
+### Foundation 07：Core Tree Representations
+
+CH5-1 的第一批先建立四種核心表示法：
+
+| ID | 題目 | 難度 | 核心能力 |
+|---|---|---|---|
+| `F27-array-binary-tree` | Array Binary Tree | D2 | zero-based parent/child indexing、sparse slots |
+| `F28-linked-binary-tree` | Linked Binary Tree | D2 | parent/left/right links、leaf lifecycle |
+| `F29-inorder-threaded-tree` | Inorder Threaded Binary Tree | D3 | predecessor/successor threads、link tags |
+| `F30-binary-min-heap` | Fixed Capacity Binary Min Heap | D2 | complete-tree array shape、bidirectional reheapify |
+
+Generator 固定包含零基索引、parent backlink、非 ID 順序的 inorder threads，以及
+heap key 增值後下沉，確保表示法錯誤不依賴隨機運氣。
+
 ### 暫緩的教材內容
 
 - CH1 Selection Sort、Binary Search 演算法題。

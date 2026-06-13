@@ -21,3 +21,4 @@ owner: project
 | `TASK.CURRICULUM.004` | Completed CH4 list representations | `docs/memory/sessions/2026-06-13-shawn.md` |
 | `TASK.CURRICULUM.005` | Completed Arrays And Structures | `docs/memory/sessions/2026-06-13-shawn.md` |
 | `TASK.CURRICULUM.006` | Completed Stack And Queue Representations | `docs/memory/sessions/2026-06-13-shawn.md` |
+| `TASK.CURRICULUM.007` | Built Core Tree Representations | `docs/memory/sessions/2026-06-13-shawn.md` |
