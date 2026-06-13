@@ -163,6 +163,18 @@ representation，並說明其邊界處理與記憶體管理取捨。
 固定測資與 seeded stress 都直接觀察 term order、CSR row offsets 與 row-major index，
 避免只驗證 lookup 結果而漏掉錯誤的底層表示法。
 
+### Foundation 06：Stack And Queue Representations
+
+這三題搭配 `F03`、`F04`、`F05`、`F07`、`F08`，補齊 CH3 的八題配置：
+
+| ID | 題目 | 難度 | 核心能力 |
+|---|---|---|---|
+| `F24-two-stacks-one-array` | Two Stacks In One Array | D2 | shared capacity、opposing growth |
+| `F25-circular-linked-queue` | Circular Linked Queue | D2 | tail-only ring、`O(1)` rotate |
+| `F26-linked-deque` | Linked Deque | D2 | endpoint symmetry、empty reset |
+
+本章只處理 ADT 與表示法；maze、expression parsing 等應用演算法仍維持暫緩。
+
 ### 暫緩的教材內容
 
 - CH1 Selection Sort、Binary Search 演算法題。

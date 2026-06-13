@@ -91,6 +91,14 @@ ctest --preset dev
 | `F22-row-major-matrix` | Two-Dimensional Row-Major Array | D1 |
 | `F23-row-major-tensor` | Three-Dimensional Row-Major Array | D2 |
 
+第六組 Stack And Queue Representations：
+
+| ID | 題目 | 難度 |
+|---|---|---|
+| `F24-two-stacks-one-array` | Two Stacks In One Array | D2 |
+| `F25-circular-linked-queue` | Circular Linked Queue | D2 |
+| `F26-linked-deque` | Linked Deque | D2 |
+
 CLI 範例：
 
 ```powershell

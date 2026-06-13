@@ -11,7 +11,7 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.006 - Complete Stack And Queue Representations
+### TASK.CURRICULUM.007 - Build Core Tree Representations
 
 - Status: todo
 - Priority: P0
@@ -20,13 +20,13 @@ owner: project
   - `docs/learning-roadmap.md`
   - `docs/judge-requirements.md`
 - Acceptance criteria:
-  - [ ] Add two stacks in one array, a circular linked queue, and a linked deque.
-  - [ ] Complete the eight-problem CH3 allocation without adding general algorithms.
-  - [ ] Make shared-capacity, circular-link, and bidirectional-end invariants observable.
+  - [ ] Add array and linked binary-tree representations, a threaded tree, and a binary heap.
+  - [ ] Keep the slice focused on data-structure representation and core ADT operations.
+  - [ ] Make parent/child indexing, links, threads, and heap shape invariants observable.
   - [ ] Preserve explicit complexity and storage contracts.
 - Validation:
   - [ ] Known correct submissions pass deterministic and seeded stress tests.
-  - [ ] Known capacity and link-invariant mistakes receive non-AC verdicts.
+  - [ ] Known index, link, thread, and heap-invariant mistakes receive non-AC verdicts.
 
 ## Strategy
 

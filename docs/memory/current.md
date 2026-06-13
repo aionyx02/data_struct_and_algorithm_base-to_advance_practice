@@ -17,9 +17,9 @@ owner: project
 
 ## Current Focus
 
-- Active priority: complete Stack and Queue representations.
-- Current phase: remaining CH3 foundation problems.
-- Current owner / handoff state: `TASK.CURRICULUM.006` is ready for `shawn`.
+- Active priority: begin core tree representations.
+- Current phase: first CH5-1 foundation slice.
+- Current owner / handoff state: `TASK.CURRICULUM.007` is ready for `shawn`.
 
 ## Important Constraints
 
@@ -30,15 +30,15 @@ owner: project
 
 ## Next Step
 
-- Add two-stacks-in-one-array, circular linked queue, and linked deque exercises
-  without adding expression parsing, maze solving, or other general algorithms.
+- Define array-based binary trees, linked binary trees, threaded trees, and
+  binary heaps as data-structure exercises.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-13.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 104 Judge integration tests passed. F18 through F23 each passed
+- Result: all 119 Judge integration tests passed. F24 through F26 each passed
   10,000 differential operations with seed `20260613`.
-- Known slot-reuse, ordering, CSR-offset, and row-major-stride mistakes produced
-  reproducible non-AC verdicts.
+- Known fixed-partition, missing-rotate, and stale-endpoint mistakes produced
+  reproducible `WA` verdicts.
 - Known failing checks: none.
