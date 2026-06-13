@@ -1,0 +1,12 @@
+8 10
+7 -1 6 -3 5 4 2 0
+array
+top
+at 3
+at 7
+parent 7
+left 2
+right 2
+parent 0
+left 7
+valid

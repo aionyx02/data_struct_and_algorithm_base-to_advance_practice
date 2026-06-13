@@ -1,0 +1,16 @@
+{
+  "id": "F32-level-order-tree-view",
+  "title": "Level-Order Binary Tree View",
+  "stage": "F",
+  "difficulty": "D2",
+  "judge_mode": "stdio",
+  "time_limit_ms": 400,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(n) level-order and level queries; O(n) depth lookup",
+  "expected_space": "O(n) nodes plus O(width) queue",
+  "forbidden_symbols": ["std::queue", "std::deque", "std::vector", "std::map", "std::unordered_map"],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}

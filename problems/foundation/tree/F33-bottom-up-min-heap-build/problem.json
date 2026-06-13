@@ -1,0 +1,16 @@
+{
+  "id": "F33-bottom-up-min-heap-build",
+  "title": "Bottom-Up Binary Min Heap Build",
+  "stage": "F",
+  "difficulty": "D2",
+  "judge_mode": "stdio",
+  "time_limit_ms": 300,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(n) Floyd construction and O(1) structural queries",
+  "expected_space": "O(capacity)",
+  "forbidden_symbols": ["std::priority_queue", "std::vector", "std::array", "std::make_heap", "std::push_heap", "std::pop_heap"],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}

@@ -1,0 +1,15 @@
+7 13
+7 2 6 1 5 4 3
+array
+pop
+array
+top
+pop
+array
+at 2
+size
+pop
+pop
+array
+size
+empty

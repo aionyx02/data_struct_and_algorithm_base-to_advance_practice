@@ -123,6 +123,10 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f28 F28-linked-binary-tree)
     add_catalog_test(catalog_lists_f29 F29-inorder-threaded-tree)
     add_catalog_test(catalog_lists_f30 F30-binary-min-heap)
+    add_catalog_test(catalog_lists_f31 F31-binary-tree-traversal-views)
+    add_catalog_test(catalog_lists_f32 F32-level-order-tree-view)
+    add_catalog_test(catalog_lists_f33 F33-bottom-up-min-heap-build)
+    add_catalog_test(catalog_lists_f34 F34-min-heap-removal-trace)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -531,6 +535,62 @@ if(BUILD_TESTING AND WIN32)
         1
         "Verdict: WA"
     )
+    add_cli_judge_test(
+        judge_accepts_binary_tree_traversal_views
+        F31-binary-tree-traversal-views
+        tests/fixtures/submissions/binary_tree_traversal_views_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_wrong_preorder_view
+        F31-binary-tree-traversal-views
+        tests/fixtures/submissions/binary_tree_traversal_views_wrong_preorder.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_level_order_tree_view
+        F32-level-order-tree-view
+        tests/fixtures/submissions/level_order_tree_view_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_dfs_as_level_order
+        F32-level-order-tree-view
+        tests/fixtures/submissions/level_order_tree_view_dfs.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_bottom_up_heap_build
+        F33-bottom-up-min-heap-build
+        tests/fixtures/submissions/bottom_up_min_heap_build_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_repeated_push_heap_build
+        F33-bottom-up-min-heap-build
+        tests/fixtures/submissions/bottom_up_min_heap_build_repeated_push.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_min_heap_removal_trace
+        F34-min-heap-removal-trace
+        tests/fixtures/submissions/min_heap_removal_trace_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_removal_without_sift_down
+        F34-min-heap-removal-trace
+        tests/fixtures/submissions/min_heap_removal_trace_no_sift_down.cpp
+        1
+        "Verdict: WA"
+    )
 
     add_cli_stress_test(
         stress_accepts_array_adt
@@ -936,6 +996,70 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_heap_without_change_sift_down
         F30-binary-min-heap
         tests/fixtures/submissions/binary_min_heap_no_sift_down_change.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_binary_tree_traversal_views
+        F31-binary-tree-traversal-views
+        tests/fixtures/submissions/binary_tree_traversal_views_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_wrong_preorder_view
+        F31-binary-tree-traversal-views
+        tests/fixtures/submissions/binary_tree_traversal_views_wrong_preorder.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_level_order_tree_view
+        F32-level-order-tree-view
+        tests/fixtures/submissions/level_order_tree_view_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_dfs_as_level_order
+        F32-level-order-tree-view
+        tests/fixtures/submissions/level_order_tree_view_dfs.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_bottom_up_heap_build
+        F33-bottom-up-min-heap-build
+        tests/fixtures/submissions/bottom_up_min_heap_build_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_repeated_push_heap_build
+        F33-bottom-up-min-heap-build
+        tests/fixtures/submissions/bottom_up_min_heap_build_repeated_push.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_min_heap_removal_trace
+        F34-min-heap-removal-trace
+        tests/fixtures/submissions/min_heap_removal_trace_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_removal_without_sift_down
+        F34-min-heap-removal-trace
+        tests/fixtures/submissions/min_heap_removal_trace_no_sift_down.cpp
         1
         "Verdict: WA"
         TRUE

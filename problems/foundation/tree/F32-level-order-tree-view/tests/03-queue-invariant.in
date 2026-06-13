@@ -1,0 +1,18 @@
+8 5 9
+0 0 -1 -1
+1 1 0 2
+2 2 -1 -1
+3 3 -1 6
+4 4 -1 -1
+5 5 3 7
+6 6 1 4
+7 7 -1 -1
+levelorder
+level 1
+level 2
+level 3
+depth 4
+width 2
+width 4
+levels
+queue_peak

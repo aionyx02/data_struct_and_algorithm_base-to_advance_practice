@@ -1,0 +1,16 @@
+{
+  "id": "F34-min-heap-removal-trace",
+  "title": "Binary Min Heap Removal Trace",
+  "stage": "F",
+  "difficulty": "D2",
+  "judge_mode": "stdio",
+  "time_limit_ms": 300,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(n) construction, O(log n) pop, and O(n) array view",
+  "expected_space": "O(count)",
+  "forbidden_symbols": ["std::priority_queue", "std::vector", "std::array", "std::make_heap", "std::push_heap", "std::pop_heap"],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}

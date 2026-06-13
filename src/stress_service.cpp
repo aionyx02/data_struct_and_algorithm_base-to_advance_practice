@@ -3089,6 +3089,343 @@ GeneratedCase generateBinaryMinHeap(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateBinaryTreeTraversalViews(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 3) {
+        throw std::runtime_error(
+            "F31-binary-tree-traversal-views operation_limit is too small"
+        );
+    }
+    constexpr int kNodeCount = 8;
+    const int left[kNodeCount] = {-1, 0, -1, -1, -1, 3, 1, -1};
+    const int right[kNodeCount] = {-1, 2, -1, 6, -1, 7, 4, -1};
+    int values[kNodeCount] = {};
+    const std::string preorder = "5 3 6 1 0 2 4 7";
+    const std::string inorder = "3 0 1 2 6 4 5 7";
+    const std::string postorder = "0 2 1 4 6 3 7 5";
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << kNodeCount << " 5 " << operationCount << '\n';
+    for (int id = 0; id < kNodeCount; ++id) {
+        values[id] = randomValue(random);
+        input << id << ' ' << values[id] << ' ' << left[id] << ' '
+              << right[id] << '\n';
+    }
+    input << "preorder\ninorder\npostorder\n";
+    appendLine(output, preorder);
+    appendLine(output, inorder);
+    appendLine(output, postorder);
+
+    for (int operation = 3; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 5)) {
+            case 0:
+                input << "preorder\n";
+                appendLine(output, preorder);
+                break;
+            case 1:
+                input << "inorder\n";
+                appendLine(output, inorder);
+                break;
+            case 2:
+                input << "postorder\n";
+                appendLine(output, postorder);
+                break;
+            case 3:
+                input << "height\n";
+                appendLine(output, 5);
+                break;
+            case 4:
+                input << "size\n";
+                appendLine(output, kNodeCount);
+                break;
+            default: {
+                const int id = randomInt(random, -1, kNodeCount);
+                input << "value " << id << '\n';
+                if (id < 0 || id >= kNodeCount) appendLine(output, "NOT_FOUND");
+                else appendLine(output, values[id]);
+                break;
+            }
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateLevelOrderTreeView(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 3) {
+        throw std::runtime_error(
+            "F32-level-order-tree-view operation_limit is too small"
+        );
+    }
+    constexpr int kNodeCount = 8;
+    const int left[kNodeCount] = {-1, 0, -1, -1, -1, 3, 1, -1};
+    const int right[kNodeCount] = {-1, 2, -1, 6, -1, 7, 4, -1};
+    const int depths[kNodeCount] = {4, 3, 4, 1, 3, 0, 2, 1};
+    const char* levels[5] = {"5", "3 7", "6", "1 4", "0 2"};
+    std::ostringstream input;
+    std::ostringstream output;
+    input << kNodeCount << " 5 " << operationCount << '\n';
+    for (int id = 0; id < kNodeCount; ++id) {
+        input << id << ' ' << randomValue(random) << ' ' << left[id] << ' '
+              << right[id] << '\n';
+    }
+    input << "levelorder\nqueue_peak\nlevels\n";
+    output << "5 3 7 6 1 4 0 2\n3\n5\n";
+
+    for (int operation = 3; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 5)) {
+            case 0:
+                input << "levelorder\n";
+                output << "5 3 7 6 1 4 0 2\n";
+                break;
+            case 1: {
+                const int depth = randomInt(random, -1, 6);
+                input << "level " << depth << '\n';
+                if (depth < 0) appendLine(output, "OUT_OF_RANGE");
+                else if (depth >= 5) appendLine(output, "EMPTY");
+                else appendLine(output, levels[depth]);
+                break;
+            }
+            case 2: {
+                const int id = randomInt(random, -1, kNodeCount);
+                input << "depth " << id << '\n';
+                if (id < 0 || id >= kNodeCount) appendLine(output, "NOT_FOUND");
+                else appendLine(output, depths[id]);
+                break;
+            }
+            case 3: {
+                const int depth = randomInt(random, -1, 6);
+                input << "width " << depth << '\n';
+                if (depth < 0) appendLine(output, "OUT_OF_RANGE");
+                else if (depth >= 5) appendLine(output, 0);
+                else appendLine(
+                    output,
+                    depth == 0 || depth == 2 ? 1 : 2
+                );
+                break;
+            }
+            case 4:
+                input << "levels\n";
+                appendLine(output, 5);
+                break;
+            default:
+                input << "queue_peak\n";
+                appendLine(output, 3);
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+void buildMinHeap(std::vector<int>& heap) {
+    auto siftDown = [&](int start) {
+        int index = start;
+        while (true) {
+            int smallest = index;
+            const int left = 2 * index + 1;
+            const int right = left + 1;
+            if (left < static_cast<int>(heap.size()) &&
+                heap[static_cast<std::size_t>(left)] <
+                    heap[static_cast<std::size_t>(smallest)]) {
+                smallest = left;
+            }
+            if (right < static_cast<int>(heap.size()) &&
+                heap[static_cast<std::size_t>(right)] <
+                    heap[static_cast<std::size_t>(smallest)]) {
+                smallest = right;
+            }
+            if (smallest == index) break;
+            std::swap(
+                heap[static_cast<std::size_t>(index)],
+                heap[static_cast<std::size_t>(smallest)]
+            );
+            index = smallest;
+        }
+    };
+    for (int index = static_cast<int>(heap.size()) / 2 - 1;
+         index >= 0;
+         --index) {
+        siftDown(index);
+    }
+}
+
+void appendHeapArray(
+    std::ostringstream& output,
+    const std::vector<int>& heap
+) {
+    if (heap.empty()) {
+        appendLine(output, "EMPTY");
+        return;
+    }
+    for (std::size_t index = 0; index < heap.size(); ++index) {
+        if (index != 0) output << ' ';
+        output << heap[index];
+    }
+    output << '\n';
+}
+
+GeneratedCase generateBottomUpMinHeapBuild(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 1) {
+        throw std::runtime_error(
+            "F33-bottom-up-min-heap-build operation_limit is too small"
+        );
+    }
+    std::vector<int> heap = {5, 4, 3, 2, 1};
+    buildMinHeap(heap);
+    std::ostringstream input;
+    std::ostringstream output;
+    input << heap.size() << ' ' << operationCount << "\n5 4 3 2 1\n";
+    input << "array\n";
+    appendHeapArray(output, heap);
+
+    for (int operation = 1; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 7)) {
+            case 0:
+                input << "array\n";
+                appendHeapArray(output, heap);
+                break;
+            case 1:
+                input << "top\n";
+                appendLine(output, heap[0]);
+                break;
+            case 2: {
+                const int index = randomInt(
+                    random,
+                    -2,
+                    static_cast<int>(heap.size()) + 1
+                );
+                input << "at " << index << '\n';
+                if (index < 0 || index >= static_cast<int>(heap.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    appendLine(output, heap[static_cast<std::size_t>(index)]);
+                }
+                break;
+            }
+            case 3:
+            case 4:
+            case 5: {
+                const int index = randomInt(
+                    random,
+                    -2,
+                    static_cast<int>(heap.size()) + 1
+                );
+                const int relation = randomInt(random, 0, 2);
+                const char* command =
+                    relation == 0 ? "parent" : (relation == 1 ? "left" : "right");
+                input << command << ' ' << index << '\n';
+                if (index < 0 || index >= static_cast<int>(heap.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    const int relative = relation == 0
+                        ? (index == 0 ? -1 : (index - 1) / 2)
+                        : (relation == 1 ? 2 * index + 1 : 2 * index + 2);
+                    if (relative < 0 ||
+                        relative >= static_cast<int>(heap.size())) {
+                        appendLine(output, "NONE");
+                    } else {
+                        appendLine(output, relative);
+                    }
+                }
+                break;
+            }
+            case 6:
+                input << "size\n";
+                appendLine(output, static_cast<int>(heap.size()));
+                break;
+            default:
+                input << "valid\n";
+                appendLine(output, "true");
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateMinHeapRemovalTrace(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 3) {
+        throw std::runtime_error(
+            "F34-min-heap-removal-trace operation_limit is too small"
+        );
+    }
+    std::vector<int> heap = {0, 3, 1, 7, 8, 4, 2, 9};
+    buildMinHeap(heap);
+    auto pop = [&]() {
+        const int removed = heap[0];
+        heap[0] = heap.back();
+        heap.pop_back();
+        if (!heap.empty()) buildMinHeap(heap);
+        return removed;
+    };
+    std::ostringstream input;
+    std::ostringstream output;
+    input << heap.size() << ' ' << operationCount
+          << "\n0 3 1 7 8 4 2 9\n";
+    input << "array\npop\narray\n";
+    appendHeapArray(output, heap);
+    appendLine(output, pop());
+    appendHeapArray(output, heap);
+
+    for (int operation = 3; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 6)) {
+            case 0:
+            case 1:
+                input << "pop\n";
+                if (heap.empty()) appendLine(output, "EMPTY");
+                else appendLine(output, pop());
+                break;
+            case 2:
+                input << "top\n";
+                if (heap.empty()) appendLine(output, "EMPTY");
+                else appendLine(output, heap[0]);
+                break;
+            case 3:
+                input << "array\n";
+                appendHeapArray(output, heap);
+                break;
+            case 4: {
+                const int index = randomInt(
+                    random,
+                    -2,
+                    static_cast<int>(heap.size()) + 1
+                );
+                input << "at " << index << '\n';
+                if (index < 0 || index >= static_cast<int>(heap.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    appendLine(output, heap[static_cast<std::size_t>(index)]);
+                }
+                break;
+            }
+            case 5:
+                if (randomInt(random, 0, 1) == 0) {
+                    input << "size\n";
+                    appendLine(output, static_cast<int>(heap.size()));
+                } else {
+                    input << "empty\n";
+                    appendLine(output, heap.empty() ? "true" : "false");
+                }
+                break;
+            default:
+                input << "clear\n";
+                heap.clear();
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 GeneratedCase generateCase(
     const std::string& problemId,
     std::uint64_t seed,
@@ -3184,6 +3521,18 @@ GeneratedCase generateCase(
     }
     if (problemId == "F30-binary-min-heap") {
         return generateBinaryMinHeap(random, operationCount);
+    }
+    if (problemId == "F31-binary-tree-traversal-views") {
+        return generateBinaryTreeTraversalViews(random, operationCount);
+    }
+    if (problemId == "F32-level-order-tree-view") {
+        return generateLevelOrderTreeView(random, operationCount);
+    }
+    if (problemId == "F33-bottom-up-min-heap-build") {
+        return generateBottomUpMinHeapBuild(random, operationCount);
+    }
+    if (problemId == "F34-min-heap-removal-trace") {
+        return generateMinHeapRemovalTrace(random, operationCount);
     }
     throw std::runtime_error(
         "stress generator is not available for problem: " + problemId
