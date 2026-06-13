@@ -220,6 +220,22 @@ CH5-1 的最後六題完成 BST 的查找、更新與結構驗證：
 parent 的鄰居查詢、排除 range endpoint、只驗證 local ordering，以及只複製 successor
 key 的刪除。至此 CH5-1 規劃的 14 題全部完成。
 
+### Foundation 10：Forest And Union-Find Foundations
+
+CH5-2 的六題從一般森林表示法銜接到 disjoint-set forest：
+
+| ID | 題目 | 難度 | 核心能力 |
+|---|---|---|---|
+| `F41-parent-array-forest` | Parent Array Forest | D2 | root chain、depth、children view |
+| `F42-child-sibling-forest` | Child Sibling Forest | D2 | first-child/next-sibling representation |
+| `F43-forest-traversal-views` | Forest Traversal Views | D2 | ordered roots、forest preorder/postorder/levelorder |
+| `F44-quick-union-disjoint-set` | Quick Union Disjoint Set | D2 | root-to-root linking、raw parent array |
+| `F45-weighted-union-disjoint-set` | Weighted Union Disjoint Set | D2 | union by component size |
+| `F46-path-compression-trace` | Union Find Path Compression Trace | D3 | full path compression、parent transition |
+
+固定 stress 前綴會命中只走一層 parent、忽略 sibling chain、只走第一棵樹、把非 root
+直接相連、反向 weighting，以及 find 不壓縮路徑等錯誤。至此 CH5-2 規劃的六題完成。
+
 ### 暫緩的教材內容
 
 - CH1 Selection Sort、Binary Search 演算法題。

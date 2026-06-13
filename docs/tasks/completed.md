@@ -24,3 +24,4 @@ owner: project
 | `TASK.CURRICULUM.007` | Built Core Tree Representations | `docs/memory/sessions/2026-06-13-shawn.md` |
 | `TASK.CURRICULUM.008` | Expanded Tree Traversal And Heap Views | `docs/memory/sessions/2026-06-13-shawn.md` |
 | `TASK.CURRICULUM.009` | Completed BST Foundations | `docs/memory/sessions/2026-06-13-shawn.md` |
+| `TASK.CURRICULUM.010` | Completed Forest And Union-Find Foundations | `docs/memory/sessions/2026-06-13-shawn.md` |

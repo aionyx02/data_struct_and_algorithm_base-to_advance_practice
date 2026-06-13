@@ -11,7 +11,7 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.010 - Complete Forest And Union-Find Foundations
+### TASK.CURRICULUM.011 - Build Graph ADT Representations
 
 - Status: todo
 - Priority: P0
@@ -20,14 +20,15 @@ owner: project
   - `docs/learning-roadmap.md`
   - `docs/judge-requirements.md`
 - Acceptance criteria:
-  - [ ] Add six exercises to complete the CH5-2 allocation.
-  - [ ] Cover parent-array and child-sibling forest representations.
-  - [ ] Cover basic union, weighting, and path compression.
-  - [ ] Make root, depth, component size, and parent transitions observable.
+  - [ ] Add five exercises to complete the CH6 Graph ADT allocation.
+  - [ ] Cover adjacency matrix and adjacency list representations.
+  - [ ] Cover directed and undirected edge insertion, removal, and lookup.
+  - [ ] Make degree and ordered neighbor views observable.
+  - [ ] Keep shortest paths, MST, topological sort, and other graph algorithms deferred.
   - [ ] Preserve explicit complexity and storage contracts.
 - Validation:
   - [ ] Known correct submissions pass deterministic and seeded stress tests.
-  - [ ] Known stale-root, reversed-weight, and missing-compression mistakes receive non-AC verdicts.
+  - [ ] Known asymmetric edge, duplicate edge, and stale degree mistakes receive non-AC verdicts.
 
 ## Strategy
 

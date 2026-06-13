@@ -128,6 +128,17 @@ ctest --preset dev
 | `F39-bst-structural-validation` | Binary Search Tree Structural Validation | D3 |
 | `F40-bst-replacement-trace` | BST Replacement Node Trace | D3 |
 
+第十組 Forest And Union-Find Foundations：
+
+| ID | 題目 | 難度 |
+|---|---|---|
+| `F41-parent-array-forest` | Parent Array Forest | D2 |
+| `F42-child-sibling-forest` | Child Sibling Forest | D2 |
+| `F43-forest-traversal-views` | Forest Traversal Views | D2 |
+| `F44-quick-union-disjoint-set` | Quick Union Disjoint Set | D2 |
+| `F45-weighted-union-disjoint-set` | Weighted Union Disjoint Set | D2 |
+| `F46-path-compression-trace` | Union Find Path Compression Trace | D3 |
+
 CLI 範例：
 
 ```powershell

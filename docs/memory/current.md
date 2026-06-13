@@ -17,9 +17,9 @@ owner: project
 
 ## Current Focus
 
-- Active priority: complete the forest and Union-Find foundation family.
-- Current phase: CH5-2 representation and disjoint-set slice.
-- Current owner / handoff state: `TASK.CURRICULUM.010` is ready for `shawn`.
+- Active priority: build the Graph ADT representation family.
+- Current phase: CH6 storage and edge-operation slice.
+- Current owner / handoff state: `TASK.CURRICULUM.011` is ready for `shawn`.
 
 ## Important Constraints
 
@@ -30,16 +30,16 @@ owner: project
 
 ## Next Step
 
-- Add six forest and Union-Find exercises covering parent arrays,
-  child-sibling links, forest views, weighting, and path compression.
+- Add five Graph ADT exercises covering adjacency matrix/list,
+  directed and undirected edges, degree, and neighbor views.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-13.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 189 Judge integration tests passed. F35 through F40 each passed
+- Result: all 219 Judge integration tests passed. F41 through F46 each passed
   10,000 differential operations with seed `20260613`.
-- Known duplicate overwrite, predecessor replacement, parent-only neighbor,
-  exclusive range, local-only validation, and key-copy replacement mistakes
-  produced reproducible `WA` verdicts.
+- Known one-hop root, missing sibling, first-root-only traversal, non-root
+  union, reversed weighting, and missing compression mistakes produced
+  reproducible `WA` verdicts.
 - Known failing checks: none.
