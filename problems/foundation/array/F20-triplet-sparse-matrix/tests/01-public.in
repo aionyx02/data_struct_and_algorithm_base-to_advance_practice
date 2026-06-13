@@ -1,0 +1,11 @@
+3 4 4 10
+set 2 1 5
+set 0 3 7
+set 1 0 4
+get 2 1
+get 0 0
+term 0
+term 1
+term 2
+nonzero
+set 1 0 0

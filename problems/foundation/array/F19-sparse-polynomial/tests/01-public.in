@@ -1,0 +1,12 @@
+3 11
+set 2 5
+set 0 1
+set 5 3
+degree
+leading
+term 1
+coeff 0
+terms
+set 2 0
+term 1
+terms

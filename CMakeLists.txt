@@ -110,6 +110,12 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f15 F15-fixed-node-pool-list)
     add_catalog_test(catalog_lists_f16 F16-sentinel-doubly-list)
     add_catalog_test(catalog_lists_f17 F17-cursor-doubly-list)
+    add_catalog_test(catalog_lists_f18 F18-record-table)
+    add_catalog_test(catalog_lists_f19 F19-sparse-polynomial)
+    add_catalog_test(catalog_lists_f20 F20-triplet-sparse-matrix)
+    add_catalog_test(catalog_lists_f21 F21-csr-sparse-matrix)
+    add_catalog_test(catalog_lists_f22 F22-row-major-matrix)
+    add_catalog_test(catalog_lists_f23 F23-row-major-tensor)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -336,6 +342,90 @@ if(BUILD_TESTING AND WIN32)
         1
         "Verdict: WA"
     )
+    add_cli_judge_test(
+        judge_accepts_record_table
+        F18-record-table
+        tests/fixtures/submissions/record_table_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_record_table_without_reuse
+        F18-record-table
+        tests/fixtures/submissions/record_table_no_reuse.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_sparse_polynomial
+        F19-sparse-polynomial
+        tests/fixtures/submissions/sparse_polynomial_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_ascending_polynomial_terms
+        F19-sparse-polynomial
+        tests/fixtures/submissions/sparse_polynomial_ascending.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_triplet_sparse_matrix
+        F20-triplet-sparse-matrix
+        tests/fixtures/submissions/triplet_sparse_matrix_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_unsorted_triplets
+        F20-triplet-sparse-matrix
+        tests/fixtures/submissions/triplet_sparse_matrix_unsorted.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_csr_sparse_matrix
+        F21-csr-sparse-matrix
+        tests/fixtures/submissions/csr_sparse_matrix_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_shifted_csr_offsets
+        F21-csr-sparse-matrix
+        tests/fixtures/submissions/csr_sparse_matrix_shifted_offsets.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_row_major_matrix
+        F22-row-major-matrix
+        tests/fixtures/submissions/row_major_matrix_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_column_major_matrix
+        F22-row-major-matrix
+        tests/fixtures/submissions/row_major_matrix_column_major.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_row_major_tensor
+        F23-row-major-tensor
+        tests/fixtures/submissions/row_major_tensor_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_wrong_tensor_stride
+        F23-row-major-tensor
+        tests/fixtures/submissions/row_major_tensor_wrong_stride.cpp
+        1
+        "Verdict: WA"
+    )
 
     add_cli_stress_test(
         stress_accepts_array_adt
@@ -533,6 +623,102 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_cursor_without_reuse
         F17-cursor-doubly-list
         tests/fixtures/submissions/cursor_doubly_list_no_reuse.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_record_table
+        F18-record-table
+        tests/fixtures/submissions/record_table_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_record_table_without_reuse
+        F18-record-table
+        tests/fixtures/submissions/record_table_no_reuse.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_sparse_polynomial
+        F19-sparse-polynomial
+        tests/fixtures/submissions/sparse_polynomial_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_ascending_polynomial_terms
+        F19-sparse-polynomial
+        tests/fixtures/submissions/sparse_polynomial_ascending.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_triplet_sparse_matrix
+        F20-triplet-sparse-matrix
+        tests/fixtures/submissions/triplet_sparse_matrix_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_unsorted_triplets
+        F20-triplet-sparse-matrix
+        tests/fixtures/submissions/triplet_sparse_matrix_unsorted.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_csr_sparse_matrix
+        F21-csr-sparse-matrix
+        tests/fixtures/submissions/csr_sparse_matrix_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_shifted_csr_offsets
+        F21-csr-sparse-matrix
+        tests/fixtures/submissions/csr_sparse_matrix_shifted_offsets.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_row_major_matrix
+        F22-row-major-matrix
+        tests/fixtures/submissions/row_major_matrix_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_column_major_matrix
+        F22-row-major-matrix
+        tests/fixtures/submissions/row_major_matrix_column_major.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_row_major_tensor
+        F23-row-major-tensor
+        tests/fixtures/submissions/row_major_tensor_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_wrong_tensor_stride
+        F23-row-major-tensor
+        tests/fixtures/submissions/row_major_tensor_wrong_stride.cpp
         1
         "Verdict: WA"
         TRUE

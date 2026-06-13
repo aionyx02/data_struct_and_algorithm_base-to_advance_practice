@@ -1,0 +1,13 @@
+3 2 12
+set 0 1 4
+set 2 0 -7
+get 0 1
+get 2 0
+index 2 0
+coord 4
+fill 6
+get 1 1
+index 1 1
+coord 3
+rows
+columns

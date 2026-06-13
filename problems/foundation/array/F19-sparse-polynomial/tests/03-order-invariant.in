@@ -1,0 +1,11 @@
+4 10
+set 1 1
+set 4 4
+set 2 2
+set 3 3
+term 0
+term 1
+term 2
+term 3
+set 4 0
+leading

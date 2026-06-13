@@ -1,0 +1,17 @@
+5 5 5 11
+0 4 8
+2 0 3
+2 3 -1
+4 1 6
+4 4 2
+row_start 0
+row_start 1
+row_start 2
+row_start 3
+row_start 4
+row_start 5
+row_nnz 1
+row_nnz 2
+row_sum 4
+term 3
+get 3 3

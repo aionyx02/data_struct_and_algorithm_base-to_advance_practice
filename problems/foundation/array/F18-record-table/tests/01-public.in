@@ -1,0 +1,11 @@
+3 10
+insert 1 10
+insert 2 20
+get 1
+update 1 15
+get 1
+contains 3
+erase 2
+size
+insert 1 99
+contains 2

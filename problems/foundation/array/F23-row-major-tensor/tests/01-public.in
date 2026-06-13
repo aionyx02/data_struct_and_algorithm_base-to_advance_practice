@@ -1,0 +1,11 @@
+2 3 4 10
+set 1 2 3 9
+get 1 2 3
+index 1 2 3
+coord 23
+get 0 0 0
+fill -2
+get 1 0 2
+dims
+index 0 2 1
+coord 9

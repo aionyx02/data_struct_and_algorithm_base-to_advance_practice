@@ -1,0 +1,10 @@
+2 3 9
+get -1 0
+set 0 3 5
+index 2 0
+coord -1
+coord 6
+index 0 0
+index 1 2
+get 1 2
+columns

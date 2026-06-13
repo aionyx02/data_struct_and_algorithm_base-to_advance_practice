@@ -1680,6 +1680,643 @@ GeneratedCase generateCursorDoublyList(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateRecordTable(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    const int capacity = randomInt(random, 3, 8);
+    if (operationCount < capacity + 3) {
+        throw std::runtime_error(
+            "F18-record-table operation_limit is too small"
+        );
+    }
+    std::vector<std::pair<int, int>> records;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << capacity << ' ' << operationCount << '\n';
+
+    for (int index = 0; index < capacity; ++index) {
+        const int value = randomValue(random);
+        input << "insert " << 100 + index << ' ' << value << '\n';
+        records.emplace_back(100 + index, value);
+    }
+    input << "erase 100\n";
+    appendLine(output, records.front().second);
+    records.erase(records.begin());
+    const int replacementValue = randomValue(random);
+    input << "insert 999 " << replacementValue << '\n';
+    records.emplace_back(999, replacementValue);
+    input << "get 999\n";
+    appendLine(output, replacementValue);
+
+    auto find = [&](int id) {
+        return std::find_if(
+            records.begin(),
+            records.end(),
+            [&](const auto& record) { return record.first == id; }
+        );
+    };
+
+    for (int operation = capacity + 3;
+         operation < operationCount;
+         ++operation) {
+        const int id = randomInt(random, -5, 12);
+        switch (randomInt(random, 0, 6)) {
+            case 0: {
+                const int value = randomValue(random);
+                input << "insert " << id << ' ' << value << '\n';
+                if (find(id) != records.end()) appendLine(output, "DUPLICATE");
+                else if (static_cast<int>(records.size()) == capacity) {
+                    appendLine(output, "FULL");
+                } else {
+                    records.emplace_back(id, value);
+                }
+                break;
+            }
+            case 1: {
+                const int value = randomValue(random);
+                input << "update " << id << ' ' << value << '\n';
+                const auto iterator = find(id);
+                if (iterator == records.end()) appendLine(output, "NOT_FOUND");
+                else iterator->second = value;
+                break;
+            }
+            case 2: {
+                input << "erase " << id << '\n';
+                const auto iterator = find(id);
+                if (iterator == records.end()) appendLine(output, "NOT_FOUND");
+                else {
+                    appendLine(output, iterator->second);
+                    records.erase(iterator);
+                }
+                break;
+            }
+            case 3: {
+                input << "get " << id << '\n';
+                const auto iterator = find(id);
+                if (iterator == records.end()) appendLine(output, "NOT_FOUND");
+                else appendLine(output, iterator->second);
+                break;
+            }
+            case 4:
+                input << "contains " << id << '\n';
+                appendLine(
+                    output,
+                    find(id) == records.end() ? "false" : "true"
+                );
+                break;
+            case 5:
+                input << "size\n";
+                appendLine(output, static_cast<int>(records.size()));
+                break;
+            default:
+                input << "clear\n";
+                records.clear();
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateSparsePolynomial(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    const int capacity = randomInt(random, 3, 8);
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "F19-sparse-polynomial operation_limit is too small"
+        );
+    }
+    std::vector<std::pair<int, int>> terms;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << capacity << ' ' << operationCount << '\n';
+
+    input << "set 1 11\nset 5 55\nset 3 33\nterm 0\n";
+    terms = {{5, 55}, {3, 33}, {1, 11}};
+    output << "5 55\n";
+
+    auto position = [&](int exponent) {
+        return std::find_if(
+            terms.begin(),
+            terms.end(),
+            [&](const auto& term) { return term.first <= exponent; }
+        );
+    };
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 6)) {
+            case 0:
+            case 1: {
+                const int exponent = randomInt(random, -2, 12);
+                const int coefficient =
+                    randomInt(random, 0, 4) == 0 ? 0 : randomValue(random);
+                input << "set " << exponent << ' ' << coefficient << '\n';
+                if (exponent < 0) {
+                    appendLine(output, "OUT_OF_RANGE");
+                    break;
+                }
+                auto iterator = position(exponent);
+                const bool found =
+                    iterator != terms.end() && iterator->first == exponent;
+                if (found && coefficient == 0) terms.erase(iterator);
+                else if (found) iterator->second = coefficient;
+                else if (coefficient != 0) {
+                    if (static_cast<int>(terms.size()) == capacity) {
+                        appendLine(output, "FULL");
+                    } else {
+                        terms.insert(iterator, {exponent, coefficient});
+                    }
+                }
+                break;
+            }
+            case 2: {
+                const int exponent = randomInt(random, -2, 12);
+                input << "coeff " << exponent << '\n';
+                if (exponent < 0) appendLine(output, "OUT_OF_RANGE");
+                else {
+                    const auto iterator = position(exponent);
+                    appendLine(
+                        output,
+                        iterator != terms.end() &&
+                                iterator->first == exponent
+                            ? iterator->second
+                            : 0
+                    );
+                }
+                break;
+            }
+            case 3:
+                input << "degree\n";
+                appendLine(output, terms.empty() ? -1 : terms.front().first);
+                break;
+            case 4:
+                input << "leading\n";
+                if (terms.empty()) appendLine(output, "EMPTY");
+                else {
+                    output << terms.front().first << ' '
+                           << terms.front().second << '\n';
+                }
+                break;
+            case 5: {
+                const int index =
+                    randomInt(random, -2, static_cast<int>(terms.size()) + 1);
+                input << "term " << index << '\n';
+                if (index < 0 || index >= static_cast<int>(terms.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << terms[static_cast<std::size_t>(index)].first
+                           << ' '
+                           << terms[static_cast<std::size_t>(index)].second
+                           << '\n';
+                }
+                break;
+            }
+            default:
+                if (randomInt(random, 0, 1) == 0) {
+                    input << "terms\n";
+                    appendLine(output, static_cast<int>(terms.size()));
+                } else {
+                    input << "clear\n";
+                    terms.clear();
+                }
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+struct MatrixEntry {
+    int row;
+    int column;
+    int value;
+};
+
+GeneratedCase generateTripletSparseMatrix(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    const int rows = randomInt(random, 3, 6);
+    const int columns = randomInt(random, 3, 6);
+    const int capacity = randomInt(random, 3, 9);
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "F20-triplet-sparse-matrix operation_limit is too small"
+        );
+    }
+    std::vector<MatrixEntry> entries;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << rows << ' ' << columns << ' ' << capacity << ' '
+          << operationCount << '\n';
+    input << "set 2 1 21\nset 0 2 2\nset 1 0 10\nterm 0\n";
+    entries = {{0, 2, 2}, {1, 0, 10}, {2, 1, 21}};
+    output << "0 2 2\n";
+
+    auto key = [&](int row, int column) { return row * columns + column; };
+    auto position = [&](int row, int column) {
+        const int target = key(row, column);
+        return std::find_if(
+            entries.begin(),
+            entries.end(),
+            [&](const MatrixEntry& entry) {
+                return key(entry.row, entry.column) >= target;
+            }
+        );
+    };
+    auto valid = [&](int row, int column) {
+        return row >= 0 && row < rows && column >= 0 && column < columns;
+    };
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 4)) {
+            case 0:
+            case 1: {
+                const int row = randomInt(random, -1, rows);
+                const int column = randomInt(random, -1, columns);
+                const int value =
+                    randomInt(random, 0, 4) == 0 ? 0 : randomValue(random);
+                input << "set " << row << ' ' << column << ' ' << value
+                      << '\n';
+                if (!valid(row, column)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                    break;
+                }
+                auto iterator = position(row, column);
+                const bool found =
+                    iterator != entries.end() && iterator->row == row &&
+                    iterator->column == column;
+                if (found && value == 0) entries.erase(iterator);
+                else if (found) iterator->value = value;
+                else if (value != 0) {
+                    if (static_cast<int>(entries.size()) == capacity) {
+                        appendLine(output, "FULL");
+                    } else {
+                        entries.insert(iterator, {row, column, value});
+                    }
+                }
+                break;
+            }
+            case 2: {
+                const int row = randomInt(random, -1, rows);
+                const int column = randomInt(random, -1, columns);
+                input << "get " << row << ' ' << column << '\n';
+                if (!valid(row, column)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    const auto iterator = position(row, column);
+                    appendLine(
+                        output,
+                        iterator != entries.end() && iterator->row == row &&
+                                iterator->column == column
+                            ? iterator->value
+                            : 0
+                    );
+                }
+                break;
+            }
+            case 3: {
+                const int index = randomInt(
+                    random,
+                    -2,
+                    static_cast<int>(entries.size()) + 1
+                );
+                input << "term " << index << '\n';
+                if (index < 0 || index >= static_cast<int>(entries.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    const MatrixEntry& entry =
+                        entries[static_cast<std::size_t>(index)];
+                    output << entry.row << ' ' << entry.column << ' '
+                           << entry.value << '\n';
+                }
+                break;
+            }
+            default:
+                if (randomInt(random, 0, 1) == 0) {
+                    input << "nonzero\n";
+                    appendLine(output, static_cast<int>(entries.size()));
+                } else {
+                    input << "clear\n";
+                    entries.clear();
+                }
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateCsrSparseMatrix(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    const int rows = randomInt(random, 2, 6);
+    const int columns = randomInt(random, 2, 6);
+    std::vector<MatrixEntry> entries;
+    std::vector<int> rowOffsets(static_cast<std::size_t>(rows + 1), 0);
+    for (int row = 0; row < rows; ++row) {
+        for (int column = 0; column < columns; ++column) {
+            if (randomInt(random, 0, 3) == 0) {
+                int value = randomValue(random);
+                if (value == 0) value = 1;
+                entries.push_back({row, column, value});
+            }
+        }
+        rowOffsets[static_cast<std::size_t>(row + 1)] =
+            static_cast<int>(entries.size());
+    }
+    if (operationCount < 3) {
+        throw std::runtime_error(
+            "F21-csr-sparse-matrix operation_limit is too small"
+        );
+    }
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << rows << ' ' << columns << ' ' << entries.size() << ' '
+          << operationCount << '\n';
+    for (const MatrixEntry& entry : entries) {
+        input << entry.row << ' ' << entry.column << ' ' << entry.value
+              << '\n';
+    }
+    input << "row_start 0\nrow_start 1\nrow_start " << rows << '\n';
+    appendLine(output, 0);
+    appendLine(output, rowOffsets[1]);
+    appendLine(output, static_cast<int>(entries.size()));
+
+    auto valid = [&](int row, int column) {
+        return row >= 0 && row < rows && column >= 0 && column < columns;
+    };
+
+    for (int operation = 3; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 5)) {
+            case 0: {
+                const int row = randomInt(random, -1, rows);
+                const int column = randomInt(random, -1, columns);
+                input << "get " << row << ' ' << column << '\n';
+                if (!valid(row, column)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    int value = 0;
+                    for (int index = rowOffsets[static_cast<std::size_t>(row)];
+                         index <
+                         rowOffsets[static_cast<std::size_t>(row + 1)];
+                         ++index) {
+                        if (entries[static_cast<std::size_t>(index)].column ==
+                            column) {
+                            value =
+                                entries[static_cast<std::size_t>(index)].value;
+                        }
+                    }
+                    appendLine(output, value);
+                }
+                break;
+            }
+            case 1:
+            case 2: {
+                const int row = randomInt(random, -1, rows);
+                const bool count = randomInt(random, 0, 1) == 0;
+                input << (count ? "row_nnz " : "row_sum ") << row << '\n';
+                if (row < 0 || row >= rows) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else if (count) {
+                    appendLine(
+                        output,
+                        rowOffsets[static_cast<std::size_t>(row + 1)] -
+                            rowOffsets[static_cast<std::size_t>(row)]
+                    );
+                } else {
+                    int sum = 0;
+                    for (int index = rowOffsets[static_cast<std::size_t>(row)];
+                         index <
+                         rowOffsets[static_cast<std::size_t>(row + 1)];
+                         ++index) {
+                        sum += entries[static_cast<std::size_t>(index)].value;
+                    }
+                    appendLine(output, sum);
+                }
+                break;
+            }
+            case 3: {
+                const int row = randomInt(random, -1, rows + 1);
+                input << "row_start " << row << '\n';
+                if (row < 0 || row > rows) appendLine(output, "OUT_OF_RANGE");
+                else appendLine(
+                    output,
+                    rowOffsets[static_cast<std::size_t>(row)]
+                );
+                break;
+            }
+            case 4: {
+                const int index = randomInt(
+                    random,
+                    -2,
+                    static_cast<int>(entries.size()) + 1
+                );
+                input << "term " << index << '\n';
+                if (index < 0 || index >= static_cast<int>(entries.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    const MatrixEntry& entry =
+                        entries[static_cast<std::size_t>(index)];
+                    output << entry.column << ' ' << entry.value << '\n';
+                }
+                break;
+            }
+            default:
+                input << "nonzero\n";
+                appendLine(output, static_cast<int>(entries.size()));
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateRowMajorMatrix(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    const int rows = randomInt(random, 2, 6);
+    const int columns = randomInt(random, 2, 6);
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "F22-row-major-matrix operation_limit is too small"
+        );
+    }
+    const int total = rows * columns;
+    std::vector<int> values(static_cast<std::size_t>(total), 0);
+    std::ostringstream input;
+    std::ostringstream output;
+    input << rows << ' ' << columns << ' ' << operationCount << '\n';
+    input << "index 1 0\ncoord " << columns << "\nset 1 0 77\nget 1 0\n";
+    appendLine(output, columns);
+    output << "1 0\n";
+    appendLine(output, 77);
+    values[static_cast<std::size_t>(columns)] = 77;
+
+    auto valid = [&](int row, int column) {
+        return row >= 0 && row < rows && column >= 0 && column < columns;
+    };
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 6)) {
+            case 0: {
+                const int row = randomInt(random, -1, rows);
+                const int column = randomInt(random, -1, columns);
+                const int value = randomValue(random);
+                input << "set " << row << ' ' << column << ' ' << value
+                      << '\n';
+                if (!valid(row, column)) appendLine(output, "OUT_OF_RANGE");
+                else {
+                    values[static_cast<std::size_t>(
+                        row * columns + column
+                    )] = value;
+                }
+                break;
+            }
+            case 1:
+            case 2: {
+                const int row = randomInt(random, -1, rows);
+                const int column = randomInt(random, -1, columns);
+                const bool get = randomInt(random, 0, 1) == 0;
+                input << (get ? "get " : "index ") << row << ' ' << column
+                      << '\n';
+                if (!valid(row, column)) appendLine(output, "OUT_OF_RANGE");
+                else if (get) {
+                    appendLine(
+                        output,
+                        values[static_cast<std::size_t>(
+                            row * columns + column
+                        )]
+                    );
+                } else {
+                    appendLine(output, row * columns + column);
+                }
+                break;
+            }
+            case 3: {
+                const int linear = randomInt(random, -2, total + 1);
+                input << "coord " << linear << '\n';
+                if (linear < 0 || linear >= total) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << linear / columns << ' ' << linear % columns
+                           << '\n';
+                }
+                break;
+            }
+            case 4: {
+                const int value = randomValue(random);
+                input << "fill " << value << '\n';
+                std::fill(values.begin(), values.end(), value);
+                break;
+            }
+            case 5:
+                input << "rows\n";
+                appendLine(output, rows);
+                break;
+            default:
+                input << "columns\n";
+                appendLine(output, columns);
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateRowMajorTensor(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    const int d1 = randomInt(random, 2, 4);
+    const int d2 = randomInt(random, 2, 4);
+    const int d3 = d2 + 1;
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "F23-row-major-tensor operation_limit is too small"
+        );
+    }
+    const int total = d1 * d2 * d3;
+    std::vector<int> values(static_cast<std::size_t>(total), 0);
+    std::ostringstream input;
+    std::ostringstream output;
+    input << d1 << ' ' << d2 << ' ' << d3 << ' ' << operationCount << '\n';
+    input << "index 0 1 0\ncoord " << d3
+          << "\nset 1 0 0 88\nget 1 0 0\n";
+    appendLine(output, d3);
+    output << "0 1 0\n";
+    appendLine(output, 88);
+    values[static_cast<std::size_t>(d2 * d3)] = 88;
+
+    auto valid = [&](int i, int j, int k) {
+        return i >= 0 && i < d1 && j >= 0 && j < d2 &&
+               k >= 0 && k < d3;
+    };
+    auto index = [&](int i, int j, int k) {
+        return (i * d2 + j) * d3 + k;
+    };
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 5)) {
+            case 0: {
+                const int i = randomInt(random, -1, d1);
+                const int j = randomInt(random, -1, d2);
+                const int k = randomInt(random, -1, d3);
+                const int value = randomValue(random);
+                input << "set " << i << ' ' << j << ' ' << k << ' '
+                      << value << '\n';
+                if (!valid(i, j, k)) appendLine(output, "OUT_OF_RANGE");
+                else values[static_cast<std::size_t>(index(i, j, k))] = value;
+                break;
+            }
+            case 1:
+            case 2: {
+                const int i = randomInt(random, -1, d1);
+                const int j = randomInt(random, -1, d2);
+                const int k = randomInt(random, -1, d3);
+                const bool get = randomInt(random, 0, 1) == 0;
+                input << (get ? "get " : "index ") << i << ' ' << j << ' '
+                      << k << '\n';
+                if (!valid(i, j, k)) appendLine(output, "OUT_OF_RANGE");
+                else if (get) {
+                    appendLine(
+                        output,
+                        values[static_cast<std::size_t>(index(i, j, k))]
+                    );
+                } else {
+                    appendLine(output, index(i, j, k));
+                }
+                break;
+            }
+            case 3: {
+                const int linear = randomInt(random, -2, total + 1);
+                input << "coord " << linear << '\n';
+                if (linear < 0 || linear >= total) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    const int i = linear / (d2 * d3);
+                    const int remainder = linear % (d2 * d3);
+                    output << i << ' ' << remainder / d3 << ' '
+                           << remainder % d3 << '\n';
+                }
+                break;
+            }
+            case 4: {
+                const int value = randomValue(random);
+                input << "fill " << value << '\n';
+                std::fill(values.begin(), values.end(), value);
+                break;
+            }
+            default:
+                input << "dims\n";
+                output << d1 << ' ' << d2 << ' ' << d3 << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 GeneratedCase generateCase(
     const std::string& problemId,
     std::uint64_t seed,
@@ -1736,6 +2373,24 @@ GeneratedCase generateCase(
     }
     if (problemId == "F17-cursor-doubly-list") {
         return generateCursorDoublyList(random, operationCount);
+    }
+    if (problemId == "F18-record-table") {
+        return generateRecordTable(random, operationCount);
+    }
+    if (problemId == "F19-sparse-polynomial") {
+        return generateSparsePolynomial(random, operationCount);
+    }
+    if (problemId == "F20-triplet-sparse-matrix") {
+        return generateTripletSparseMatrix(random, operationCount);
+    }
+    if (problemId == "F21-csr-sparse-matrix") {
+        return generateCsrSparseMatrix(random, operationCount);
+    }
+    if (problemId == "F22-row-major-matrix") {
+        return generateRowMajorMatrix(random, operationCount);
+    }
+    if (problemId == "F23-row-major-tensor") {
+        return generateRowMajorTensor(random, operationCount);
     }
     throw std::runtime_error(
         "stress generator is not available for problem: " + problemId

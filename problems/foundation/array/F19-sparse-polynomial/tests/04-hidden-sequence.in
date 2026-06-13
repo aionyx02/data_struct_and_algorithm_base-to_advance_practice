@@ -1,0 +1,11 @@
+2 10
+set 0 5
+set 2 -3
+coeff 1
+set 0 0
+terms
+set 1 7
+term 0
+term 1
+clear
+degree

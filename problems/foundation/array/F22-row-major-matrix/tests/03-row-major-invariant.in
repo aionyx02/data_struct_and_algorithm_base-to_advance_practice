@@ -1,0 +1,12 @@
+4 5 11
+index 0 4
+index 1 0
+index 2 3
+coord 4
+coord 5
+coord 13
+set 2 3 99
+get 2 3
+fill 8
+get 0 4
+get 3 0

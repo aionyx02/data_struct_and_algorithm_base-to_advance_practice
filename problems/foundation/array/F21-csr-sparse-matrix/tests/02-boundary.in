@@ -1,0 +1,9 @@
+2 3 0 8
+get -1 0
+get 0 3
+row_nnz 2
+row_sum -1
+row_start -1
+row_start 2
+term 0
+nonzero

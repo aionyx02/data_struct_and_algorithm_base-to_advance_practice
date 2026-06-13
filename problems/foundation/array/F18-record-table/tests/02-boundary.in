@@ -1,0 +1,9 @@
+1 8
+get 9
+erase 9
+update 9 1
+insert 9 5
+insert 8 4
+get 9
+clear
+size

@@ -1,0 +1,12 @@
+3 4 5 11
+index 0 3 4
+index 1 0 0
+index 1 2 3
+index 2 0 0
+coord 19
+coord 20
+coord 33
+coord 40
+set 1 2 3 77
+get 1 2 3
+dims
