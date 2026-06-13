@@ -108,6 +108,8 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f13 F13-singly-list-split)
     add_catalog_test(catalog_lists_f14 F14-doubly-list-splice)
     add_catalog_test(catalog_lists_f15 F15-fixed-node-pool-list)
+    add_catalog_test(catalog_lists_f16 F16-sentinel-doubly-list)
+    add_catalog_test(catalog_lists_f17 F17-cursor-doubly-list)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -306,6 +308,34 @@ if(BUILD_TESTING AND WIN32)
         1
         "Verdict: WA"
     )
+    add_cli_judge_test(
+        judge_accepts_sentinel_doubly_list
+        F16-sentinel-doubly-list
+        tests/fixtures/submissions/sentinel_doubly_list_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_broken_sentinel_backlink
+        F16-sentinel-doubly-list
+        tests/fixtures/submissions/sentinel_doubly_list_broken_backlink.cpp
+        1
+        "Verdict:"
+    )
+    add_cli_judge_test(
+        judge_accepts_cursor_doubly_list
+        F17-cursor-doubly-list
+        tests/fixtures/submissions/cursor_doubly_list_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_cursor_without_reuse
+        F17-cursor-doubly-list
+        tests/fixtures/submissions/cursor_doubly_list_no_reuse.cpp
+        1
+        "Verdict: WA"
+    )
 
     add_cli_stress_test(
         stress_accepts_array_adt
@@ -471,6 +501,38 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_pool_without_reuse
         F15-fixed-node-pool-list
         tests/fixtures/submissions/fixed_node_pool_list_no_reuse.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_sentinel_doubly_list
+        F16-sentinel-doubly-list
+        tests/fixtures/submissions/sentinel_doubly_list_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_broken_sentinel_backlink
+        F16-sentinel-doubly-list
+        tests/fixtures/submissions/sentinel_doubly_list_broken_backlink.cpp
+        1
+        "Verdict:"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_cursor_doubly_list
+        F17-cursor-doubly-list
+        tests/fixtures/submissions/cursor_doubly_list_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_cursor_without_reuse
+        F17-cursor-doubly-list
+        tests/fixtures/submissions/cursor_doubly_list_no_reuse.cpp
         1
         "Verdict: WA"
         TRUE

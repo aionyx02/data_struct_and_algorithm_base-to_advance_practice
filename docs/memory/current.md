@@ -17,9 +17,9 @@ owner: project
 
 ## Current Focus
 
-- Active priority: complete the remaining list representations.
-- Current phase: final CH4 foundation chapter.
-- Current owner / handoff state: `TASK.CURRICULUM.004` is ready for `shawn`.
+- Active priority: complete Arrays and Structures.
+- Current phase: remaining CH2 foundation problems.
+- Current owner / handoff state: `TASK.CURRICULUM.005` is ready for `shawn`.
 
 ## Important Constraints
 
@@ -30,13 +30,14 @@ owner: project
 
 ## Next Step
 
-- Implement sentinel doubly linked list and cursor linked list as F16 and F17.
+- Define F18 onward for records, polynomial representation, sparse matrices, and
+  multidimensional row-major storage.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-13.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 64 Judge integration tests passed. F11 through F15 each passed 10,000
-  differential operations with seed `20260613`, for 50,000 new operations total.
-- Known lost-tail, broken-backlink, and no-reuse submissions produced reproducible non-AC verdicts.
+- Result: all 74 Judge integration tests passed. F16 and F17 each passed 10,000
+  differential operations with seed `20260613`.
+- Known sentinel-backlink and cursor-no-reuse submissions produced reproducible non-AC verdicts.
 - Known failing checks: none.

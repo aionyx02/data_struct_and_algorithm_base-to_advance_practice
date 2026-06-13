@@ -11,7 +11,7 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.004 - Complete List Representations
+### TASK.CURRICULUM.005 - Complete Arrays And Structures
 
 - Status: todo
 - Priority: P0
@@ -21,13 +21,13 @@ owner: project
   - `docs/learning-roadmap.md`
   - `docs/judge-requirements.md`
 - Acceptance criteria:
-  - [ ] Add sentinel-based and cursor-based linked-list representations.
-  - [ ] Complete the ten-problem CH4 list allocation.
-  - [ ] Compare pointer and array-index link representations explicitly.
-  - [ ] Preserve lifecycle, boundary, and node-reuse coverage.
+  - [ ] Add records, polynomial, sparse-matrix, and multidimensional-array representations.
+  - [ ] Complete the eight-problem CH2 allocation without adding general algorithms.
+  - [ ] Make row-major indexing and sparse storage invariants observable.
+  - [ ] Preserve explicit complexity and storage contracts.
 - Validation:
   - [ ] Known correct submissions pass deterministic and seeded stress tests.
-  - [ ] Known sentinel or free-list mistakes receive non-AC verdicts.
+  - [ ] Known indexing or representation mistakes receive non-AC verdicts.
 
 ## Strategy
 

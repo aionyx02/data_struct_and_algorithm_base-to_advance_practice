@@ -135,6 +135,18 @@ Topological Sort、Critical Path 等演算法內容。
 Generator 對 concat、splice 與 node pool 加入固定前綴，讓 source reuse、逆向刪除與
 容量填滿後重用都成為每個 seed 必測的 invariant。
 
+### Foundation 04：Complete List Representations
+
+最後兩題補齊 CH4 的十題串列配置：
+
+| ID | 題目 | 難度 | 核心能力 |
+|---|---|---|---|
+| `F16-sentinel-doubly-list` | Sentinel Doubly Linked List | D2 | dummy endpoints 與無分支 link/unlink |
+| `F17-cursor-doubly-list` | Cursor Doubly Linked List | D3 | array cursor、雙向 index links、free list |
+
+至此能直接比較 raw pointer、sentinel、circular、fixed pool 與 cursor 五種 linked
+representation，並說明其邊界處理與記憶體管理取捨。
+
 ### 暫緩的教材內容
 
 - CH1 Selection Sort、Binary Search 演算法題。

@@ -18,3 +18,4 @@ owner: project
 | `TASK.CURRICULUM.001` | Completed the five-problem Linear Storage chapter | `docs/memory/sessions/2026-06-13-shawn.md` |
 | `TASK.CURRICULUM.002` | Completed Pointer-Based Linear Structures | `docs/memory/sessions/2026-06-13-shawn.md` |
 | `TASK.CURRICULUM.003` | Completed List Transformations And Node Management | `docs/memory/sessions/2026-06-13-shawn.md` |
+| `TASK.CURRICULUM.004` | Completed CH4 list representations | `docs/memory/sessions/2026-06-13-shawn.md` |

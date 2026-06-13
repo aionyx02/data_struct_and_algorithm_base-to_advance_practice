@@ -1423,6 +1423,263 @@ GeneratedCase generateFixedNodePoolList(
     return {input.str(), output.str()};
 }
 
+void sentinelListOperation(
+    std::mt19937_64& random,
+    std::vector<int>& values,
+    std::ostringstream& input,
+    std::ostringstream& output
+) {
+    switch (randomInt(random, 0, 11)) {
+        case 0: {
+            const int value = randomValue(random);
+            input << "push_front " << value << '\n';
+            values.insert(values.begin(), value);
+            break;
+        }
+        case 1: {
+            const int value = randomValue(random);
+            input << "push_back " << value << '\n';
+            values.push_back(value);
+            break;
+        }
+        case 2:
+            input << "pop_front\n";
+            if (values.empty()) appendLine(output, "EMPTY");
+            else {
+                appendLine(output, values.front());
+                values.erase(values.begin());
+            }
+            break;
+        case 3:
+            input << "pop_back\n";
+            if (values.empty()) appendLine(output, "EMPTY");
+            else {
+                appendLine(output, values.back());
+                values.pop_back();
+            }
+            break;
+        case 4: {
+            const int index =
+                randomInt(random, -2, static_cast<int>(values.size()) + 2);
+            const int value = randomValue(random);
+            input << "insert " << index << ' ' << value << '\n';
+            if (index < 0 || index > static_cast<int>(values.size())) {
+                appendLine(output, "OUT_OF_RANGE");
+            } else {
+                values.insert(values.begin() + index, value);
+            }
+            break;
+        }
+        case 5: {
+            const int index =
+                randomInt(random, -2, static_cast<int>(values.size()) + 1);
+            input << "erase " << index << '\n';
+            if (index < 0 || index >= static_cast<int>(values.size())) {
+                appendLine(output, "OUT_OF_RANGE");
+            } else {
+                appendLine(output, values[static_cast<std::size_t>(index)]);
+                values.erase(values.begin() + index);
+            }
+            break;
+        }
+        case 6: {
+            const int index =
+                randomInt(random, -2, static_cast<int>(values.size()) + 1);
+            input << "get " << index << '\n';
+            if (index < 0 || index >= static_cast<int>(values.size())) {
+                appendLine(output, "OUT_OF_RANGE");
+            } else {
+                appendLine(output, values[static_cast<std::size_t>(index)]);
+            }
+            break;
+        }
+        case 7:
+            input << "front\n";
+            if (values.empty()) appendLine(output, "EMPTY");
+            else appendLine(output, values.front());
+            break;
+        case 8:
+            input << "back\n";
+            if (values.empty()) appendLine(output, "EMPTY");
+            else appendLine(output, values.back());
+            break;
+        case 9:
+            input << "size\n";
+            appendLine(output, static_cast<int>(values.size()));
+            break;
+        case 10:
+            input << "empty\n";
+            appendLine(output, values.empty() ? "true" : "false");
+            break;
+        default:
+            input << "clear\n";
+            values.clear();
+            break;
+    }
+}
+
+GeneratedCase generateSentinelDoublyList(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "F16-sentinel-doubly-list requires operation_limit of at least 4"
+        );
+    }
+    std::vector<int> values;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << operationCount << '\n';
+
+    const int first = randomValue(random);
+    const int second = randomValue(random);
+    input << "push_back " << first << '\n';
+    input << "push_back " << second << '\n';
+    values = {first, second};
+    input << "pop_front\n";
+    appendLine(output, values.front());
+    values.erase(values.begin());
+    input << "pop_back\n";
+    appendLine(output, values.back());
+    values.pop_back();
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        sentinelListOperation(random, values, input, output);
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateCursorDoublyList(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    const int capacity = randomInt(random, 1, 8);
+    if (operationCount < capacity + 4) {
+        throw std::runtime_error(
+            "F17-cursor-doubly-list operation_limit is too small"
+        );
+    }
+    std::vector<int> values;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << capacity << ' ' << operationCount << '\n';
+
+    for (int index = 0; index < capacity; ++index) {
+        const int value = randomValue(random);
+        input << "push_back " << value << '\n';
+        values.push_back(value);
+    }
+    input << "pop_front\n";
+    appendLine(output, values.front());
+    values.erase(values.begin());
+    const int replacement = randomValue(random);
+    input << "push_front " << replacement << '\n';
+    values.insert(values.begin(), replacement);
+    input << "free\n";
+    appendLine(output, 0);
+    input << "front\n";
+    appendLine(output, values.front());
+
+    for (int operation = capacity + 4;
+         operation < operationCount;
+         ++operation) {
+        switch (randomInt(random, 0, 11)) {
+            case 0:
+            case 1:
+            case 2: {
+                const int choice = randomInt(random, 0, 2);
+                int index = choice == 0 ? 0 : static_cast<int>(values.size());
+                const int value = randomValue(random);
+                if (choice == 2) {
+                    index = randomInt(
+                        random,
+                        -2,
+                        static_cast<int>(values.size()) + 2
+                    );
+                    input << "insert " << index << ' ' << value << '\n';
+                } else {
+                    input << (choice == 0 ? "push_front " : "push_back ")
+                          << value << '\n';
+                }
+                if (index < 0 || index > static_cast<int>(values.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else if (static_cast<int>(values.size()) == capacity) {
+                    appendLine(output, "FULL");
+                } else {
+                    values.insert(values.begin() + index, value);
+                }
+                break;
+            }
+            case 3:
+            case 4: {
+                const bool front = randomInt(random, 0, 1) == 0;
+                input << (front ? "pop_front\n" : "pop_back\n");
+                if (values.empty()) appendLine(output, "EMPTY");
+                else if (front) {
+                    appendLine(output, values.front());
+                    values.erase(values.begin());
+                } else {
+                    appendLine(output, values.back());
+                    values.pop_back();
+                }
+                break;
+            }
+            case 5: {
+                const int index =
+                    randomInt(random, -2, static_cast<int>(values.size()) + 1);
+                input << "erase " << index << '\n';
+                if (index < 0 || index >= static_cast<int>(values.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    appendLine(output, values[static_cast<std::size_t>(index)]);
+                    values.erase(values.begin() + index);
+                }
+                break;
+            }
+            case 6: {
+                const int index =
+                    randomInt(random, -2, static_cast<int>(values.size()) + 1);
+                input << "get " << index << '\n';
+                if (index < 0 || index >= static_cast<int>(values.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    appendLine(output, values[static_cast<std::size_t>(index)]);
+                }
+                break;
+            }
+            case 7:
+                input << "front\n";
+                if (values.empty()) appendLine(output, "EMPTY");
+                else appendLine(output, values.front());
+                break;
+            case 8:
+                input << "back\n";
+                if (values.empty()) appendLine(output, "EMPTY");
+                else appendLine(output, values.back());
+                break;
+            case 9:
+                input << "size\n";
+                appendLine(output, static_cast<int>(values.size()));
+                break;
+            case 10:
+                input << "free\n";
+                appendLine(output, capacity - static_cast<int>(values.size()));
+                break;
+            default:
+                if (randomInt(random, 0, 1) == 0) {
+                    input << "empty\n";
+                    appendLine(output, values.empty() ? "true" : "false");
+                } else {
+                    input << "clear\n";
+                    values.clear();
+                }
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 GeneratedCase generateCase(
     const std::string& problemId,
     std::uint64_t seed,
@@ -1473,6 +1730,12 @@ GeneratedCase generateCase(
     }
     if (problemId == "F15-fixed-node-pool-list") {
         return generateFixedNodePoolList(random, operationCount);
+    }
+    if (problemId == "F16-sentinel-doubly-list") {
+        return generateSentinelDoublyList(random, operationCount);
+    }
+    if (problemId == "F17-cursor-doubly-list") {
+        return generateCursorDoublyList(random, operationCount);
     }
     throw std::runtime_error(
         "stress generator is not available for problem: " + problemId

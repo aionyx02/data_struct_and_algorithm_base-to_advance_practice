@@ -73,6 +73,13 @@ ctest --preset dev
 | `F14-doubly-list-splice` | Splice Doubly Linked Lists | D3 |
 | `F15-fixed-node-pool-list` | Fixed Node Pool List | D3 |
 
+第四章 Complete List Representations：
+
+| ID | 題目 | 難度 |
+|---|---|---|
+| `F16-sentinel-doubly-list` | Sentinel Doubly Linked List | D2 |
+| `F17-cursor-doubly-list` | Cursor Doubly Linked List | D3 |
+
 CLI 範例：
 
 ```powershell
