@@ -1,0 +1,23 @@
+{
+  "type": "decision_summary",
+  "updated": "2026-06-13",
+  "gates": [
+    {
+      "id": "ADR-0001",
+      "status": "proposed",
+      "decision": "Use one local Judge core with CLI first and Web as a later adapter",
+      "required_action": "Obtain explicit acceptance before broad architecture implementation"
+    },
+    {
+      "id": "UNTRUSTED_EXECUTION",
+      "status": "approval_required",
+      "decision": "Do not expose code execution to untrusted or network users",
+      "required_action": "Create and accept a dedicated security ADR before changing this boundary"
+    }
+  ],
+  "references": [
+    "docs/adr/0001-local-judge-boundary.md",
+    "docs/security.md",
+    "docs/decisions.md"
+  ]
+}
