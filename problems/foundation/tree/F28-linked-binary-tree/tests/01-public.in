@@ -1,0 +1,16 @@
+15
+root 10 100
+attach_left 10 20 200
+attach_right 10 30 300
+attach_left 20 40 400
+parent 40
+left 10
+right 10
+value 30
+erase_leaf 20
+erase_leaf 40
+left 20
+erase_leaf 20
+left 10
+size
+parent 10

@@ -1,0 +1,16 @@
+15
+root 5 50
+attach_right 5 8 80
+attach_left 8 6 60
+attach_right 8 9 90
+attach_right 6 7 70
+parent 8
+parent 6
+parent 7
+left 8
+right 8
+right 6
+erase_leaf 7
+right 6
+erase_leaf 6
+left 8

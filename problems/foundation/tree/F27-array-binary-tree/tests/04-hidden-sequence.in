@@ -1,0 +1,17 @@
+12 16
+set 0 8
+set 2 4
+set 6 2
+set 5 3
+set 11 7
+get 11
+parent_index 11
+right_index 2
+left_index 5
+erase 5
+erase 11
+erase 5
+set 11 9
+get 11
+occupied
+clear

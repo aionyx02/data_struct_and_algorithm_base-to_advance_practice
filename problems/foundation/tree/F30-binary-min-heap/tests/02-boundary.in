@@ -1,0 +1,13 @@
+2 12
+pop
+top
+at 0
+change 0 3
+push 4
+push 2
+push 1
+size
+change 2 0
+pop
+pop
+empty

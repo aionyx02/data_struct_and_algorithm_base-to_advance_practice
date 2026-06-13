@@ -119,6 +119,10 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f24 F24-two-stacks-one-array)
     add_catalog_test(catalog_lists_f25 F25-circular-linked-queue)
     add_catalog_test(catalog_lists_f26 F26-linked-deque)
+    add_catalog_test(catalog_lists_f27 F27-array-binary-tree)
+    add_catalog_test(catalog_lists_f28 F28-linked-binary-tree)
+    add_catalog_test(catalog_lists_f29 F29-inorder-threaded-tree)
+    add_catalog_test(catalog_lists_f30 F30-binary-min-heap)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -471,6 +475,62 @@ if(BUILD_TESTING AND WIN32)
         1
         "Verdict: WA"
     )
+    add_cli_judge_test(
+        judge_accepts_array_binary_tree
+        F27-array-binary-tree
+        tests/fixtures/submissions/array_binary_tree_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_one_based_tree_indices
+        F27-array-binary-tree
+        tests/fixtures/submissions/array_binary_tree_one_based.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_linked_binary_tree
+        F28-linked-binary-tree
+        tests/fixtures/submissions/linked_binary_tree_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_missing_tree_parent_links
+        F28-linked-binary-tree
+        tests/fixtures/submissions/linked_binary_tree_missing_parent.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_inorder_threaded_tree
+        F29-inorder-threaded-tree
+        tests/fixtures/submissions/inorder_threaded_tree_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_id_neighbor_threads
+        F29-inorder-threaded-tree
+        tests/fixtures/submissions/inorder_threaded_tree_id_neighbors.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_binary_min_heap
+        F30-binary-min-heap
+        tests/fixtures/submissions/binary_min_heap_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_heap_without_change_sift_down
+        F30-binary-min-heap
+        tests/fixtures/submissions/binary_min_heap_no_sift_down_change.cpp
+        1
+        "Verdict: WA"
+    )
 
     add_cli_stress_test(
         stress_accepts_array_adt
@@ -812,6 +872,70 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_stale_deque_tail
         F26-linked-deque
         tests/fixtures/submissions/linked_deque_stale_tail.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_array_binary_tree
+        F27-array-binary-tree
+        tests/fixtures/submissions/array_binary_tree_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_one_based_tree_indices
+        F27-array-binary-tree
+        tests/fixtures/submissions/array_binary_tree_one_based.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_linked_binary_tree
+        F28-linked-binary-tree
+        tests/fixtures/submissions/linked_binary_tree_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_missing_tree_parent_links
+        F28-linked-binary-tree
+        tests/fixtures/submissions/linked_binary_tree_missing_parent.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_inorder_threaded_tree
+        F29-inorder-threaded-tree
+        tests/fixtures/submissions/inorder_threaded_tree_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_id_neighbor_threads
+        F29-inorder-threaded-tree
+        tests/fixtures/submissions/inorder_threaded_tree_id_neighbors.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_binary_min_heap
+        F30-binary-min-heap
+        tests/fixtures/submissions/binary_min_heap_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_heap_without_change_sift_down
+        F30-binary-min-heap
+        tests/fixtures/submissions/binary_min_heap_no_sift_down_change.cpp
         1
         "Verdict: WA"
         TRUE

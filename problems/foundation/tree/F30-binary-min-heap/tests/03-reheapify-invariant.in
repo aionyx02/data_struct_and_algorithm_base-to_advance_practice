@@ -1,0 +1,17 @@
+8 16
+push 1
+push 3
+push 2
+push 7
+push 6
+push 5
+push 4
+change 0 9
+top
+at 0
+change 5 0
+top
+pop
+top
+size
+at 2

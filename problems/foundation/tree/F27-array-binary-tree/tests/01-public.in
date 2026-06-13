@@ -1,0 +1,15 @@
+7 14
+set 0 10
+set 1 20
+set 2 30
+set 5 60
+parent_index 5
+left_index 2
+right_index 2
+get 5
+erase 2
+erase 5
+erase 2
+occupied
+right_index 0
+left_index 0

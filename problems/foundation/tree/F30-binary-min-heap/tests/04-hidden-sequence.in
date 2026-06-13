@@ -1,0 +1,18 @@
+6 17
+push -1
+push -5
+push 3
+push 0
+push 2
+at 0
+at 1
+change 1 4
+top
+push -9
+top
+pop
+pop
+change 0 10
+top
+clear
+empty

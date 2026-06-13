@@ -1,0 +1,18 @@
+6 2 11
+0 10 -1 5
+1 20 -1 -1
+2 30 4 0
+3 40 -1 -1
+4 50 1 3
+5 60 -1 -1
+inorder
+predecessor 1
+successor 1
+predecessor 3
+successor 3
+predecessor 2
+successor 2
+left_link 5
+right_link 3
+left_link 0
+right_link 0

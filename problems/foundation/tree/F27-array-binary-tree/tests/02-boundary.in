@@ -1,0 +1,11 @@
+3 10
+set 1 4
+get 3
+get 0
+set 0 1
+set 2 3
+set 3 5
+parent_index 0
+erase 0
+clear
+occupied

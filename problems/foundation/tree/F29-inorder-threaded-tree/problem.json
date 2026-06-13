@@ -1,0 +1,16 @@
+{
+  "id": "F29-inorder-threaded-tree",
+  "title": "Inorder Threaded Binary Tree",
+  "stage": "F",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 400,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(n) construction, O(1) direct thread steps, and O(h) successor/predecessor worst case",
+  "expected_space": "O(n)",
+  "forbidden_symbols": ["std::map", "std::unordered_map", "std::vector", "std::list"],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}
