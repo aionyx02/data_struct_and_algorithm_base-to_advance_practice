@@ -1,0 +1,76 @@
+# Data Structures Practice
+
+這是一個以 C++20、CLion 與 CMake 建立的漸進式資料結構學習專案。
+
+目前範圍只包含資料結構。題目主要依據 `資料結構/` 內的課程教材，再延伸到高等資料結構。
+專案會先建立本地 CLI Judge，之後才增加 Web 練習介面；兩者共用同一套判題核心。
+
+## Current Plan
+
+- 68 題教材基礎。
+- 64 題高等資料結構。
+- ADT 實作題限制會直接完成核心工作的 STL 容器。
+- Judge 驗證答案、invariant、時間、記憶體、禁止 API 與複雜度成長。
+
+詳細規劃：
+
+- `docs/learning-roadmap.md`
+- `docs/judge-requirements.md`
+- `docs/architecture.md`
+
+## Context Workflow
+
+```powershell
+npm install
+npm run team:status
+npm run lint
+npm run security:scan
+npm test
+npm run team:guard
+npm run docs:refresh
+npm run docs:ready
+```
+
+AI 或開發者開始工作前，先讀取 `CLAUDE.md`，再依 `docs/index.md` 路由到最小必要文件。
+
+## C++ Workflow
+
+使用 MinGW Debug preset：
+
+```powershell
+cmake --preset dev
+cmake --build --preset dev
+ctest --preset dev
+```
+
+目前可練習的第一章：
+
+| ID | 題目 | 難度 |
+|---|---|---|
+| `F01-array-adt` | Fixed Array ADT | D0 |
+| `F02-dynamic-array` | Manual Dynamic Array | D1 |
+| `F03-stack-array` | Fixed Capacity Array Stack | D1 |
+| `F04-circular-queue` | Fixed Capacity Circular Queue | D1 |
+| `F05-array-deque` | Fixed Capacity Array Deque | D2 |
+
+第二章 Pointer-Based Linear Structures：
+
+| ID | 題目 | 難度 |
+|---|---|---|
+| `F06-singly-linked-list` | Singly Linked List | D1 |
+| `F07-linked-stack` | Linked Stack | D1 |
+| `F08-linked-queue` | Linked Queue | D1 |
+| `F09-doubly-linked-list` | Doubly Linked List | D2 |
+| `F10-circular-linked-list` | Circular Singly Linked List | D2 |
+
+CLI 範例：
+
+```powershell
+.\build\mingw-debug\algo.exe list
+.\build\mingw-debug\algo.exe show F03-stack-array
+.\build\mingw-debug\algo.exe test F03-stack-array tests\fixtures\submissions\stack_correct.cpp
+.\build\mingw-debug\algo.exe stress F03-stack-array tests\fixtures\submissions\stack_correct.cpp --seed 20260613
+```
+
+`stress` 預設依題目 metadata 執行 100 cases，每個 case 100 次操作。失敗時會輸出
+master seed、case seed、重播命令與完整 failing input；可用 `--cases` 調整 case 數。

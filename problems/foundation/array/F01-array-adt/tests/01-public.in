@@ -1,0 +1,10 @@
+5 8
+10 20 30 40 50
+get 2
+set 2 99
+get 2
+swap 0 4
+front
+back
+size
+get 4

@@ -1,0 +1,10 @@
+4 8
+7 7 -1 0
+set 0 42
+swap 0 3
+get 0
+get 3
+swap 1 2
+front
+back
+size

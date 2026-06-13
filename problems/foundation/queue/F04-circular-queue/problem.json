@@ -1,0 +1,21 @@
+{
+  "id": "F04-circular-queue",
+  "title": "Fixed Capacity Circular Queue",
+  "stage": "F",
+  "difficulty": "D1",
+  "judge_mode": "stdio",
+  "time_limit_ms": 300,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(1) per operation",
+  "expected_space": "O(capacity)",
+  "forbidden_symbols": [
+    "std::deque",
+    "std::list",
+    "std::queue",
+    "std::vector"
+  ],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}

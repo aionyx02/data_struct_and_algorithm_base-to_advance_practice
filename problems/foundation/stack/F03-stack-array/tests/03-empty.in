@@ -1,0 +1,8 @@
+1 7
+pop
+top
+empty
+push 42
+empty
+pop
+size

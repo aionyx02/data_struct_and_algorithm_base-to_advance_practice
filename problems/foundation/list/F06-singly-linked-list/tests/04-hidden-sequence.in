@@ -1,0 +1,16 @@
+15
+push_front 2
+push_front 1
+push_back 4
+insert 2 3
+get 3
+erase 0
+front
+clear
+empty
+push_back 9
+insert 0 8
+back
+erase 1
+back
+size

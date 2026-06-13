@@ -1,0 +1,21 @@
+{
+  "id": "F09-doubly-linked-list",
+  "title": "Doubly Linked List",
+  "stage": "F",
+  "difficulty": "D2",
+  "judge_mode": "stdio",
+  "time_limit_ms": 400,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(1) at ends and O(min(index, n-index)) for indexed operations",
+  "expected_space": "O(n)",
+  "forbidden_symbols": [
+    "std::deque",
+    "std::forward_list",
+    "std::list",
+    "std::vector"
+  ],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}

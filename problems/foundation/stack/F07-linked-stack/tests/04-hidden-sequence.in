@@ -1,0 +1,14 @@
+13
+push 10
+push 20
+clear
+empty
+push 30
+top
+push 40
+pop
+pop
+size
+clear
+top
+empty

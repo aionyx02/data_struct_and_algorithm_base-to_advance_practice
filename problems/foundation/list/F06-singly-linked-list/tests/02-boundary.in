@@ -1,0 +1,13 @@
+12
+empty
+front
+back
+get 0
+erase 0
+insert 1 5
+insert 0 7
+front
+back
+erase 0
+empty
+size

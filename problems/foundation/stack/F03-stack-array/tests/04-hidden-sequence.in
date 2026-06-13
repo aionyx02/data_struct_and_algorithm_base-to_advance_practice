@@ -1,0 +1,15 @@
+4 14
+push 1
+push 2
+pop
+push 3
+push 4
+top
+size
+push 5
+push 6
+pop
+pop
+pop
+pop
+empty

@@ -1,0 +1,14 @@
+13
+enqueue 10
+enqueue 20
+clear
+empty
+enqueue 30
+front
+back
+enqueue 40
+dequeue
+front
+dequeue
+size
+empty

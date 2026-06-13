@@ -1,0 +1,15 @@
+14
+enqueue 1
+dequeue
+empty
+enqueue 2
+front
+back
+enqueue 3
+dequeue
+dequeue
+empty
+enqueue 4
+back
+size
+front

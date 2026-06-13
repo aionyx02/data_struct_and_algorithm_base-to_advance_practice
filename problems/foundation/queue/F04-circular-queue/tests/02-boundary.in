@@ -1,0 +1,10 @@
+1 9
+empty
+dequeue
+enqueue 5
+enqueue 6
+front
+back
+size
+dequeue
+empty

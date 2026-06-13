@@ -1,0 +1,12 @@
+2 11
+capacity
+push 10
+push 20
+size
+push 30
+capacity
+get 2
+set 1 25
+get 1
+pop
+size

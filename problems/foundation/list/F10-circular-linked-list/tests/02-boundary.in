@@ -1,0 +1,12 @@
+11
+empty
+pop_front
+front
+back
+rotate
+push_front 5
+rotate
+front
+back
+pop_front
+empty

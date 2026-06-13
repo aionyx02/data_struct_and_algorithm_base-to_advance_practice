@@ -1,0 +1,14 @@
+13
+empty
+pop_front
+pop_back
+front
+back
+insert 1 5
+insert 0 7
+get -1
+erase 1
+pop_back
+empty
+size
+back

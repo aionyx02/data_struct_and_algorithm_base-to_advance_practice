@@ -1,0 +1,11 @@
+1 10
+pop
+get 0
+push 7
+get 0
+set 1 9
+push 8
+capacity
+pop
+pop
+pop

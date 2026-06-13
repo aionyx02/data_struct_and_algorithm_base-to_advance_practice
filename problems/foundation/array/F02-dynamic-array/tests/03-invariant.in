@@ -1,0 +1,14 @@
+3 13
+push 1
+push 2
+push 3
+capacity
+push 4
+capacity
+push 5
+size
+clear
+size
+capacity
+push 9
+get 0

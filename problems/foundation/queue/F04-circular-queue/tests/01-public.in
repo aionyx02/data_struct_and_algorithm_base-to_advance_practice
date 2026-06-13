@@ -1,0 +1,13 @@
+3 12
+enqueue 10
+enqueue 20
+front
+back
+size
+dequeue
+enqueue 30
+enqueue 40
+back
+dequeue
+dequeue
+dequeue
