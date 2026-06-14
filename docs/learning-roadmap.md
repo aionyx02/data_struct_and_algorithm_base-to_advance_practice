@@ -252,6 +252,24 @@ CH6 的五題只處理圖形儲存、邊操作與可觀察 invariant，不延伸
 list、刪除後 stale in-degree，以及 edge table 不重用最小空 slot 等錯誤。MST、
 Shortest Path、Topological Sort 與其他圖演算法仍維持暫緩。
 
+### Foundation 12：Hash Table Foundations
+
+CH8 的七題從 hash bucket 映射逐步進入碰撞處理、刪除與容量成長：
+
+| ID | 題目 | 難度 | 核心能力 |
+|---|---|---|---|
+| `F52-modulo-hash-function` | Normalized Modulo Hash Function | D1 | negative-key normalization、bucket equivalence |
+| `F53-linear-probing-hash-table` | Linear Probing Hash Table | D2 | wraparound probing、cluster observation |
+| `F54-quadratic-probing-hash-table` | Quadratic Probing Hash Table | D2 | square-step probe sequence、unreachable empty slots |
+| `F55-double-hashing-table` | Double Hashing Table | D3 | key-dependent secondary step、full-cycle probing |
+| `F56-tombstone-hash-table` | Linear Probing With Tombstones | D3 | deleted-state lookup、first-tombstone reuse |
+| `F57-node-pool-chained-hash-table` | Node Pool Chained Hash Table | D3 | sorted chains、fixed node pool、slot reuse |
+| `F58-rehashing-linear-probing-table` | Rehashing Linear Probing Table | D3 | load factor、capacity growth、full reinsertion |
+
+固定 stress 前綴會命中 negative remainder、probe 不 wrap、把 quadratic 或 double
+hashing 寫成 linear probing、lookup 遇 tombstone 提早停止、碰撞覆寫 chain，以及
+rehash 後沿用 stale slot 等錯誤。至此 CH8 規劃的七題完成。
+
 ### 暫緩的教材內容
 
 - CH1 Selection Sort、Binary Search 演算法題。

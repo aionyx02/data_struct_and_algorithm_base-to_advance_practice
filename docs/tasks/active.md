@@ -11,7 +11,7 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.012 - Build Hash Table Foundations
+### TASK.CURRICULUM.013 - Build Advanced Search Tree Foundations
 
 - Status: todo
 - Priority: P0
@@ -20,16 +20,16 @@ owner: project
   - `docs/learning-roadmap.md`
   - `docs/judge-requirements.md`
 - Acceptance criteria:
-  - [ ] Add seven exercises to complete the CH8 Hashing allocation.
-  - [ ] Cover direct bucket mapping and collision observability.
-  - [ ] Cover linear probing, quadratic probing, and double hashing.
-  - [ ] Cover deletion tombstones and separate chaining.
-  - [ ] Make load factor and rehash transitions observable.
-  - [ ] Preserve explicit average/worst-case complexity and storage contracts.
+  - [ ] Add seven exercises to complete the CH10 Search Trees allocation.
+  - [ ] Cover AVL single/double rotations, insertion, deletion, and validation.
+  - [ ] Cover fixed-order multiway search-tree node representation.
+  - [ ] Cover red-black insertion transitions and structural validation.
+  - [ ] Keep dynamic-programming optimization and general search algorithms deferred.
+  - [ ] Preserve explicit height, update, and storage contracts.
 - Validation:
   - [ ] Known correct submissions pass deterministic and seeded stress tests.
-  - [ ] Known collision overwrite, broken probe, tombstone, and stale rehash
-        mistakes receive non-AC verdicts.
+  - [ ] Known wrong rotation, stale height, broken parent link, and red-black
+        invariant mistakes receive non-AC verdicts.
 
 ## Strategy
 

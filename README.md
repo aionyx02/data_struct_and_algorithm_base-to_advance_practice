@@ -149,6 +149,18 @@ ctest --preset dev
 | `F50-directed-adjacency-list` | Directed Sorted Adjacency List | D2 |
 | `F51-fixed-edge-table-graph` | Fixed Capacity Edge Table Graph | D3 |
 
+第十二組 Hash Table Foundations：
+
+| ID | 題目 | 難度 |
+|---|---|---|
+| `F52-modulo-hash-function` | Normalized Modulo Hash Function | D1 |
+| `F53-linear-probing-hash-table` | Linear Probing Hash Table | D2 |
+| `F54-quadratic-probing-hash-table` | Quadratic Probing Hash Table | D2 |
+| `F55-double-hashing-table` | Double Hashing Table | D3 |
+| `F56-tombstone-hash-table` | Linear Probing With Tombstones | D3 |
+| `F57-node-pool-chained-hash-table` | Node Pool Chained Hash Table | D3 |
+| `F58-rehashing-linear-probing-table` | Rehashing Linear Probing Table | D3 |
+
 CLI 範例：
 
 ```powershell

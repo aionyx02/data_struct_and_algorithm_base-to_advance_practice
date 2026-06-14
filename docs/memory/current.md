@@ -17,9 +17,9 @@ owner: project
 
 ## Current Focus
 
-- Active priority: build the Hash Table foundation family.
-- Current phase: CH8 collision handling and table lifecycle.
-- Current owner / handoff state: `TASK.CURRICULUM.012` is ready for `shawn`.
+- Active priority: build the advanced search-tree foundation family.
+- Current phase: CH10 balanced tree representations and invariants.
+- Current owner / handoff state: `TASK.CURRICULUM.013` is ready for `shawn`.
 
 ## Important Constraints
 
@@ -30,16 +30,16 @@ owner: project
 
 ## Next Step
 
-- Add seven Hash Table exercises covering bucket mapping, open addressing,
-  tombstones, separate chaining, and observable rehash transitions.
+- Add seven CH10 search-tree exercises covering AVL rotations and deletion,
+  multiway search-tree nodes, and red-black tree invariants.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-14.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 244 Judge integration tests passed. F47 through F51 each passed
+- Result: all 279 Judge integration tests passed. F52 through F58 each passed
   10,000 differential operations with seed `20260614`.
-- Known asymmetric matrix, duplicate arc count, unsorted adjacency list,
-  stale in-degree, and missing edge-slot reuse mistakes produced reproducible
-  `WA` verdicts.
+- Known negative remainder, missing probe wrap, wrong probe sequence,
+  tombstone-stop, collision overwrite, and stale rehash-slot mistakes produced
+  reproducible `WA` verdicts.
 - Known failing checks: none.
