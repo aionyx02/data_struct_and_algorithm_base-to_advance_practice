@@ -1,0 +1,15 @@
+7 14
+insert 6
+insert 13
+insert 20
+erase 13
+contains 20
+slot 20
+insert 27
+table
+erase 99
+clear
+table
+size
+tombstones
+state 7

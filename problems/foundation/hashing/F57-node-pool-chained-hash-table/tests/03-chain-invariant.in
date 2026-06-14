@@ -1,0 +1,15 @@
+4 5 14
+insert 9
+insert 1
+insert 5
+insert -3
+bucket 1
+bucket_slots 1
+erase 5
+insert 13
+bucket 1
+bucket_slots 1
+contains 5
+slot 13
+size
+free_slots

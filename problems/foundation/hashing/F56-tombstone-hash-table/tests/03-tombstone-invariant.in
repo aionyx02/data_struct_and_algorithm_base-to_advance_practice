@@ -1,0 +1,15 @@
+5 14
+insert 0
+insert 5
+insert 10
+erase 0
+contains 10
+insert 10
+insert 15
+table
+slot 15
+erase 5
+insert 20
+table
+size
+tombstones

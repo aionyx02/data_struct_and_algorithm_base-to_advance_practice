@@ -1,0 +1,13 @@
+7 12
+insert 0
+insert 7
+insert 14
+contains 21
+probe_count 21
+insert 21
+slot 14
+clear
+insert -8
+slot -8
+table
+capacity

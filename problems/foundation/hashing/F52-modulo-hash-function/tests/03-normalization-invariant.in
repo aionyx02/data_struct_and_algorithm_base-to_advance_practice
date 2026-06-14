@@ -1,0 +1,8 @@
+5 7
+hash -6
+hash -5
+hash -4
+same_bucket -6 4
+same_bucket -5 0
+sequence -7 6
+hash 2147483647

@@ -1,0 +1,16 @@
+{
+  "id": "F57-node-pool-chained-hash-table",
+  "title": "Node Pool Chained Hash Table",
+  "stage": "F",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 500,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "average O(1), worst-case O(size) per key query",
+  "expected_space": "O(bucketCount + nodeCapacity)",
+  "forbidden_symbols": ["std::map", "std::unordered_map", "std::set", "std::vector", "std::list"],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}

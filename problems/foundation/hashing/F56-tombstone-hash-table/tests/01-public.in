@@ -1,0 +1,16 @@
+7 15
+insert 1
+insert 8
+insert 15
+erase 8
+table
+contains 15
+slot 15
+insert 22
+table
+slot 22
+size
+tombstones
+state 2
+state 6
+contains 8

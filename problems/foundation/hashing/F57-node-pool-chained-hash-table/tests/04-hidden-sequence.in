@@ -1,0 +1,14 @@
+7 4 13
+insert 14
+insert 7
+insert 0
+bucket 0
+erase 7
+insert 21
+bucket_slots 0
+slot 21
+clear
+bucket 0
+free_slots
+insert -7
+slot -7

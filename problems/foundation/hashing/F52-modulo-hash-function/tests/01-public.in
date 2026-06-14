@@ -1,0 +1,8 @@
+7 7
+hash 0
+hash 8
+hash -1
+same_bucket 1 8
+same_bucket -1 1
+sequence -2 5
+bucket_count

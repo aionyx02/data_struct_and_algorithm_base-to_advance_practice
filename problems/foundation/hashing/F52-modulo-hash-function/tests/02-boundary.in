@@ -1,0 +1,6 @@
+1 5
+hash -100
+hash 100
+same_bucket -9 12
+sequence 4 0
+bucket_count

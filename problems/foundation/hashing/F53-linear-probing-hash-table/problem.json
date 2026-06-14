@@ -1,0 +1,16 @@
+{
+  "id": "F53-linear-probing-hash-table",
+  "title": "Linear Probing Hash Table",
+  "stage": "F",
+  "difficulty": "D2",
+  "judge_mode": "stdio",
+  "time_limit_ms": 500,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "average O(1), worst-case O(capacity) per query",
+  "expected_space": "O(capacity)",
+  "forbidden_symbols": ["std::map", "std::unordered_map", "std::set", "std::vector", "std::list"],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}

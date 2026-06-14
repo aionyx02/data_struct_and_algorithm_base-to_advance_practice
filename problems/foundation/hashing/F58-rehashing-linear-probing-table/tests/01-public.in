@@ -1,0 +1,16 @@
+3 15
+insert 1
+capacity
+insert 4
+capacity
+table
+slot 1
+slot 4
+insert 8
+table
+size
+load_percent
+contains 4
+insert 4
+capacity
+slot 8

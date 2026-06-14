@@ -1,0 +1,7 @@
+11 6
+sequence -12 7
+same_bucket -12 10
+same_bucket -12 -1
+hash -2147483647
+hash 22
+bucket_count

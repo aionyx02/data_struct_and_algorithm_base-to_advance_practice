@@ -1,0 +1,14 @@
+2 13
+insert 2
+insert 4
+insert 6
+table
+capacity
+slot 2
+slot 4
+slot 6
+clear
+insert -3
+table
+capacity
+load_percent

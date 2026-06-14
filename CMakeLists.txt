@@ -144,6 +144,13 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f49 F49-undirected-adjacency-list)
     add_catalog_test(catalog_lists_f50 F50-directed-adjacency-list)
     add_catalog_test(catalog_lists_f51 F51-fixed-edge-table-graph)
+    add_catalog_test(catalog_lists_f52 F52-modulo-hash-function)
+    add_catalog_test(catalog_lists_f53 F53-linear-probing-hash-table)
+    add_catalog_test(catalog_lists_f54 F54-quadratic-probing-hash-table)
+    add_catalog_test(catalog_lists_f55 F55-double-hashing-table)
+    add_catalog_test(catalog_lists_f56 F56-tombstone-hash-table)
+    add_catalog_test(catalog_lists_f57 F57-node-pool-chained-hash-table)
+    add_catalog_test(catalog_lists_f58 F58-rehashing-linear-probing-table)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -843,6 +850,104 @@ if(BUILD_TESTING AND WIN32)
         judge_rejects_edge_table_without_reuse
         F51-fixed-edge-table-graph
         tests/fixtures/submissions/fixed_edge_table_graph_no_reuse.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_modulo_hash_function
+        F52-modulo-hash-function
+        tests/fixtures/submissions/modulo_hash_function_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_negative_hash_remainder
+        F52-modulo-hash-function
+        tests/fixtures/submissions/modulo_hash_function_negative_remainder.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_linear_probing_hash_table
+        F53-linear-probing-hash-table
+        tests/fixtures/submissions/linear_probing_hash_table_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_linear_probing_without_wrap
+        F53-linear-probing-hash-table
+        tests/fixtures/submissions/linear_probing_hash_table_no_wrap.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_quadratic_probing_hash_table
+        F54-quadratic-probing-hash-table
+        tests/fixtures/submissions/quadratic_probing_hash_table_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_linear_as_quadratic_probing
+        F54-quadratic-probing-hash-table
+        tests/fixtures/submissions/quadratic_probing_hash_table_linear.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_double_hashing_table
+        F55-double-hashing-table
+        tests/fixtures/submissions/double_hashing_table_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_fixed_step_double_hashing
+        F55-double-hashing-table
+        tests/fixtures/submissions/double_hashing_table_fixed_step.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_tombstone_hash_table
+        F56-tombstone-hash-table
+        tests/fixtures/submissions/tombstone_hash_table_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_lookup_stopping_at_tombstone
+        F56-tombstone-hash-table
+        tests/fixtures/submissions/tombstone_hash_table_stops_at_deleted.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_node_pool_chained_hash_table
+        F57-node-pool-chained-hash-table
+        tests/fixtures/submissions/node_pool_chained_hash_table_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_chaining_collision_overwrite
+        F57-node-pool-chained-hash-table
+        tests/fixtures/submissions/node_pool_chained_hash_table_overwrites_collision.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_rehashing_linear_probing_table
+        F58-rehashing-linear-probing-table
+        tests/fixtures/submissions/rehashing_linear_probing_table_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_stale_slots_after_rehash
+        F58-rehashing-linear-probing-table
+        tests/fixtures/submissions/rehashing_linear_probing_table_stale_slots.cpp
         1
         "Verdict: WA"
     )
@@ -1587,6 +1692,118 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_edge_table_without_reuse
         F51-fixed-edge-table-graph
         tests/fixtures/submissions/fixed_edge_table_graph_no_reuse.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_modulo_hash_function
+        F52-modulo-hash-function
+        tests/fixtures/submissions/modulo_hash_function_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_negative_hash_remainder
+        F52-modulo-hash-function
+        tests/fixtures/submissions/modulo_hash_function_negative_remainder.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_linear_probing_hash_table
+        F53-linear-probing-hash-table
+        tests/fixtures/submissions/linear_probing_hash_table_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_linear_probing_without_wrap
+        F53-linear-probing-hash-table
+        tests/fixtures/submissions/linear_probing_hash_table_no_wrap.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_quadratic_probing_hash_table
+        F54-quadratic-probing-hash-table
+        tests/fixtures/submissions/quadratic_probing_hash_table_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_linear_as_quadratic_probing
+        F54-quadratic-probing-hash-table
+        tests/fixtures/submissions/quadratic_probing_hash_table_linear.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_double_hashing_table
+        F55-double-hashing-table
+        tests/fixtures/submissions/double_hashing_table_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_fixed_step_double_hashing
+        F55-double-hashing-table
+        tests/fixtures/submissions/double_hashing_table_fixed_step.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_tombstone_hash_table
+        F56-tombstone-hash-table
+        tests/fixtures/submissions/tombstone_hash_table_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_lookup_stopping_at_tombstone
+        F56-tombstone-hash-table
+        tests/fixtures/submissions/tombstone_hash_table_stops_at_deleted.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_node_pool_chained_hash_table
+        F57-node-pool-chained-hash-table
+        tests/fixtures/submissions/node_pool_chained_hash_table_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_chaining_collision_overwrite
+        F57-node-pool-chained-hash-table
+        tests/fixtures/submissions/node_pool_chained_hash_table_overwrites_collision.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_rehashing_linear_probing_table
+        F58-rehashing-linear-probing-table
+        tests/fixtures/submissions/rehashing_linear_probing_table_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_stale_slots_after_rehash
+        F58-rehashing-linear-probing-table
+        tests/fixtures/submissions/rehashing_linear_probing_table_stale_slots.cpp
         1
         "Verdict: WA"
         TRUE

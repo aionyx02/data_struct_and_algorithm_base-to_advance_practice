@@ -1,0 +1,13 @@
+1 12
+capacity
+insert -1
+capacity
+slot -1
+insert 2
+capacity
+table
+load_percent
+clear
+capacity
+table
+size

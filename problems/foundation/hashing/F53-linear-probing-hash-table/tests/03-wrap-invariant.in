@@ -1,0 +1,12 @@
+5 11
+insert 4
+insert 9
+insert 14
+insert 19
+table
+slot 19
+probe_count 19
+contains -1
+insert -1
+table
+size

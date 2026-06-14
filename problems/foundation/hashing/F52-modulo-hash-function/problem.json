@@ -1,0 +1,16 @@
+{
+  "id": "F52-modulo-hash-function",
+  "title": "Normalized Modulo Hash Function",
+  "stage": "F",
+  "difficulty": "D1",
+  "judge_mode": "stdio",
+  "time_limit_ms": 300,
+  "memory_limit_mb": 32,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(1) per hash and same_bucket query",
+  "expected_space": "O(1)",
+  "forbidden_symbols": [],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}
