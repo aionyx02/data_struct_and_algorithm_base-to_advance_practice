@@ -270,6 +270,36 @@ CH8 的七題從 hash bucket 映射逐步進入碰撞處理、刪除與容量成
 hashing 寫成 linear probing、lookup 遇 tombstone 提早停止、碰撞覆寫 chain，以及
 rehash 後沿用 stale slot 等錯誤。至此 CH8 規劃的七題完成。
 
+### Foundation 13：Advanced Search Tree Foundations
+
+CH10 的七題從局部 AVL 旋轉逐步進入完整更新與跨節點 invariant：
+
+| ID | 題目 | 難度 | 核心能力 |
+|---|---|---|---|
+| `F59-avl-single-rotation-trace` | AVL Single Rotation Trace | D2 | LL/RR imbalance、單旋轉與高度更新 |
+| `F60-avl-double-rotation-trace` | AVL Double Rotation Trace | D2 | LR/RL imbalance、雙旋轉順序 |
+| `F61-avl-insertion-tree` | AVL Insertion Tree | D3 | 插入路徑回溯、balance factor 維護 |
+| `F62-avl-deletion-tree` | AVL Deletion Tree | D3 | 刪除後多層重平衡 |
+| `F63-avl-structural-validation` | AVL Structural Validation | D3 | 全域 BST order、parent、height 與 balance 驗證 |
+| `F64-order-four-search-tree-validation` | Order-Four Search Tree Validation | D3 | multiway node occupancy、separator range |
+| `F65-red-black-insertion-tree` | Red-Black Insertion Tree | D3 | recolor、rotation、black-height invariant |
+
+固定 stress 前綴會命中旋轉方向錯誤、只做單旋轉、漏掉刪除後重平衡、只驗證
+局部順序、忽略 multiway occupancy，以及把一般 BST 當成 red-black tree 等錯誤。
+
+### Foundation 14：Basic Concepts
+
+最後三題回到 CH1，以可觀察成本把 ADT、表示法與 amortized analysis 串起來：
+
+| ID | 題目 | 難度 | 核心能力 |
+|---|---|---|---|
+| `F66-sequence-shift-cost-trace` | Sequence Shift Cost Trace | D1 | sequence ADT、array shift 的精確成本 |
+| `F67-switchable-stack-representation` | Switchable Stack Representation | D2 | 介面與表示分離、轉換時維持 LIFO |
+| `F68-amortized-growth-ledger` | Amortized Growth Ledger | D2 | capacity growth、copy ledger、amortized push |
+
+這三題完成後，Stage F 的 68 題已全部具備固定測資、正反 submission fixture 與
+可重現 stress generator。下一階段只進入高等資料結構，不展開一般演算法課程。
+
 ### 暫緩的教材內容
 
 - CH1 Selection Sort、Binary Search 演算法題。

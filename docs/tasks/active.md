@@ -11,7 +11,7 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.013 - Build Advanced Search Tree Foundations
+### TASK.CURRICULUM.015 - Build Fenwick Tree Foundations
 
 - Status: todo
 - Priority: P0
@@ -20,16 +20,16 @@ owner: project
   - `docs/learning-roadmap.md`
   - `docs/judge-requirements.md`
 - Acceptance criteria:
-  - [ ] Add seven exercises to complete the CH10 Search Trees allocation.
-  - [ ] Cover AVL single/double rotations, insertion, deletion, and validation.
-  - [ ] Cover fixed-order multiway search-tree node representation.
-  - [ ] Cover red-black insertion transitions and structural validation.
-  - [ ] Keep dynamic-programming optimization and general search algorithms deferred.
-  - [ ] Preserve explicit height, update, and storage contracts.
+  - [ ] Add eight exercises for the Stage A1 Fenwick Tree family.
+  - [ ] Begin with point update and prefix/range query using explicit array storage.
+  - [ ] Add range update variants, prefix lower bound, and frequency order statistics.
+  - [ ] Add coordinate-indexed, two-dimensional, and sparse Fenwick representations.
+  - [ ] Keep coordinate compression and unrelated search algorithms outside this batch.
+  - [ ] Preserve observable update/query contracts and stated complexity limits.
 - Validation:
   - [ ] Known correct submissions pass deterministic and seeded stress tests.
-  - [ ] Known wrong rotation, stale height, broken parent link, and red-black
-        invariant mistakes receive non-AC verdicts.
+  - [ ] Known wrong index direction, off-by-one range, stale dual-tree,
+        lower-bound, and sparse-storage mistakes receive non-AC verdicts.
 
 ## Strategy
 

@@ -17,9 +17,9 @@ owner: project
 
 ## Current Focus
 
-- Active priority: build the advanced search-tree foundation family.
-- Current phase: CH10 balanced tree representations and invariants.
-- Current owner / handoff state: `TASK.CURRICULUM.013` is ready for `shawn`.
+- Active priority: begin the high-level data-structure curriculum.
+- Current phase: Stage A1 Fenwick Tree family.
+- Current owner / handoff state: `TASK.CURRICULUM.015` is ready for `shawn`.
 
 ## Important Constraints
 
@@ -30,16 +30,16 @@ owner: project
 
 ## Next Step
 
-- Add seven CH10 search-tree exercises covering AVL rotations and deletion,
-  multiway search-tree nodes, and red-black tree invariants.
+- Add the first Stage A1 exercises for Fenwick point updates, prefix queries,
+  and range queries before expanding into advanced variants.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-14.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 279 Judge integration tests passed. F52 through F58 each passed
+- Result: all 329 Judge integration tests passed. F59 through F68 each passed
   10,000 differential operations with seed `20260614`.
-- Known negative remainder, missing probe wrap, wrong probe sequence,
-  tombstone-stop, collision overwrite, and stale rehash-slot mistakes produced
+- Known rotation, stale height, invalid occupancy, red-black invariant,
+  shift-accounting, representation-reversal, and copy-ledger mistakes produced
   reproducible `WA` verdicts.
 - Known failing checks: none.
