@@ -1,0 +1,11 @@
+1 10
+pop
+top
+values
+push 7
+push 8
+switch linked
+pop
+pop
+switch array
+size

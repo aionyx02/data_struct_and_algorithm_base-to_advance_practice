@@ -6236,6 +6236,330 @@ GeneratedCase generateRedBlackInsertionTree(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateSequenceShiftCostTrace(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 3) {
+        throw std::runtime_error(
+            "F66-sequence-shift-cost-trace operation_limit is too small"
+        );
+    }
+    const int capacity = randomInt(random, 3, 8);
+    std::vector<int> values;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << capacity << ' ' << operationCount << '\n';
+
+    for (int index = 0; index < 3; ++index) {
+        const int value = randomValue(random);
+        const int insertionIndex = index == 0 ? 0 : index - 1;
+        input << "insert " << insertionIndex << ' ' << value << '\n';
+        appendLine(
+            output,
+            static_cast<int>(values.size()) - insertionIndex
+        );
+        values.insert(values.begin() + insertionIndex, value);
+    }
+
+    for (int operation = 3; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 7)) {
+            case 0: {
+                const int index = randomInt(
+                    random,
+                    -1,
+                    static_cast<int>(values.size()) + 1
+                );
+                const int value = randomValue(random);
+                input << "insert " << index << ' ' << value << '\n';
+                if (index < 0 ||
+                    index > static_cast<int>(values.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else if (static_cast<int>(values.size()) == capacity) {
+                    appendLine(output, "FULL");
+                } else {
+                    appendLine(
+                        output,
+                        static_cast<int>(values.size()) - index
+                    );
+                    values.insert(values.begin() + index, value);
+                }
+                break;
+            }
+            case 1: {
+                const int index = randomInt(
+                    random,
+                    -1,
+                    static_cast<int>(values.size())
+                );
+                input << "erase " << index << '\n';
+                if (index < 0 ||
+                    index >= static_cast<int>(values.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    const int removed =
+                        values[static_cast<std::size_t>(index)];
+                    const int shifts =
+                        static_cast<int>(values.size()) - index - 1;
+                    output << removed << ' ' << shifts << '\n';
+                    values.erase(values.begin() + index);
+                }
+                break;
+            }
+            case 2: {
+                const int index = randomInt(
+                    random,
+                    -1,
+                    static_cast<int>(values.size())
+                );
+                input << "get " << index << '\n';
+                if (index < 0 ||
+                    index >= static_cast<int>(values.size())) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    appendLine(
+                        output,
+                        values[static_cast<std::size_t>(index)]
+                    );
+                }
+                break;
+            }
+            case 3:
+                input << "size\n";
+                appendLine(output, static_cast<int>(values.size()));
+                break;
+            case 4:
+                input << "capacity\n";
+                appendLine(output, capacity);
+                break;
+            case 5:
+            case 6:
+                input << "values\n";
+                if (values.empty()) {
+                    appendLine(output, "EMPTY");
+                } else {
+                    for (std::size_t index = 0; index < values.size(); ++index) {
+                        if (index > 0) output << ' ';
+                        output << values[index];
+                    }
+                    output << '\n';
+                }
+                break;
+            default:
+                input << "clear\n";
+                values.clear();
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateSwitchableStackRepresentation(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 6) {
+        throw std::runtime_error(
+            "F67-switchable-stack-representation operation_limit is too small"
+        );
+    }
+    const int capacity = randomInt(random, 2, 8);
+    std::vector<int> values;
+    bool linked = false;
+    const int first = randomValue(random);
+    const int second = randomValue(random);
+    std::ostringstream input;
+    std::ostringstream output;
+    input << capacity << ' ' << operationCount
+          << "\npush " << first
+          << "\npush " << second
+          << "\nswitch linked\ntop\nswitch array\nvalues\n";
+    values.push_back(first);
+    values.push_back(second);
+    appendLine(output, 2);
+    appendLine(output, second);
+    appendLine(output, 2);
+    output << first << ' ' << second << '\n';
+
+    for (int operation = 6; operation < operationCount; ++operation) {
+        const int kind = randomInt(random, 0, 8);
+        switch (kind) {
+            case 0: {
+                const int value = randomValue(random);
+                input << "push " << value << '\n';
+                if (static_cast<int>(values.size()) == capacity) {
+                    appendLine(output, "FULL");
+                } else {
+                    values.push_back(value);
+                }
+                break;
+            }
+            case 1:
+                input << "pop\n";
+                if (values.empty()) {
+                    appendLine(output, "EMPTY");
+                } else {
+                    appendLine(output, values.back());
+                    values.pop_back();
+                }
+                break;
+            case 2:
+                input << "top\n";
+                if (values.empty()) appendLine(output, "EMPTY");
+                else appendLine(output, values.back());
+                break;
+            case 3:
+                input << "size\n";
+                appendLine(output, static_cast<int>(values.size()));
+                break;
+            case 4:
+                input << "representation\n";
+                appendLine(output, linked ? "linked" : "array");
+                break;
+            case 5:
+            case 6: {
+                const bool targetLinked =
+                    kind == 5 ? !linked : linked;
+                input << "switch "
+                      << (targetLinked ? "linked" : "array") << '\n';
+                if (targetLinked == linked) {
+                    appendLine(output, "UNCHANGED");
+                } else {
+                    appendLine(output, static_cast<int>(values.size()));
+                    linked = targetLinked;
+                }
+                break;
+            }
+            case 7:
+                input << "values\n";
+                if (values.empty()) {
+                    appendLine(output, "EMPTY");
+                } else {
+                    for (std::size_t index = 0; index < values.size(); ++index) {
+                        if (index > 0) output << ' ';
+                        output << values[index];
+                    }
+                    output << '\n';
+                }
+                break;
+            default:
+                input << "clear\n";
+                values.clear();
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateAmortizedGrowthLedger(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 6) {
+        throw std::runtime_error(
+            "F68-amortized-growth-ledger operation_limit is too small"
+        );
+    }
+    int capacity = 2;
+    long long totalCopies = 0;
+    std::vector<int> values;
+    std::ostringstream input;
+    std::ostringstream output;
+    input << capacity << ' ' << operationCount << '\n';
+
+    for (int index = 0; index < 3; ++index) {
+        const int value = randomValue(random);
+        input << "push " << value << '\n';
+        int copies = 0;
+        if (static_cast<int>(values.size()) == capacity) {
+            copies = static_cast<int>(values.size());
+            capacity *= 2;
+            totalCopies += copies;
+        }
+        values.push_back(value);
+        appendLine(output, copies);
+    }
+    input << "total_copies\nreserve 7\ncapacity\n";
+    appendLine(output, static_cast<int>(totalCopies));
+    totalCopies += static_cast<int>(values.size());
+    capacity = 7;
+    appendLine(output, static_cast<int>(values.size()));
+    appendLine(output, capacity);
+
+    for (int operation = 6; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 8)) {
+            case 0:
+            case 1: {
+                const int value = randomValue(random);
+                input << "push " << value << '\n';
+                int copies = 0;
+                if (static_cast<int>(values.size()) == capacity) {
+                    copies = static_cast<int>(values.size());
+                    capacity *= 2;
+                    totalCopies += copies;
+                }
+                values.push_back(value);
+                appendLine(output, copies);
+                break;
+            }
+            case 2:
+                input << "pop\n";
+                if (values.empty()) {
+                    appendLine(output, "EMPTY");
+                } else {
+                    appendLine(output, values.back());
+                    values.pop_back();
+                }
+                break;
+            case 3: {
+                const int requested = randomInt(
+                    random,
+                    1,
+                    capacity + 8
+                );
+                input << "reserve " << requested << '\n';
+                if (requested <= capacity) {
+                    appendLine(output, "UNCHANGED");
+                } else {
+                    totalCopies += static_cast<int>(values.size());
+                    capacity = requested;
+                    appendLine(output, static_cast<int>(values.size()));
+                }
+                break;
+            }
+            case 4:
+                input << "size\n";
+                appendLine(output, static_cast<int>(values.size()));
+                break;
+            case 5:
+                input << "capacity\n";
+                appendLine(output, capacity);
+                break;
+            case 6:
+                input << "total_copies\n";
+                output << totalCopies << '\n';
+                break;
+            case 7:
+                input << "values\n";
+                if (values.empty()) {
+                    appendLine(output, "EMPTY");
+                } else {
+                    for (std::size_t index = 0; index < values.size(); ++index) {
+                        if (index > 0) output << ' ';
+                        output << values[index];
+                    }
+                    output << '\n';
+                }
+                break;
+            default:
+                input << "clear\n";
+                values.clear();
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 GeneratedCase generateCase(
     const std::string& problemId,
     std::uint64_t seed,
@@ -6436,6 +6760,15 @@ GeneratedCase generateCase(
     }
     if (problemId == "F65-red-black-insertion-tree") {
         return generateRedBlackInsertionTree(random, operationCount);
+    }
+    if (problemId == "F66-sequence-shift-cost-trace") {
+        return generateSequenceShiftCostTrace(random, operationCount);
+    }
+    if (problemId == "F67-switchable-stack-representation") {
+        return generateSwitchableStackRepresentation(random, operationCount);
+    }
+    if (problemId == "F68-amortized-growth-ledger") {
+        return generateAmortizedGrowthLedger(random, operationCount);
     }
     throw std::runtime_error(
         "stress generator is not available for problem: " + problemId

@@ -1,0 +1,14 @@
+5 13
+push 10
+push 20
+representation
+switch linked
+representation
+values
+top
+pop
+values
+switch array
+representation
+size
+switch array

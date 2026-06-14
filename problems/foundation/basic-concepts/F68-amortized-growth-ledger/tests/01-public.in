@@ -1,0 +1,13 @@
+2 12
+push 10
+push 20
+push 30
+capacity
+total_copies
+values
+reserve 10
+capacity
+total_copies
+pop
+size
+values

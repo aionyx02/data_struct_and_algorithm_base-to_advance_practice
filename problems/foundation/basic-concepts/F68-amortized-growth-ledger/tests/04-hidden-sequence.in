@@ -1,0 +1,12 @@
+3 11
+push -1
+push -2
+reserve 5
+push -3
+push -4
+push -5
+push -6
+capacity
+total_copies
+clear
+total_copies

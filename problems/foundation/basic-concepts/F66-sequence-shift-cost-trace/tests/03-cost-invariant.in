@@ -1,0 +1,11 @@
+6 10
+insert 0 1
+insert 0 2
+insert 0 3
+insert 3 4
+insert 2 5
+values
+erase 1
+erase 3
+values
+size

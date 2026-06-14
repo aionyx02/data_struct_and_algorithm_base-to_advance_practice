@@ -1,0 +1,9 @@
+1 8
+values
+insert 1 7
+insert 0 7
+insert 1 8
+erase 0
+erase 0
+size
+capacity

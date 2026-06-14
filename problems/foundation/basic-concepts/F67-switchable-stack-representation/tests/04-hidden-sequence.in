@@ -1,0 +1,12 @@
+3 11
+push -1
+switch linked
+clear
+values
+representation
+push 5
+push 6
+switch array
+values
+pop
+top

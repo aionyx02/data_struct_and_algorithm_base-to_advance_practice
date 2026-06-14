@@ -158,6 +158,9 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f63 F63-avl-structural-validation)
     add_catalog_test(catalog_lists_f64 F64-order-four-search-tree-validation)
     add_catalog_test(catalog_lists_f65 F65-red-black-insertion-tree)
+    add_catalog_test(catalog_lists_f66 F66-sequence-shift-cost-trace)
+    add_catalog_test(catalog_lists_f67 F67-switchable-stack-representation)
+    add_catalog_test(catalog_lists_f68 F68-amortized-growth-ledger)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1053,6 +1056,48 @@ if(BUILD_TESTING AND WIN32)
         judge_rejects_plain_bst_as_red_black_tree
         F65-red-black-insertion-tree
         tests/fixtures/submissions/red_black_insertion_tree_plain_bst.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_sequence_shift_cost_trace
+        F66-sequence-shift-cost-trace
+        tests/fixtures/submissions/sequence_shift_cost_trace_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_counting_inserted_value_as_shift
+        F66-sequence-shift-cost-trace
+        tests/fixtures/submissions/sequence_shift_cost_trace_counts_inserted_value.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_switchable_stack_representation
+        F67-switchable-stack-representation
+        tests/fixtures/submissions/switchable_stack_representation_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_stack_reversal_during_representation_switch
+        F67-switchable-stack-representation
+        tests/fixtures/submissions/switchable_stack_representation_reverses_on_switch.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_amortized_growth_ledger
+        F68-amortized-growth-ledger
+        tests/fixtures/submissions/amortized_growth_ledger_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_counting_new_value_as_copy
+        F68-amortized-growth-ledger
+        tests/fixtures/submissions/amortized_growth_ledger_counts_new_element.cpp
         1
         "Verdict: WA"
     )
@@ -2021,6 +2066,54 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_plain_bst_as_red_black_tree
         F65-red-black-insertion-tree
         tests/fixtures/submissions/red_black_insertion_tree_plain_bst.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_sequence_shift_cost_trace
+        F66-sequence-shift-cost-trace
+        tests/fixtures/submissions/sequence_shift_cost_trace_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_counting_inserted_value_as_shift
+        F66-sequence-shift-cost-trace
+        tests/fixtures/submissions/sequence_shift_cost_trace_counts_inserted_value.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_switchable_stack_representation
+        F67-switchable-stack-representation
+        tests/fixtures/submissions/switchable_stack_representation_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_stack_reversal_during_representation_switch
+        F67-switchable-stack-representation
+        tests/fixtures/submissions/switchable_stack_representation_reverses_on_switch.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_amortized_growth_ledger
+        F68-amortized-growth-ledger
+        tests/fixtures/submissions/amortized_growth_ledger_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_counting_new_value_as_copy
+        F68-amortized-growth-ledger
+        tests/fixtures/submissions/amortized_growth_ledger_counts_new_element.cpp
         1
         "Verdict: WA"
         TRUE

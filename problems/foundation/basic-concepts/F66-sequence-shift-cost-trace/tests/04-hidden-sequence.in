@@ -1,0 +1,10 @@
+4 9
+insert 0 -1
+insert 1 -2
+clear
+values
+insert 0 9
+insert 1 8
+erase 1
+get 0
+size

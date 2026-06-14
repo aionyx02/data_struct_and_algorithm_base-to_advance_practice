@@ -1,0 +1,11 @@
+1 10
+pop
+push 7
+push 8
+capacity
+clear
+size
+capacity
+total_copies
+reserve 1
+values
