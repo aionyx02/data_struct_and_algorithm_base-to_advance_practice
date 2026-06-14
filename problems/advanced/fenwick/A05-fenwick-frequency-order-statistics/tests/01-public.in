@@ -1,0 +1,9 @@
+5 8
+insert 2
+insert 2
+insert 4
+kth 1
+kth 2
+kth 3
+less 4
+size

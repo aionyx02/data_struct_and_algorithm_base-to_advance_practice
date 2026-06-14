@@ -18,10 +18,10 @@ owner: project
 ## Current Focus
 
 - Active priority: build out the high-level data-structure curriculum.
-- Current phase: Stage A1 Fenwick Tree family; first three core problems
-  (`A01`–`A03`) are implemented under `problems/advanced/fenwick/`.
+- Current phase: Stage A1 Fenwick Tree family; five problems (`A01`–`A05`) are
+  implemented under `problems/advanced/fenwick/`.
 - Current owner / handoff state: `TASK.CURRICULUM.015` stays with `shawn`;
-  remaining five A1 variants are still todo.
+  remaining three A1 representations (`A06`–`A08`) are still todo.
 
 ## Important Constraints
 
@@ -32,17 +32,16 @@ owner: project
 
 ## Next Step
 
-- Add the next Stage A1 batch starting at prefix lower bound and frequency
-  order statistics, then coordinate-indexed, two-dimensional, and sparse Fenwick
-  representations to finish the eight-problem family.
+- Add the final Stage A1 batch: coordinate-indexed, two-dimensional, and sparse
+  Fenwick representations (`A06`–`A08`) to finish the eight-problem family.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-14.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 344 Judge integration tests passed. A01 through A03 each passed
+- Result: all 354 Judge integration tests passed. A01 through A05 each passed
   1,000 differential cases (200,000 operations) with seed `20260614`.
-- Known off-by-one range, endpoint-only difference, and single-tree range-query
-  mistakes produced reproducible `WA` verdicts; earlier F-series invariant
-  mistakes still fail as before.
+- Known off-by-one range, endpoint-only difference, single-tree range-query,
+  upper-bound lower-bound walk, and off-by-one rank mistakes produced
+  reproducible `WA` verdicts; earlier F-series invariant mistakes still fail.
 - Known failing checks: none.

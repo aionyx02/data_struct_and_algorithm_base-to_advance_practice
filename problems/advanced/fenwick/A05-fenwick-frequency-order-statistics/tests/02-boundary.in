@@ -1,0 +1,10 @@
+3 9
+insert 0
+erase 1
+erase 0
+erase 0
+kth 1
+less 3
+count 5
+insert 9
+size

@@ -1,0 +1,10 @@
+1 8
+0
+lower_bound 0
+lower_bound 1
+add 0 5
+lower_bound 5
+lower_bound 6
+prefix 0
+prefix 1
+size

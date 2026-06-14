@@ -1,0 +1,16 @@
+{
+  "id": "A05-fenwick-frequency-order-statistics",
+  "title": "Fenwick Frequency Table And Order Statistics",
+  "stage": "A",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 500,
+  "memory_limit_mb": 32,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(log U) per update or query",
+  "expected_space": "O(U)",
+  "forbidden_symbols": ["std::vector", "std::map", "std::unordered_map", "std::set", "std::list", "std::multiset"],
+  "random_tests": 100,
+  "operation_limit": 200,
+  "tests_directory": "tests"
+}

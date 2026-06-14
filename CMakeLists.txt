@@ -164,6 +164,8 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_a01 A01-fenwick-point-prefix)
     add_catalog_test(catalog_lists_a02 A02-fenwick-range-update-point-query)
     add_catalog_test(catalog_lists_a03 A03-fenwick-dual-range-range)
+    add_catalog_test(catalog_lists_a04 A04-fenwick-prefix-lower-bound)
+    add_catalog_test(catalog_lists_a05 A05-fenwick-frequency-order-statistics)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1143,6 +1145,34 @@ if(BUILD_TESTING AND WIN32)
         judge_rejects_fenwick_single_tree_range
         A03-fenwick-dual-range-range
         tests/fixtures/submissions/fenwick_dual_single_tree.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_fenwick_prefix_lower_bound
+        A04-fenwick-prefix-lower-bound
+        tests/fixtures/submissions/fenwick_prefix_lower_bound_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_fenwick_upper_bound_walk
+        A04-fenwick-prefix-lower-bound
+        tests/fixtures/submissions/fenwick_prefix_lower_bound_upper.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_fenwick_order_statistics
+        A05-fenwick-frequency-order-statistics
+        tests/fixtures/submissions/fenwick_order_statistics_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_fenwick_rank_off_by_one
+        A05-fenwick-frequency-order-statistics
+        tests/fixtures/submissions/fenwick_order_statistics_off_by_one.cpp
         1
         "Verdict: WA"
     )
@@ -2207,6 +2237,38 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_fenwick_single_tree_range
         A03-fenwick-dual-range-range
         tests/fixtures/submissions/fenwick_dual_single_tree.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_fenwick_prefix_lower_bound
+        A04-fenwick-prefix-lower-bound
+        tests/fixtures/submissions/fenwick_prefix_lower_bound_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_fenwick_upper_bound_walk
+        A04-fenwick-prefix-lower-bound
+        tests/fixtures/submissions/fenwick_prefix_lower_bound_upper.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_fenwick_order_statistics
+        A05-fenwick-frequency-order-statistics
+        tests/fixtures/submissions/fenwick_order_statistics_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_fenwick_rank_off_by_one
+        A05-fenwick-frequency-order-statistics
+        tests/fixtures/submissions/fenwick_order_statistics_off_by_one.cpp
         1
         "Verdict: WA"
         TRUE

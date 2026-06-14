@@ -6849,6 +6849,233 @@ GeneratedCase generateFenwickDualRangeRange(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateFenwickPrefixLowerBound(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 3) {
+        throw std::runtime_error(
+            "A04-fenwick-prefix-lower-bound requires operation_limit of at least 3"
+        );
+    }
+    const int size = randomInt(random, 1, 20);
+    std::vector<long long> values(static_cast<std::size_t>(size));
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << size << ' ' << operationCount << '\n';
+    for (int index = 0; index < size; ++index) {
+        values[static_cast<std::size_t>(index)] = randomInt(random, 0, 30);
+        if (index != 0) {
+            input << ' ';
+        }
+        input << values[static_cast<std::size_t>(index)];
+    }
+    input << '\n';
+
+    auto prefix = [&](int last) {
+        long long sum = 0;
+        for (int index = 0; index <= last; ++index) {
+            sum += values[static_cast<std::size_t>(index)];
+        }
+        return sum;
+    };
+    auto lowerBound = [&](long long target) {
+        long long accumulated = 0;
+        for (int index = 0; index < size; ++index) {
+            accumulated += values[static_cast<std::size_t>(index)];
+            if (accumulated >= target) {
+                return index;
+            }
+        }
+        return -1;
+    };
+
+    const int bumpIndex = randomInt(random, 0, size - 1);
+    const int bump = randomInt(random, 1, 20);
+    input << "add " << bumpIndex << ' ' << bump << '\n';
+    values[static_cast<std::size_t>(bumpIndex)] += bump;
+    const long long boundaryTarget = prefix(bumpIndex);
+    input << "lower_bound " << boundaryTarget << '\n';
+    {
+        const int answer = lowerBound(boundaryTarget);
+        if (answer < 0) {
+            appendLine(output, "NONE");
+        } else {
+            output << answer << '\n';
+        }
+    }
+
+    for (int operation = 2; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 4)) {
+            case 0: {
+                const int index = randomInt(random, 0, size - 1);
+                const int value = randomInt(random, 0, 20);
+                input << "add " << index << ' ' << value << '\n';
+                values[static_cast<std::size_t>(index)] += value;
+                break;
+            }
+            case 1: {
+                const int index = randomInt(random, -2, size + 1);
+                input << "get " << index << '\n';
+                if (index < 0 || index >= size) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << values[static_cast<std::size_t>(index)] << '\n';
+                }
+                break;
+            }
+            case 2: {
+                const int index = randomInt(random, -2, size + 1);
+                input << "prefix " << index << '\n';
+                if (index < 0 || index >= size) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << prefix(index) << '\n';
+                }
+                break;
+            }
+            case 3: {
+                const long long target = randomInt(
+                    random, -2, static_cast<int>(prefix(size - 1)) + 3
+                );
+                input << "lower_bound " << target << '\n';
+                const int answer = lowerBound(target);
+                if (answer < 0) {
+                    appendLine(output, "NONE");
+                } else {
+                    output << answer << '\n';
+                }
+                break;
+            }
+            default:
+                input << "size\n";
+                output << size << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateFenwickOrderStatistics(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "A05-fenwick-frequency-order-statistics requires operation_limit "
+            "of at least 4"
+        );
+    }
+    const int universe = randomInt(random, 1, 20);
+    std::vector<long long> freq(static_cast<std::size_t>(universe));
+    long long total = 0;
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << universe << ' ' << operationCount << '\n';
+
+    auto kth = [&](long long order) {
+        if (order < 1 || order > total) {
+            return -1;
+        }
+        long long accumulated = 0;
+        for (int key = 0; key < universe; ++key) {
+            accumulated += freq[static_cast<std::size_t>(key)];
+            if (accumulated >= order) {
+                return key;
+            }
+        }
+        return -1;
+    };
+    auto less = [&](int bound) {
+        long long sum = 0;
+        for (int key = 0; key < bound; ++key) {
+            sum += freq[static_cast<std::size_t>(key)];
+        }
+        return sum;
+    };
+
+    const int seedKeyA = randomInt(random, 0, universe - 1);
+    input << "insert " << seedKeyA << '\n';
+    freq[static_cast<std::size_t>(seedKeyA)] += 1;
+    total += 1;
+    const int seedKeyB = randomInt(random, 0, universe - 1);
+    input << "insert " << seedKeyB << '\n';
+    freq[static_cast<std::size_t>(seedKeyB)] += 1;
+    total += 1;
+    input << "kth 1\n";
+    output << kth(1) << '\n';
+    input << "less " << universe << '\n';
+    output << less(universe) << '\n';
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 5)) {
+            case 0: {
+                const int key = randomInt(random, -2, universe + 1);
+                input << "insert " << key << '\n';
+                if (key < 0 || key >= universe) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    freq[static_cast<std::size_t>(key)] += 1;
+                    total += 1;
+                }
+                break;
+            }
+            case 1: {
+                const int key = randomInt(random, -2, universe + 1);
+                input << "erase " << key << '\n';
+                if (key < 0 || key >= universe) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else if (freq[static_cast<std::size_t>(key)] == 0) {
+                    appendLine(output, "NOT_FOUND");
+                } else {
+                    freq[static_cast<std::size_t>(key)] -= 1;
+                    total -= 1;
+                }
+                break;
+            }
+            case 2: {
+                const long long order =
+                    randomInt(random, -1, static_cast<int>(total) + 2);
+                input << "kth " << order << '\n';
+                const int key = kth(order);
+                if (key < 0) {
+                    appendLine(output, "NONE");
+                } else {
+                    output << key << '\n';
+                }
+                break;
+            }
+            case 3: {
+                const int bound = randomInt(random, -2, universe + 1);
+                input << "less " << bound << '\n';
+                if (bound < 0 || bound > universe) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << less(bound) << '\n';
+                }
+                break;
+            }
+            case 4: {
+                const int key = randomInt(random, -2, universe + 1);
+                input << "count " << key << '\n';
+                if (key < 0 || key >= universe) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << freq[static_cast<std::size_t>(key)] << '\n';
+                }
+                break;
+            }
+            default:
+                input << "size\n";
+                output << total << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 GeneratedCase generateCase(
     const std::string& problemId,
     std::uint64_t seed,
@@ -7067,6 +7294,12 @@ GeneratedCase generateCase(
     }
     if (problemId == "A03-fenwick-dual-range-range") {
         return generateFenwickDualRangeRange(random, operationCount);
+    }
+    if (problemId == "A04-fenwick-prefix-lower-bound") {
+        return generateFenwickPrefixLowerBound(random, operationCount);
+    }
+    if (problemId == "A05-fenwick-frequency-order-statistics") {
+        return generateFenwickOrderStatistics(random, operationCount);
     }
     throw std::runtime_error(
         "stress generator is not available for problem: " + problemId
