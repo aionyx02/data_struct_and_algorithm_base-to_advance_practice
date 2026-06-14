@@ -29,3 +29,4 @@ owner: project
 | `TASK.CURRICULUM.012` | Built Hash Table Foundations | `docs/memory/sessions/2026-06-14-shawn.md` |
 | `TASK.CURRICULUM.013` | Built Advanced Search Tree Foundations | `docs/memory/sessions/2026-06-14-shawn.md` |
 | `TASK.CURRICULUM.014` | Completed Basic Concepts And Stage F | `docs/memory/sessions/2026-06-14-shawn.md` |
+| `TASK.CURRICULUM.015` | Built Fenwick Tree Foundations | `docs/memory/sessions/2026-06-14-shawn.md` |

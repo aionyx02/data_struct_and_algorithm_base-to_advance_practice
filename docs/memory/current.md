@@ -18,10 +18,10 @@ owner: project
 ## Current Focus
 
 - Active priority: build out the high-level data-structure curriculum.
-- Current phase: Stage A1 Fenwick Tree family; five problems (`A01`–`A05`) are
-  implemented under `problems/advanced/fenwick/`.
-- Current owner / handoff state: `TASK.CURRICULUM.015` stays with `shawn`;
-  remaining three A1 representations (`A06`–`A08`) are still todo.
+- Current phase: Stage A1 Fenwick Tree family is complete; all eight problems
+  (`A01`-`A08`) are implemented under `problems/advanced/fenwick/`.
+- Current owner / handoff state: `TASK.CURRICULUM.015` is complete and there is
+  no active task. Stage A2 Segment Tree work needs a new assigned task.
 
 ## Important Constraints
 
@@ -32,16 +32,17 @@ owner: project
 
 ## Next Step
 
-- Add the final Stage A1 batch: coordinate-indexed, two-dimensional, and sparse
-  Fenwick representations (`A06`–`A08`) to finish the eight-problem family.
+- Create and assign the Stage A2 Segment Tree task, then begin with recursive
+  and iterative point-update range-query representations.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-14.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 354 Judge integration tests passed. A01 through A05 each passed
+- Result: all 369 Judge integration tests passed. A01 through A08 each passed
   1,000 differential cases (200,000 operations) with seed `20260614`.
 - Known off-by-one range, endpoint-only difference, single-tree range-query,
-  upper-bound lower-bound walk, and off-by-one rank mistakes produced
+  upper-bound lower-bound walk, off-by-one rank, reversed coordinate mapping,
+  wrong 2D update direction, and point-only sparse-storage mistakes produced
   reproducible `WA` verdicts; earlier F-series invariant mistakes still fail.
 - Known failing checks: none.

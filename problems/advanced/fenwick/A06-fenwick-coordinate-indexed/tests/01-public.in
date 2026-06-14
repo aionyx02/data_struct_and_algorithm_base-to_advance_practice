@@ -1,0 +1,11 @@
+-3 3 10
+add -3 5
+add 0 4
+add 3 7
+prefix -3
+prefix 0
+range -2 3
+get 3
+set 0 -2
+range -3 0
+bounds

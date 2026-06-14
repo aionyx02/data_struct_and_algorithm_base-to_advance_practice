@@ -1,0 +1,15 @@
+3 3 14
+add 1 1 5
+add 1 1 -2
+add 0 2 4
+add 2 0 6
+rectangle 0 0 2 2
+rectangle 1 1 1 1
+prefix 1 2
+set 1 1 0
+get 1 1
+rectangle 0 1 2 2
+set 2 0 -1
+prefix 2 0
+shape
+rectangle 2 2 1 1

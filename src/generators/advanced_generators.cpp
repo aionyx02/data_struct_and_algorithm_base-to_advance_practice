@@ -12,6 +12,7 @@
 #include <set>
 #include <sstream>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -1103,6 +1104,406 @@ GeneratedCase generateFenwickOrderStatistics(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateFenwickCoordinateIndexed(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "A06-fenwick-coordinate-indexed requires operation_limit of at "
+            "least 4"
+        );
+    }
+    const int span = randomInt(random, 1, 20);
+    const int minimum = randomInt(random, -20, 5);
+    const int maximum = minimum + span - 1;
+    std::vector<long long> values(static_cast<std::size_t>(span));
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << minimum << ' ' << maximum << ' ' << operationCount << '\n';
+
+    auto valid = [&](int coordinate) {
+        return coordinate >= minimum && coordinate <= maximum;
+    };
+    auto prefix = [&](int coordinate) {
+        long long sum = 0;
+        for (int current = minimum; current <= coordinate; ++current) {
+            sum += values[static_cast<std::size_t>(current - minimum)];
+        }
+        return sum;
+    };
+
+    const int firstDelta = randomValue(random);
+    input << "add " << minimum << ' ' << firstDelta << '\n';
+    values.front() += firstDelta;
+    const int lastDelta = randomValue(random);
+    input << "add " << maximum << ' ' << lastDelta << '\n';
+    values.back() += lastDelta;
+    input << "prefix " << minimum << '\n';
+    output << values.front() << '\n';
+    input << "range " << minimum << ' ' << maximum << '\n';
+    output << prefix(maximum) << '\n';
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 5)) {
+            case 0: {
+                const int coordinate =
+                    randomInt(random, minimum - 2, maximum + 2);
+                const int delta = randomValue(random);
+                input << "add " << coordinate << ' ' << delta << '\n';
+                if (!valid(coordinate)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    values[static_cast<std::size_t>(coordinate - minimum)] +=
+                        delta;
+                }
+                break;
+            }
+            case 1: {
+                const int coordinate =
+                    randomInt(random, minimum - 2, maximum + 2);
+                const int value = randomValue(random);
+                input << "set " << coordinate << ' ' << value << '\n';
+                if (!valid(coordinate)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    values[static_cast<std::size_t>(coordinate - minimum)] =
+                        value;
+                }
+                break;
+            }
+            case 2: {
+                const int coordinate =
+                    randomInt(random, minimum - 2, maximum + 2);
+                input << "get " << coordinate << '\n';
+                if (!valid(coordinate)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output
+                        << values[static_cast<std::size_t>(
+                               coordinate - minimum
+                           )]
+                        << '\n';
+                }
+                break;
+            }
+            case 3: {
+                const int coordinate =
+                    randomInt(random, minimum - 2, maximum + 2);
+                input << "prefix " << coordinate << '\n';
+                if (!valid(coordinate)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << prefix(coordinate) << '\n';
+                }
+                break;
+            }
+            case 4: {
+                const int left = randomInt(random, minimum - 2, maximum + 2);
+                const int right = randomInt(random, minimum - 2, maximum + 2);
+                input << "range " << left << ' ' << right << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    const long long before =
+                        left == minimum ? 0 : prefix(left - 1);
+                    output << prefix(right) - before << '\n';
+                }
+                break;
+            }
+            default:
+                input << "bounds\n";
+                output << minimum << ' ' << maximum << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateFenwickTwoDimensional(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "A07-fenwick-two-dimensional requires operation_limit of at least 4"
+        );
+    }
+    const int rows = randomInt(random, 1, 6);
+    const int columns = randomInt(random, 1, 6);
+    std::vector<long long> values(
+        static_cast<std::size_t>(rows) * columns
+    );
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << rows << ' ' << columns << ' ' << operationCount << '\n';
+
+    auto index = [&](int row, int column) {
+        return static_cast<std::size_t>(row) * columns + column;
+    };
+    auto valid = [&](int row, int column) {
+        return row >= 0 && row < rows && column >= 0 && column < columns;
+    };
+    auto rectangle = [&](int top, int left, int bottom, int right) {
+        long long sum = 0;
+        for (int row = top; row <= bottom; ++row) {
+            for (int column = left; column <= right; ++column) {
+                sum += values[index(row, column)];
+            }
+        }
+        return sum;
+    };
+
+    const int firstDelta = randomValue(random);
+    input << "add 0 0 " << firstDelta << '\n';
+    values[index(0, 0)] += firstDelta;
+    const int lastDelta = randomValue(random);
+    input << "add " << (rows - 1) << ' ' << (columns - 1) << ' ' << lastDelta
+          << '\n';
+    values[index(rows - 1, columns - 1)] += lastDelta;
+    input << "prefix " << (rows - 1) << ' ' << (columns - 1) << '\n';
+    output << rectangle(0, 0, rows - 1, columns - 1) << '\n';
+    input << "rectangle " << (rows - 1) << ' ' << (columns - 1) << ' '
+          << (rows - 1) << ' ' << (columns - 1) << '\n';
+    output << values[index(rows - 1, columns - 1)] << '\n';
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 5)) {
+            case 0: {
+                const int row = randomInt(random, -1, rows);
+                const int column = randomInt(random, -1, columns);
+                const int delta = randomValue(random);
+                input << "add " << row << ' ' << column << ' ' << delta
+                      << '\n';
+                if (!valid(row, column)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    values[index(row, column)] += delta;
+                }
+                break;
+            }
+            case 1: {
+                const int row = randomInt(random, -1, rows);
+                const int column = randomInt(random, -1, columns);
+                const int value = randomValue(random);
+                input << "set " << row << ' ' << column << ' ' << value
+                      << '\n';
+                if (!valid(row, column)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    values[index(row, column)] = value;
+                }
+                break;
+            }
+            case 2: {
+                const int row = randomInt(random, -1, rows);
+                const int column = randomInt(random, -1, columns);
+                input << "get " << row << ' ' << column << '\n';
+                if (!valid(row, column)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << values[index(row, column)] << '\n';
+                }
+                break;
+            }
+            case 3: {
+                const int row = randomInt(random, -1, rows);
+                const int column = randomInt(random, -1, columns);
+                input << "prefix " << row << ' ' << column << '\n';
+                if (!valid(row, column)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << rectangle(0, 0, row, column) << '\n';
+                }
+                break;
+            }
+            case 4: {
+                const int top = randomInt(random, -1, rows);
+                const int left = randomInt(random, -1, columns);
+                const int bottom = randomInt(random, -1, rows);
+                const int right = randomInt(random, -1, columns);
+                input << "rectangle " << top << ' ' << left << ' ' << bottom
+                      << ' ' << right << '\n';
+                if (!valid(top, left) || !valid(bottom, right) ||
+                    top > bottom || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << rectangle(top, left, bottom, right) << '\n';
+                }
+                break;
+            }
+            default:
+                input << "shape\n";
+                output << rows << ' ' << columns << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateFenwickSparse(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "A08-fenwick-sparse requires operation_limit of at least 4"
+        );
+    }
+    const int exponent = randomInt(random, 4, 39);
+    const long long universe = 1LL << exponent;
+    std::unordered_map<long long, long long> values;
+    std::unordered_map<long long, long long> bit;
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << universe << ' ' << operationCount << '\n';
+
+    auto valid = [&](long long coordinate) {
+        return coordinate >= 0 && coordinate < universe;
+    };
+    auto coordinate = [&]() {
+        const int small = randomInt(random, 0, 1000);
+        switch (randomInt(random, 0, 3)) {
+            case 0:
+                return 0LL;
+            case 1:
+                return universe - 1;
+            case 2:
+                return std::min(universe - 1, static_cast<long long>(small));
+            default:
+                return std::max(0LL, universe - 1 - small);
+        }
+    };
+    auto update = [&](long long point, long long delta) {
+        const auto foundValue = values.find(point);
+        const long long currentValue =
+            foundValue == values.end() ? 0 : foundValue->second;
+        const long long nextValue = currentValue + delta;
+        if (nextValue == 0) {
+            if (foundValue != values.end()) {
+                values.erase(foundValue);
+            }
+        } else {
+            values[point] = nextValue;
+        }
+
+        for (long long index = point + 1; index <= universe;
+             index += index & -index) {
+            const auto foundNode = bit.find(index);
+            const long long currentNode =
+                foundNode == bit.end() ? 0 : foundNode->second;
+            const long long nextNode = currentNode + delta;
+            if (nextNode == 0) {
+                if (foundNode != bit.end()) {
+                    bit.erase(foundNode);
+                }
+            } else {
+                bit[index] = nextNode;
+            }
+        }
+    };
+    auto pointValue = [&](long long point) {
+        const auto found = values.find(point);
+        return found == values.end() ? 0LL : found->second;
+    };
+    auto prefix = [&](long long last) {
+        long long sum = 0;
+        for (const auto& [point, value] : values) {
+            if (point <= last) {
+                sum += value;
+            }
+        }
+        return sum;
+    };
+
+    const long long seedCoordinate = std::min(5LL, universe - 1);
+    input << "add " << seedCoordinate << " 7\n";
+    update(seedCoordinate, 7);
+    input << "prefix " << (universe - 1) << '\n';
+    output << "7\n";
+    input << "nodes\n";
+    output << bit.size() << '\n';
+    input << "get " << seedCoordinate << '\n';
+    output << "7\n";
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 5)) {
+            case 0: {
+                const long long point =
+                    randomInt(random, 0, 4) == 0 ? universe : coordinate();
+                const int delta = randomValue(random);
+                input << "add " << point << ' ' << delta << '\n';
+                if (!valid(point)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    update(point, delta);
+                }
+                break;
+            }
+            case 1: {
+                const long long point =
+                    randomInt(random, 0, 4) == 0 ? -1 : coordinate();
+                const int value = randomValue(random);
+                input << "set " << point << ' ' << value << '\n';
+                if (!valid(point)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    update(point, value - pointValue(point));
+                }
+                break;
+            }
+            case 2: {
+                const long long point =
+                    randomInt(random, 0, 4) == 0 ? universe : coordinate();
+                input << "get " << point << '\n';
+                if (!valid(point)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << pointValue(point) << '\n';
+                }
+                break;
+            }
+            case 3: {
+                const long long point =
+                    randomInt(random, 0, 4) == 0 ? -1 : coordinate();
+                input << "prefix " << point << '\n';
+                if (!valid(point)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << prefix(point) << '\n';
+                }
+                break;
+            }
+            case 4: {
+                long long left = coordinate();
+                long long right = coordinate();
+                const bool makeInvalid = randomInt(random, 0, 4) == 0;
+                if (!makeInvalid && left > right) {
+                    std::swap(left, right);
+                } else if (makeInvalid) {
+                    right = universe;
+                }
+                input << "range " << left << ' ' << right << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    const long long before = left == 0 ? 0 : prefix(left - 1);
+                    output << prefix(right) - before << '\n';
+                }
+                break;
+            }
+            default:
+                input << "nodes\n";
+                output << bit.size() << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 
 }  // namespace
 
@@ -1122,6 +1523,9 @@ void registerAdvancedGenerators(CaseGeneratorRegistry& registry) {
     registry.emplace("A03-fenwick-dual-range-range", generateFenwickDualRangeRange);
     registry.emplace("A04-fenwick-prefix-lower-bound", generateFenwickPrefixLowerBound);
     registry.emplace("A05-fenwick-frequency-order-statistics", generateFenwickOrderStatistics);
+    registry.emplace("A06-fenwick-coordinate-indexed", generateFenwickCoordinateIndexed);
+    registry.emplace("A07-fenwick-two-dimensional", generateFenwickTwoDimensional);
+    registry.emplace("A08-fenwick-sparse", generateFenwickSparse);
 }
 
 }  // namespace judge::generators

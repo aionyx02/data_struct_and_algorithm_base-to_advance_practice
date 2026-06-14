@@ -1,0 +1,14 @@
+10 15 13
+add 10 2
+add 15 4
+add 12 -1
+range 10 15
+prefix 12
+set 10 7
+get 10
+range 10 11
+add 15 -4
+get 15
+prefix 15
+bounds
+get 9

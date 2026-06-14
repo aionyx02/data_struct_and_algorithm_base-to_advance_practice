@@ -176,6 +176,9 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_a03 A03-fenwick-dual-range-range)
     add_catalog_test(catalog_lists_a04 A04-fenwick-prefix-lower-bound)
     add_catalog_test(catalog_lists_a05 A05-fenwick-frequency-order-statistics)
+    add_catalog_test(catalog_lists_a06 A06-fenwick-coordinate-indexed)
+    add_catalog_test(catalog_lists_a07 A07-fenwick-two-dimensional)
+    add_catalog_test(catalog_lists_a08 A08-fenwick-sparse)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1183,6 +1186,48 @@ if(BUILD_TESTING AND WIN32)
         judge_rejects_fenwick_rank_off_by_one
         A05-fenwick-frequency-order-statistics
         tests/fixtures/submissions/fenwick_order_statistics_off_by_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_fenwick_coordinate_indexed
+        A06-fenwick-coordinate-indexed
+        tests/fixtures/submissions/fenwick_coordinate_indexed_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_fenwick_reversed_coordinate_mapping
+        A06-fenwick-coordinate-indexed
+        tests/fixtures/submissions/fenwick_coordinate_indexed_reversed.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_fenwick_two_dimensional
+        A07-fenwick-two-dimensional
+        tests/fixtures/submissions/fenwick_two_dimensional_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_fenwick_two_dimensional_wrong_y_direction
+        A07-fenwick-two-dimensional
+        tests/fixtures/submissions/fenwick_two_dimensional_wrong_y_direction.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_fenwick_sparse
+        A08-fenwick-sparse
+        tests/fixtures/submissions/fenwick_sparse_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_fenwick_sparse_point_only_storage
+        A08-fenwick-sparse
+        tests/fixtures/submissions/fenwick_sparse_point_only.cpp
         1
         "Verdict: WA"
     )
@@ -2279,6 +2324,54 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_fenwick_rank_off_by_one
         A05-fenwick-frequency-order-statistics
         tests/fixtures/submissions/fenwick_order_statistics_off_by_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_fenwick_coordinate_indexed
+        A06-fenwick-coordinate-indexed
+        tests/fixtures/submissions/fenwick_coordinate_indexed_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_fenwick_reversed_coordinate_mapping
+        A06-fenwick-coordinate-indexed
+        tests/fixtures/submissions/fenwick_coordinate_indexed_reversed.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_fenwick_two_dimensional
+        A07-fenwick-two-dimensional
+        tests/fixtures/submissions/fenwick_two_dimensional_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_fenwick_two_dimensional_wrong_y_direction
+        A07-fenwick-two-dimensional
+        tests/fixtures/submissions/fenwick_two_dimensional_wrong_y_direction.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_fenwick_sparse
+        A08-fenwick-sparse
+        tests/fixtures/submissions/fenwick_sparse_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_fenwick_sparse_point_only_storage
+        A08-fenwick-sparse
+        tests/fixtures/submissions/fenwick_sparse_point_only.cpp
         1
         "Verdict: WA"
         TRUE

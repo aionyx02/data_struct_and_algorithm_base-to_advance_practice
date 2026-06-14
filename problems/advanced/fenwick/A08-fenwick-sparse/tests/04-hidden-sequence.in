@@ -1,0 +1,17 @@
+32 16
+add 3 5
+add 7 2
+add 15 -1
+nodes
+prefix 31
+range 4 15
+set 7 0
+get 7
+prefix 7
+set 3 1
+nodes
+get 15
+prefix 31
+range 3 15
+set 15 0
+nodes

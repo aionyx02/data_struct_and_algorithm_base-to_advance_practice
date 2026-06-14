@@ -1,0 +1,10 @@
+5 5 9
+get 5
+add 5 8
+prefix 5
+range 5 5
+set 5 -3
+get 5
+add 4 1
+range 5 4
+prefix 6

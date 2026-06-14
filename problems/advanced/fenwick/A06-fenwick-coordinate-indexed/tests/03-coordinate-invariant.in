@@ -1,0 +1,12 @@
+-4 2 11
+add -4 3
+add -1 5
+add 2 7
+prefix -4
+prefix -1
+prefix 2
+range -3 1
+range -4 -1
+set -1 1
+prefix -1
+get -4
