@@ -1,0 +1,19 @@
+18
+insert 30
+insert 20
+insert 40
+insert 10
+insert 25
+insert 35
+insert 50
+erase 50
+erase 40
+root
+preorder
+inorder
+height 30
+balance 30
+contains 40
+size
+erase 99
+erase 35

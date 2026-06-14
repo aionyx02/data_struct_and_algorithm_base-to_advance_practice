@@ -1,0 +1,13 @@
+12
+erase 1
+root
+insert 1
+erase 1
+root
+size
+insert -1
+insert -1
+clear
+contains -1
+preorder
+height 9

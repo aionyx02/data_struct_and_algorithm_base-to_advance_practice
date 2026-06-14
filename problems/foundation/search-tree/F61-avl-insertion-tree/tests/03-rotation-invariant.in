@@ -1,0 +1,18 @@
+17
+insert 30
+insert 10
+insert 20
+root
+preorder
+clear
+insert 10
+insert 30
+insert 20
+root
+preorder
+insert 40
+insert 50
+root
+preorder
+height 30
+balance 30

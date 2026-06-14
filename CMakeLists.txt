@@ -151,6 +151,13 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f56 F56-tombstone-hash-table)
     add_catalog_test(catalog_lists_f57 F57-node-pool-chained-hash-table)
     add_catalog_test(catalog_lists_f58 F58-rehashing-linear-probing-table)
+    add_catalog_test(catalog_lists_f59 F59-avl-single-rotation-trace)
+    add_catalog_test(catalog_lists_f60 F60-avl-double-rotation-trace)
+    add_catalog_test(catalog_lists_f61 F61-avl-insertion-tree)
+    add_catalog_test(catalog_lists_f62 F62-avl-deletion-tree)
+    add_catalog_test(catalog_lists_f63 F63-avl-structural-validation)
+    add_catalog_test(catalog_lists_f64 F64-order-four-search-tree-validation)
+    add_catalog_test(catalog_lists_f65 F65-red-black-insertion-tree)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -948,6 +955,104 @@ if(BUILD_TESTING AND WIN32)
         judge_rejects_stale_slots_after_rehash
         F58-rehashing-linear-probing-table
         tests/fixtures/submissions/rehashing_linear_probing_table_stale_slots.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_avl_single_rotation_trace
+        F59-avl-single-rotation-trace
+        tests/fixtures/submissions/avl_single_rotation_trace_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_wrong_avl_single_rotation
+        F59-avl-single-rotation-trace
+        tests/fixtures/submissions/avl_single_rotation_trace_wrong_direction.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_avl_double_rotation_trace
+        F60-avl-double-rotation-trace
+        tests/fixtures/submissions/avl_double_rotation_trace_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_single_only_avl_rotation
+        F60-avl-double-rotation-trace
+        tests/fixtures/submissions/avl_double_rotation_trace_single_only.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_avl_insertion_tree
+        F61-avl-insertion-tree
+        tests/fixtures/submissions/avl_tree_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_avl_without_rebalancing
+        F61-avl-insertion-tree
+        tests/fixtures/submissions/avl_tree_without_rebalancing.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_avl_deletion_tree
+        F62-avl-deletion-tree
+        tests/fixtures/submissions/avl_tree_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_avl_without_delete_rebalancing
+        F62-avl-deletion-tree
+        tests/fixtures/submissions/avl_tree_without_rebalancing.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_avl_structural_validation
+        F63-avl-structural-validation
+        tests/fixtures/submissions/avl_structural_validation_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_local_only_avl_validation
+        F63-avl-structural-validation
+        tests/fixtures/submissions/avl_structural_validation_local_only.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_order_four_search_tree_validation
+        F64-order-four-search-tree-validation
+        tests/fixtures/submissions/order_four_search_tree_validation_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_missing_multiway_occupancy_check
+        F64-order-four-search-tree-validation
+        tests/fixtures/submissions/order_four_search_tree_validation_skips_occupancy.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_red_black_insertion_tree
+        F65-red-black-insertion-tree
+        tests/fixtures/submissions/red_black_insertion_tree_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_plain_bst_as_red_black_tree
+        F65-red-black-insertion-tree
+        tests/fixtures/submissions/red_black_insertion_tree_plain_bst.cpp
         1
         "Verdict: WA"
     )
@@ -1804,6 +1909,118 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_stale_slots_after_rehash
         F58-rehashing-linear-probing-table
         tests/fixtures/submissions/rehashing_linear_probing_table_stale_slots.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_avl_single_rotation_trace
+        F59-avl-single-rotation-trace
+        tests/fixtures/submissions/avl_single_rotation_trace_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_wrong_avl_single_rotation
+        F59-avl-single-rotation-trace
+        tests/fixtures/submissions/avl_single_rotation_trace_wrong_direction.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_avl_double_rotation_trace
+        F60-avl-double-rotation-trace
+        tests/fixtures/submissions/avl_double_rotation_trace_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_single_only_avl_rotation
+        F60-avl-double-rotation-trace
+        tests/fixtures/submissions/avl_double_rotation_trace_single_only.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_avl_insertion_tree
+        F61-avl-insertion-tree
+        tests/fixtures/submissions/avl_tree_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_avl_without_rebalancing
+        F61-avl-insertion-tree
+        tests/fixtures/submissions/avl_tree_without_rebalancing.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_avl_deletion_tree
+        F62-avl-deletion-tree
+        tests/fixtures/submissions/avl_tree_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_avl_without_delete_rebalancing
+        F62-avl-deletion-tree
+        tests/fixtures/submissions/avl_tree_without_rebalancing.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_avl_structural_validation
+        F63-avl-structural-validation
+        tests/fixtures/submissions/avl_structural_validation_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_local_only_avl_validation
+        F63-avl-structural-validation
+        tests/fixtures/submissions/avl_structural_validation_local_only.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_order_four_search_tree_validation
+        F64-order-four-search-tree-validation
+        tests/fixtures/submissions/order_four_search_tree_validation_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_missing_multiway_occupancy_check
+        F64-order-four-search-tree-validation
+        tests/fixtures/submissions/order_four_search_tree_validation_skips_occupancy.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_red_black_insertion_tree
+        F65-red-black-insertion-tree
+        tests/fixtures/submissions/red_black_insertion_tree_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_plain_bst_as_red_black_tree
+        F65-red-black-insertion-tree
+        tests/fixtures/submissions/red_black_insertion_tree_plain_bst.cpp
         1
         "Verdict: WA"
         TRUE

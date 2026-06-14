@@ -1,0 +1,13 @@
+12
+root
+preorder
+insert -1
+root
+parent -1
+height -1
+balance -1
+clear
+size
+contains -1
+parent 9
+inorder

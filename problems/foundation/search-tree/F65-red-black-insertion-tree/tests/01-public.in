@@ -1,0 +1,18 @@
+17
+insert 10
+insert 20
+insert 30
+root
+preorder
+inorder
+color 20
+color 10
+parent 30
+black_height
+validate
+insert 15
+preorder
+color 10
+color 30
+size
+insert 15

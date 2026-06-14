@@ -1,0 +1,17 @@
+16
+insert 30
+insert 20
+insert 10
+root
+preorder
+inorder
+height 20
+balance 20
+parent 10
+insert 25
+insert 28
+root
+preorder
+contains 99
+size
+insert 28

@@ -5990,6 +5990,252 @@ GeneratedCase generateRehashingLinearProbingTable(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateAvlSingleRotationTrace(
+    std::mt19937_64& random,
+    int caseCount
+) {
+    std::ostringstream input;
+    std::ostringstream output;
+    input << caseCount << '\n';
+    for (int index = 0; index < caseCount; ++index) {
+        int low = randomInt(random, -1000, 998);
+        int middle = randomInt(random, low + 1, 999);
+        int high = randomInt(random, middle + 1, 1000);
+        const bool leftLeft = randomInt(random, 0, 1) == 0;
+        if (leftLeft) {
+            input << "LL " << high << ' ' << middle << ' ' << low << '\n';
+        } else {
+            input << "RR " << low << ' ' << middle << ' ' << high << '\n';
+        }
+        output << middle << " | " << middle << ' ' << low << ' ' << high
+               << " | 2 1 1\n";
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateAvlDoubleRotationTrace(
+    std::mt19937_64& random,
+    int caseCount
+) {
+    std::ostringstream input;
+    std::ostringstream output;
+    input << caseCount << '\n';
+    for (int index = 0; index < caseCount; ++index) {
+        int low = randomInt(random, -1000, 998);
+        int middle = randomInt(random, low + 1, 999);
+        int high = randomInt(random, middle + 1, 1000);
+        const bool leftRight = randomInt(random, 0, 1) == 0;
+        if (leftRight) {
+            input << "LR " << high << ' ' << low << ' ' << middle << '\n';
+            output << "LEFT_RIGHT";
+        } else {
+            input << "RL " << low << ' ' << high << ' ' << middle << '\n';
+            output << "RIGHT_LEFT";
+        }
+        output << " | " << middle << " | " << middle << ' ' << low << ' '
+               << high << " | 2 1 1\n";
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateAvlInsertionTree(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 5) {
+        throw std::runtime_error(
+            "F61-avl-insertion-tree operation_limit is too small"
+        );
+    }
+    std::ostringstream input;
+    std::ostringstream output;
+    input << operationCount
+          << "\ninsert 30\ninsert 10\ninsert 20\ninsert 40\ninsert 50\n";
+    const int keys[5] = {10, 20, 30, 40, 50};
+    const int parents[5] = {20, -1, 40, 20, 40};
+    const int heights[5] = {1, 3, 1, 2, 1};
+    const int balances[5] = {0, -1, 0, 0, 0};
+    for (int operation = 5; operation < operationCount; ++operation) {
+        const int kind = randomInt(random, 0, 8);
+        if (kind == 0) {
+            input << "root\n";
+            appendLine(output, 20);
+        } else if (kind == 1) {
+            input << "preorder\n";
+            output << "20 10 40 30 50\n";
+        } else if (kind == 2) {
+            input << "inorder\n";
+            output << "10 20 30 40 50\n";
+        } else if (kind == 3) {
+            input << "size\n";
+            appendLine(output, 5);
+        } else if (kind == 4) {
+            const int key = randomInt(random, 5, 55);
+            input << "contains " << key << '\n';
+            bool found = false;
+            for (int value : keys) found = found || value == key;
+            appendLine(output, found ? "true" : "false");
+        } else {
+            const int index = randomInt(random, 0, 4);
+            const int query = randomInt(random, 0, 2);
+            const char* command =
+                query == 0 ? "parent" : (query == 1 ? "height" : "balance");
+            input << command << ' ' << keys[index] << '\n';
+            if (query == 0) {
+                if (parents[index] < 0) appendLine(output, "NONE");
+                else appendLine(output, parents[index]);
+            } else if (query == 1) {
+                appendLine(output, heights[index]);
+            } else {
+                appendLine(output, balances[index]);
+            }
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateAvlDeletionTree(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 10) {
+        throw std::runtime_error(
+            "F62-avl-deletion-tree operation_limit is too small"
+        );
+    }
+    std::ostringstream input;
+    std::ostringstream output;
+    input << operationCount
+          << "\ninsert 9\ninsert 5\ninsert 10\ninsert 0\ninsert 6\n"
+          << "insert 11\ninsert -1\ninsert 1\ninsert 2\nerase 10\n";
+    appendLine(output, "REMOVED");
+    const int keys[8] = {-1, 0, 1, 2, 5, 6, 9, 11};
+    const int heights[8] = {1, 2, 4, 1, 2, 1, 3, 1};
+    const int balances[8] = {0, 1, -1, 0, 0, 0, 1, 0};
+    for (int operation = 10; operation < operationCount; ++operation) {
+        const int kind = randomInt(random, 0, 7);
+        if (kind == 0) {
+            input << "root\n";
+            appendLine(output, 1);
+        } else if (kind == 1) {
+            input << "preorder\n";
+            output << "1 0 -1 9 5 2 6 11\n";
+        } else if (kind == 2) {
+            input << "inorder\n";
+            output << "-1 0 1 2 5 6 9 11\n";
+        } else if (kind == 3) {
+            input << "size\n";
+            appendLine(output, 8);
+        } else if (kind == 4) {
+            const int key = randomInt(random, -2, 12);
+            input << "contains " << key << '\n';
+            bool found = false;
+            for (int value : keys) found = found || value == key;
+            appendLine(output, found ? "true" : "false");
+        } else {
+            const int index = randomInt(random, 0, 7);
+            const bool heightQuery = randomInt(random, 0, 1) == 0;
+            input << (heightQuery ? "height " : "balance ")
+                  << keys[index] << '\n';
+            appendLine(
+                output,
+                heightQuery ? heights[index] : balances[index]
+            );
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateAvlStructuralValidation(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    static_cast<void>(operationCount);
+    const int base = randomInt(random, -500, 500);
+    std::ostringstream input;
+    input << "4 0\n"
+          << "0 " << base << " 1 2 -1 3\n"
+          << "1 " << base - 20 << " -1 3 0 2\n"
+          << "2 " << base + 20 << " -1 -1 0 1\n"
+          << "3 " << base + 10 << " -1 -1 1 1\n";
+    return {input.str(), "INVALID_ORDER\n"};
+}
+
+GeneratedCase generateOrderFourSearchTreeValidation(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    static_cast<void>(operationCount);
+    const int separator = randomInt(random, -100, 100);
+    std::ostringstream input;
+    input << "2 0\n"
+          << "0 2 " << separator << ' ' << separator + 10
+          << " -1 1 -1 -1 -1\n"
+          << "1 1 " << separator - 5
+          << " -1 -1 -1 -1 -1 -1\n";
+    return {input.str(), "INVALID_OCCUPANCY\n"};
+}
+
+GeneratedCase generateRedBlackInsertionTree(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 6) {
+        throw std::runtime_error(
+            "F65-red-black-insertion-tree operation_limit is too small"
+        );
+    }
+    std::ostringstream input;
+    std::ostringstream output;
+    input << operationCount
+          << "\ninsert 41\ninsert 38\ninsert 31\ninsert 12\n"
+          << "insert 19\ninsert 8\n";
+    const int keys[6] = {8, 12, 19, 31, 38, 41};
+    const int parents[6] = {12, 19, 38, 19, -1, 38};
+    const bool red[6] = {true, false, true, false, false, false};
+    for (int operation = 6; operation < operationCount; ++operation) {
+        const int kind = randomInt(random, 0, 8);
+        if (kind == 0) {
+            input << "root\n";
+            appendLine(output, 38);
+        } else if (kind == 1) {
+            input << "preorder\n";
+            output << "38:B 19:R 12:B 8:R 31:B 41:B\n";
+        } else if (kind == 2) {
+            input << "inorder\n";
+            output << "8 12 19 31 38 41\n";
+        } else if (kind == 3) {
+            input << "black_height\n";
+            appendLine(output, 3);
+        } else if (kind == 4) {
+            input << "validate\n";
+            appendLine(output, "VALID");
+        } else if (kind == 5) {
+            input << "size\n";
+            appendLine(output, 6);
+        } else if (kind == 6) {
+            const int key = randomInt(random, 5, 45);
+            input << "contains " << key << '\n';
+            bool found = false;
+            for (int value : keys) found = found || value == key;
+            appendLine(output, found ? "true" : "false");
+        } else {
+            const int index = randomInt(random, 0, 5);
+            const bool colorQuery = kind == 7;
+            input << (colorQuery ? "color " : "parent ")
+                  << keys[index] << '\n';
+            if (colorQuery) {
+                appendLine(output, red[index] ? "RED" : "BLACK");
+            } else if (parents[index] < 0) {
+                appendLine(output, "NONE");
+            } else {
+                appendLine(output, parents[index]);
+            }
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 GeneratedCase generateCase(
     const std::string& problemId,
     std::uint64_t seed,
@@ -6169,6 +6415,27 @@ GeneratedCase generateCase(
     }
     if (problemId == "F58-rehashing-linear-probing-table") {
         return generateRehashingLinearProbingTable(random, operationCount);
+    }
+    if (problemId == "F59-avl-single-rotation-trace") {
+        return generateAvlSingleRotationTrace(random, operationCount);
+    }
+    if (problemId == "F60-avl-double-rotation-trace") {
+        return generateAvlDoubleRotationTrace(random, operationCount);
+    }
+    if (problemId == "F61-avl-insertion-tree") {
+        return generateAvlInsertionTree(random, operationCount);
+    }
+    if (problemId == "F62-avl-deletion-tree") {
+        return generateAvlDeletionTree(random, operationCount);
+    }
+    if (problemId == "F63-avl-structural-validation") {
+        return generateAvlStructuralValidation(random, operationCount);
+    }
+    if (problemId == "F64-order-four-search-tree-validation") {
+        return generateOrderFourSearchTreeValidation(random, operationCount);
+    }
+    if (problemId == "F65-red-black-insertion-tree") {
+        return generateRedBlackInsertionTree(random, operationCount);
     }
     throw std::runtime_error(
         "stress generator is not available for problem: " + problemId

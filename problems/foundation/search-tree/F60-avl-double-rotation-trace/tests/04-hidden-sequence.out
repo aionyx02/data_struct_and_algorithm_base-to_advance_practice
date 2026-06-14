@@ -1,0 +1,4 @@
+RIGHT_LEFT | 5 | 5 1 9 | 2 1 1
+LEFT_RIGHT | 5 | 5 1 9 | 2 1 1
+RIGHT_LEFT | 0 | 0 -9 9 | 2 1 1
+LEFT_RIGHT | 0 | 0 -500 500 | 2 1 1

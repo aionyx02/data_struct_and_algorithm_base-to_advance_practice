@@ -1,0 +1,21 @@
+20
+insert 41
+insert 38
+insert 31
+insert 12
+insert 19
+insert 8
+root
+preorder
+inorder
+black_height
+validate
+color 19
+color 8
+parent 12
+parent 31
+contains 38
+contains 99
+size
+clear
+root
