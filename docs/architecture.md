@@ -2,7 +2,7 @@
 type: architecture_spec
 status: active
 priority: p1
-updated: 2026-06-13
+updated: 2026-06-14
 context_policy: retrieve_only
 owner: project
 ---
@@ -11,81 +11,171 @@ owner: project
 
 ## System Overview
 
-The local Judge is the single source of truth. CLI and future Web interfaces call the same application
+The local Judge is the single source of truth for verdicts. The `algo` CLI is the
+only interface today; a future Web adapter must call the same application
 services and must not implement separate judging behavior.
 
 ```text
-CLI now                    Web later
-   \                         /
-    -> Application services
-             |
-             v
-      Judge domain core
-      /       |        \
- problem   execution   validation
- catalog    adapter     policies
-      \       |        /
-       progress repository
+algo CLI (src/main.cpp)            Web adapter (later)
+        \                                /
+         v                              v
+        Application services
+        JudgeService  +  StressService
+                     |
+                     v
+            Judge domain core
+   ProblemCatalog   ProcessRunner   CaseGenerator registry
+   (discovery)      (OS adapter)    (differential oracles)
+                     |
+                     v
+        Problem packages on disk (problems/**)
 ```
 
-Context-engineering documents and guard scripts are a repository support system. They do not participate
-in runtime judging.
+Problem definitions are **data on disk**, discovered at runtime. The Node scripts
+under `scripts/` and the docs guards are a repository support system; they do not
+participate in runtime judging.
 
-## Planned Layers
+## Repository Layout
 
-| Layer | Responsibility | Must not own |
-|---|---|---|
-| Interface | CLI commands and future HTTP/UI adapters | Judge rules |
-| Application | Orchestrate list, test, stress, benchmark, and progress use cases | OS-specific process details |
-| Domain | Verdicts, limits, metadata contracts, invariant and complexity policies | CLI, Web, filesystem APIs |
-| Infrastructure | Compiler/process runner, filesystem catalog, JSON progress storage | Curriculum policy |
-| Problem packages | Statement, starter code, harness, generators, oracle, metadata | Global process management |
+```text
+include/judge/          Public headers: domain contracts + service interfaces
+  problem.hpp             Problem + ProblemMetadata value types
+  judge_service.hpp       Verdict, TestResult, JudgeReport, JudgeService
+  stress_service.hpp      StressReport, StressService
+  process_runner.hpp      ProcessRequest/ProcessResult + ProcessRunner port
+  catalog.hpp             ProblemCatalog
+  case_generator.hpp      GeneratedCase, CaseGenerator(Registry), generateCase
+src/
+  main.cpp                The algo CLI: argument parsing + command dispatch
+  catalog.cpp             Filesystem discovery + JSON metadata parsing/validation
+  judge_service.cpp       Compile, forbidden-symbol scan, run tests, verdicts
+  stress_service.cpp      Seeded differential run orchestration (~166 lines)
+  case_generator.cpp      Assembles the generator registry; ID-keyed dispatch
+  process_runner_windows.cpp / _unsupported.cpp   ProcessRunner adapter impls
+  generators/             Per-domain brute-force oracles (registry pattern)
+    generator_support.hpp   Shared inline helpers (RNG, list printing)
+    generator_registry.hpp  Declares each register<Domain>Generators(...)
+    linear_/tree_/bst_/forest_dsu_/graph_/hashing_/advanced_generators.cpp
+problems/<stage>/<category>/<id>/
+  problem.json            Metadata contract (judge mode, limits, forbidden APIs)
+  statement.md            Problem statement
+  tests/*.in, *.out       Public, boundary, invariant, hidden fixtures
+tests/
+  fixtures/submissions/*.cpp   Correct + deliberately faulty reference programs
+  run_cli_test.cmake, run_stress_test.cmake   CTest drivers
+CMakeLists.txt, CMakePresets.json             Build + CTest wiring
+scripts/                Repository tooling (practice CLI, docs/team guards)
+```
 
-## Planned Modules
+## Layers
 
-| Module | Responsibility |
-|---|---|
-| `judge/core` | Verdicts, test plans, limits, reports, and policy interfaces |
-| `judge/runner` | Compile and execute learner code with bounded resources |
-| `judge/catalog` | Discover and validate problem packages |
-| `judge/testing` | Deterministic, random, differential, invariant, and benchmark checks |
-| `judge/progress` | Record attempts, results, reviews, and spaced repetition state |
-| `cli` | Implement `algo` commands without embedding Judge behavior |
-| `problems` | Hold curriculum content grouped by stage and topic |
-| `web` | Future adapter; absent until the CLI foundation is stable |
+| Layer | Responsibility | Concrete code | Must not own |
+|---|---|---|---|
+| Interface | Parse args, dispatch `list`/`show`/`test`/`stress`, format output, set exit code | `src/main.cpp` | Judge rules |
+| Application | Orchestrate the test and stress use cases | `JudgeService`, `StressService` | OS-specific process details |
+| Domain | Verdicts, metadata contract, generator contract, discovery rules | `judge_service.hpp`, `problem.hpp`, `case_generator.hpp`, `catalog.cpp` | CLI, Web, raw OS APIs |
+| Infrastructure | Compile/run child processes, read the filesystem catalog | `ProcessRunner` impls, `ProblemCatalog` | Curriculum policy |
+| Problem packages | Statement, metadata, fixtures, and the matching brute-force oracle | `problems/**`, `src/generators/**` | Global process management |
 
-Exact directories may change during the first vertical slice. A structural change that affects public
-contracts or process boundaries requires an ADR update.
+## Key Components
+
+- **ProblemCatalog** (`catalog.cpp`) walks `problems/**/problem.json`, parses the
+  JSON with a small hand-rolled parser, and validates each package: required
+  metadata fields, ID character set, directory name equals ID, tests directory
+  stays inside the package, and every `.in` has a matching `.out`. It currently
+  accepts only `stdio` judge mode.
+- **JudgeService** (`judge_service.cpp`) runs one submission against a package's
+  test directory: scan source text for forbidden symbols, compile with `g++`
+  (compiler configurable by environment), then for each `.in` run the binary
+  through the `ProcessRunner` with the package's timeout and output cap and
+  diff stdout against the `.out`.
+- **ProcessRunner** (`process_runner.hpp` + platform `.cpp`) is the only OS
+  boundary: it takes a `ProcessRequest` (executable, args, stdin, timeout,
+  output limit) and returns a `ProcessResult` (launched, timedOut,
+  outputLimitExceeded, exitCode, elapsed, captured streams). Windows has a real
+  implementation; other platforms get an honest "unsupported" stub.
+- **CaseGenerator registry** (`case_generator.cpp` + `src/generators/**`) maps a
+  problem ID to a trusted brute-force model. Each generator returns a
+  `GeneratedCase { input, expectedOutput }`. Generators are grouped into
+  self-contained domain translation units, each exposing a
+  `register<Domain>Generators(...)` registrar that `caseGenerators()` assembles
+  once into an ID-keyed map.
+- **StressService** (`stress_service.cpp`) draws per-case seeds from a master
+  seed, asks the registry to generate cases into a temporary directory under
+  `.judge/stress/`, reuses `JudgeService` to judge them, cleans the directory via
+  RAII, and on failure reports the failing case seed plus a replay command.
+
+## Runtime Flows
+
+- `algo list` / `algo show <id>`: `ProblemCatalog` discovers and validates
+  packages; `show` prints metadata and the declared (not enforced) memory limit.
+- `algo test <id> <source.cpp>`: forbidden-symbol scan → compile → run each test
+  → diff output → aggregate the first non-AC test into the report verdict.
+- `algo stress <id> <source.cpp> [--seed s] [--cases n]`: registry generates
+  `n` differential cases (defaulting to the package's `random_tests`) → judge the
+  generated directory → on failure print the case seed and a reproducible replay.
+
+## Verdict Vocabulary
+
+The verdict enum (`judge_service.hpp`) is the shared report shape. Enforced
+today: `AC`, `WA`, `TLE`, `RE` (launch failure, non-zero exit, or output overflow),
+`CE`, and `API` (forbidden symbol). Declared but **not yet enforced**: `MLE`
+(memory limits are read but not applied on the MinGW target), and the
+`INV`/`CX` invariant and complexity verdicts reserved for later checks.
+
+CLI exit codes: `0` for `AC`, `1` for any other verdict, `2` for usage or
+internal errors.
 
 ## Dependency Direction
 
-- Interfaces depend on application contracts.
-- Application services depend on domain ports.
-- Infrastructure implements domain ports.
-- Domain code does not depend on CLI, Web, CMake, or operating-system APIs.
-- Problem packages depend only on stable harness contracts.
-- Web must invoke the same application layer used by CLI.
+- The interface depends on application services; services depend on domain types.
+- Infrastructure (`ProcessRunner`, `ProblemCatalog`) implements domain-facing
+  behavior; domain code does not depend on CLI, Web, CMake, or OS APIs.
+- Problem packages and generators depend only on the stable contracts below.
+- A future Web adapter must invoke the same `JudgeService` / `StressService`.
 
 ## Runtime Safety Boundary
 
 - Learner programs run as child processes, never inside the Judge process.
-- Every run has a timeout and bounded output capture.
-- Temporary artifacts stay inside a dedicated project-controlled directory.
-- The initial product is local-only and has no network execution API.
-- Memory limiting on Windows needs a tested adapter; unsupported enforcement must be reported honestly.
+- Every run has a timeout and bounded output capture (defaults: 1000 ms, 64 KB).
+- Temporary compile and stress artifacts stay under the project-controlled
+  `.judge/` directory and are removed after use.
+- The product is local-only with no network execution API; it is not a sandbox
+  for untrusted remote code.
+- Memory limiting on the MinGW target is unimplemented and reported honestly
+  rather than silently assumed.
 
 ## Stable Contracts
 
-- Problem metadata schema.
-- Test case and generator contract.
-- Verdict and report shapes.
-- Progress record schema.
-- CLI exit-code behavior.
+- Problem metadata schema (`problem.json` fields read by `catalog.cpp`).
+- Case generator contract (`GeneratedCase`, `CaseGenerator`).
+- Verdict and report shapes (`Verdict`, `TestResult`, `JudgeReport`, `StressReport`).
+- CLI command surface and exit-code behavior.
 
-Breaking changes to these contracts require tests, migration notes, and an ADR when already in use.
+Breaking changes to these require tests, migration notes, and an ADR when the
+contract is already in use.
 
-## Architecture Questions
+## Extension Points
 
-- Which Windows mechanism will enforce memory limits reliably with MinGW-built executables?
-- Should the first progress repository use one JSON file or one record per problem?
-- Which minimal HTTP adapter will be used when the Web phase begins?
+- **Add a problem**: create `problems/<stage>/<category>/<id>/` (metadata,
+  statement, `tests/*`), add one brute-force generator to the matching
+  `src/generators/<domain>_generators.cpp`, register it in that file's
+  registrar, add reference fixtures, and wire CTest entries in `CMakeLists.txt`.
+- **Add a judge mode** (`function`, `adt`): extend `catalog.cpp` validation and
+  `JudgeService`; keep the `ProcessRunner` boundary unchanged.
+- **Add the Web layer**: place an HTTP adapter in front of the existing
+  application services without duplicating judging logic.
+
+## Not Yet Built (Planned)
+
+- Progress repository (attempts, best time, spaced repetition) — schema and
+  storage shape still open.
+- Web dashboard and practice UI, after the CLI is stable on enough problems.
+- Memory-limit enforcement adapter and the `INV`/`CX` structural and complexity
+  checks described in `docs/judge-requirements.md`.
+
+## Open Questions
+
+- Which Windows mechanism reliably enforces memory limits for MinGW binaries?
+- Should the first progress store be one JSON file or one record per problem?
+- Which minimal HTTP adapter fits the Web phase?
