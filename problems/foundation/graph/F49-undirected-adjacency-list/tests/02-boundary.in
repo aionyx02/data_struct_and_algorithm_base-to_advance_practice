@@ -1,0 +1,9 @@
+0 0 8
+edge_count
+capacity
+neighbors 0
+degree -1
+add 0 1
+remove 0 1
+has 0 0
+clear

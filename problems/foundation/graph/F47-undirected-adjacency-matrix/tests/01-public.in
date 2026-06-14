@@ -1,0 +1,21 @@
+5 20
+add 0 1
+add 0 3
+add 1 2
+add 3 4
+has 1 0
+degree 0
+neighbors 0
+row 0
+edge_count
+add 0 1
+remove 0 3
+has 3 0
+degree 0
+degree 3
+neighbors 3
+remove 0 3
+add 2 2
+clear
+edge_count
+neighbors 1

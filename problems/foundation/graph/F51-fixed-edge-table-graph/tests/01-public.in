@@ -1,0 +1,19 @@
+5 3 18
+add 10 0 1
+add 20 1 2
+add 30 3 4
+edge_at 1
+slot 30
+endpoints 10
+degree 1
+neighbors 1
+edge_count
+free_slots
+add 40 0 4
+erase 20
+add 40 0 4
+slot 40
+edge_at 1
+neighbors 0
+edge_count
+free_slots

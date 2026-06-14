@@ -1,0 +1,11 @@
+0 0 10
+edge_count
+free_slots
+add 1 0 1
+erase 1
+slot 1
+edge_at 0
+degree 0
+neighbors -1
+endpoints 1
+clear

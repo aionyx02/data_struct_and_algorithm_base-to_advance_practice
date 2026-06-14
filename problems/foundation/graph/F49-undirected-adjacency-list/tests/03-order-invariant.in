@@ -1,0 +1,16 @@
+6 6 15
+add 3 5
+add 3 1
+add 3 4
+add 3 0
+add 3 2
+neighbors 3
+neighbors 1
+degree 3
+remove 3 1
+neighbors 3
+add 1 5
+neighbors 1
+neighbors 5
+edge_count
+has 5 1

@@ -139,6 +139,11 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f44 F44-quick-union-disjoint-set)
     add_catalog_test(catalog_lists_f45 F45-weighted-union-disjoint-set)
     add_catalog_test(catalog_lists_f46 F46-path-compression-trace)
+    add_catalog_test(catalog_lists_f47 F47-undirected-adjacency-matrix)
+    add_catalog_test(catalog_lists_f48 F48-directed-adjacency-matrix)
+    add_catalog_test(catalog_lists_f49 F49-undirected-adjacency-list)
+    add_catalog_test(catalog_lists_f50 F50-directed-adjacency-list)
+    add_catalog_test(catalog_lists_f51 F51-fixed-edge-table-graph)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -768,6 +773,76 @@ if(BUILD_TESTING AND WIN32)
         judge_rejects_missing_path_compression
         F46-path-compression-trace
         tests/fixtures/submissions/path_compression_trace_no_compression.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_undirected_adjacency_matrix
+        F47-undirected-adjacency-matrix
+        tests/fixtures/submissions/undirected_adjacency_matrix_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_asymmetric_undirected_matrix
+        F47-undirected-adjacency-matrix
+        tests/fixtures/submissions/undirected_adjacency_matrix_asymmetric.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_directed_adjacency_matrix
+        F48-directed-adjacency-matrix
+        tests/fixtures/submissions/directed_adjacency_matrix_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_duplicate_arc_count
+        F48-directed-adjacency-matrix
+        tests/fixtures/submissions/directed_adjacency_matrix_counts_duplicates.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_undirected_adjacency_list
+        F49-undirected-adjacency-list
+        tests/fixtures/submissions/undirected_adjacency_list_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_unsorted_undirected_neighbors
+        F49-undirected-adjacency-list
+        tests/fixtures/submissions/undirected_adjacency_list_unsorted.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_directed_adjacency_list
+        F50-directed-adjacency-list
+        tests/fixtures/submissions/directed_adjacency_list_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_stale_directed_indegree
+        F50-directed-adjacency-list
+        tests/fixtures/submissions/directed_adjacency_list_stale_indegree.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_fixed_edge_table_graph
+        F51-fixed-edge-table-graph
+        tests/fixtures/submissions/fixed_edge_table_graph_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_edge_table_without_reuse
+        F51-fixed-edge-table-graph
+        tests/fixtures/submissions/fixed_edge_table_graph_no_reuse.cpp
         1
         "Verdict: WA"
     )
@@ -1432,6 +1507,86 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_missing_path_compression
         F46-path-compression-trace
         tests/fixtures/submissions/path_compression_trace_no_compression.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_undirected_adjacency_matrix
+        F47-undirected-adjacency-matrix
+        tests/fixtures/submissions/undirected_adjacency_matrix_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_asymmetric_undirected_matrix
+        F47-undirected-adjacency-matrix
+        tests/fixtures/submissions/undirected_adjacency_matrix_asymmetric.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_directed_adjacency_matrix
+        F48-directed-adjacency-matrix
+        tests/fixtures/submissions/directed_adjacency_matrix_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_duplicate_arc_count
+        F48-directed-adjacency-matrix
+        tests/fixtures/submissions/directed_adjacency_matrix_counts_duplicates.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_undirected_adjacency_list
+        F49-undirected-adjacency-list
+        tests/fixtures/submissions/undirected_adjacency_list_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_unsorted_undirected_neighbors
+        F49-undirected-adjacency-list
+        tests/fixtures/submissions/undirected_adjacency_list_unsorted.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_directed_adjacency_list
+        F50-directed-adjacency-list
+        tests/fixtures/submissions/directed_adjacency_list_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_stale_directed_indegree
+        F50-directed-adjacency-list
+        tests/fixtures/submissions/directed_adjacency_list_stale_indegree.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_fixed_edge_table_graph
+        F51-fixed-edge-table-graph
+        tests/fixtures/submissions/fixed_edge_table_graph_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_edge_table_without_reuse
+        F51-fixed-edge-table-graph
+        tests/fixtures/submissions/fixed_edge_table_graph_no_reuse.cpp
         1
         "Verdict: WA"
         TRUE

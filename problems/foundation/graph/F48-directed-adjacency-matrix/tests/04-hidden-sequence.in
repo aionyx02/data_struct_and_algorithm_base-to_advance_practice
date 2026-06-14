@@ -1,0 +1,14 @@
+3 13
+add 0 2
+add 1 2
+add 2 1
+out_neighbors 2
+in_neighbors 2
+out_degree 1
+in_degree 1
+has 2 1
+has 1 2
+remove 2 1
+in_degree 1
+out_degree 2
+edge_count

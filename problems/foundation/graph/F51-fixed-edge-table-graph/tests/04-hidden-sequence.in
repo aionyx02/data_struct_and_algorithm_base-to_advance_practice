@@ -1,0 +1,16 @@
+3 2 15
+add 7 2 0
+add 8 1 2
+neighbors 2
+add 9 0 1
+erase 7
+edge_at 0
+add 9 0 1
+edge_at 0
+endpoints 9
+degree 0
+erase 99
+add 9 0 2
+slot 8
+clear
+free_slots
