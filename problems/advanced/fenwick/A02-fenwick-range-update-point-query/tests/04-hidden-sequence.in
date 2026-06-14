@@ -1,0 +1,13 @@
+6 11
+1 2 3 4 5 6
+range_add 0 5 10
+get 0
+get 5
+range_add 2 4 -3
+get 2
+get 3
+get 4
+get 5
+add 1 100
+get 1
+size

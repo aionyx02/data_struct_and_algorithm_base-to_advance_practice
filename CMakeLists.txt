@@ -161,6 +161,9 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_f66 F66-sequence-shift-cost-trace)
     add_catalog_test(catalog_lists_f67 F67-switchable-stack-representation)
     add_catalog_test(catalog_lists_f68 F68-amortized-growth-ledger)
+    add_catalog_test(catalog_lists_a01 A01-fenwick-point-prefix)
+    add_catalog_test(catalog_lists_a02 A02-fenwick-range-update-point-query)
+    add_catalog_test(catalog_lists_a03 A03-fenwick-dual-range-range)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1098,6 +1101,48 @@ if(BUILD_TESTING AND WIN32)
         judge_rejects_counting_new_value_as_copy
         F68-amortized-growth-ledger
         tests/fixtures/submissions/amortized_growth_ledger_counts_new_element.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_fenwick_point_prefix
+        A01-fenwick-point-prefix
+        tests/fixtures/submissions/fenwick_point_prefix_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_fenwick_off_by_one_range
+        A01-fenwick-point-prefix
+        tests/fixtures/submissions/fenwick_point_prefix_wrong_range.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_fenwick_range_point
+        A02-fenwick-range-update-point-query
+        tests/fixtures/submissions/fenwick_range_point_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_fenwick_endpoint_only_range_add
+        A02-fenwick-range-update-point-query
+        tests/fixtures/submissions/fenwick_range_point_endpoint_only.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_fenwick_dual_range
+        A03-fenwick-dual-range-range
+        tests/fixtures/submissions/fenwick_dual_range_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_fenwick_single_tree_range
+        A03-fenwick-dual-range-range
+        tests/fixtures/submissions/fenwick_dual_single_tree.cpp
         1
         "Verdict: WA"
     )
@@ -2114,6 +2159,54 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_counting_new_value_as_copy
         F68-amortized-growth-ledger
         tests/fixtures/submissions/amortized_growth_ledger_counts_new_element.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_fenwick_point_prefix
+        A01-fenwick-point-prefix
+        tests/fixtures/submissions/fenwick_point_prefix_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_fenwick_off_by_one_range
+        A01-fenwick-point-prefix
+        tests/fixtures/submissions/fenwick_point_prefix_wrong_range.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_fenwick_range_point
+        A02-fenwick-range-update-point-query
+        tests/fixtures/submissions/fenwick_range_point_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_fenwick_endpoint_only_range_add
+        A02-fenwick-range-update-point-query
+        tests/fixtures/submissions/fenwick_range_point_endpoint_only.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_fenwick_dual_range
+        A03-fenwick-dual-range-range
+        tests/fixtures/submissions/fenwick_dual_range_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_fenwick_single_tree_range
+        A03-fenwick-dual-range-range
+        tests/fixtures/submissions/fenwick_dual_single_tree.cpp
         1
         "Verdict: WA"
         TRUE

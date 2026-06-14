@@ -6560,6 +6560,295 @@ GeneratedCase generateAmortizedGrowthLedger(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateFenwickPointPrefix(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 3) {
+        throw std::runtime_error(
+            "A01-fenwick-point-prefix requires operation_limit of at least 3"
+        );
+    }
+    const int size = randomInt(random, 1, 20);
+    std::vector<long long> values(static_cast<std::size_t>(size));
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << size << ' ' << operationCount << '\n';
+    for (int index = 0; index < size; ++index) {
+        values[static_cast<std::size_t>(index)] = randomValue(random);
+        if (index != 0) {
+            input << ' ';
+        }
+        input << values[static_cast<std::size_t>(index)];
+    }
+    input << '\n';
+
+    auto prefix = [&](int last) {
+        long long sum = 0;
+        for (int index = 0; index <= last; ++index) {
+            sum += values[static_cast<std::size_t>(index)];
+        }
+        return sum;
+    };
+
+    const int firstIndex = randomInt(random, 0, size - 1);
+    const int firstDelta = randomValue(random);
+    input << "add " << firstIndex << ' ' << firstDelta << '\n';
+    values[static_cast<std::size_t>(firstIndex)] += firstDelta;
+    const int secondIndex = randomInt(random, 0, size - 1);
+    const int secondDelta = randomValue(random);
+    input << "add " << secondIndex << ' ' << secondDelta << '\n';
+    values[static_cast<std::size_t>(secondIndex)] += secondDelta;
+    input << "range 0 " << (size - 1) << '\n';
+    output << prefix(size - 1) << '\n';
+
+    for (int operation = 3; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 5)) {
+            case 0: {
+                const int index = randomInt(random, 0, size - 1);
+                const int value = randomValue(random);
+                input << "add " << index << ' ' << value << '\n';
+                values[static_cast<std::size_t>(index)] += value;
+                break;
+            }
+            case 1: {
+                const int index = randomInt(random, -2, size + 1);
+                const int value = randomValue(random);
+                input << "set " << index << ' ' << value << '\n';
+                if (index < 0 || index >= size) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    values[static_cast<std::size_t>(index)] = value;
+                }
+                break;
+            }
+            case 2: {
+                const int index = randomInt(random, -2, size + 1);
+                input << "get " << index << '\n';
+                if (index < 0 || index >= size) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << values[static_cast<std::size_t>(index)] << '\n';
+                }
+                break;
+            }
+            case 3: {
+                const int index = randomInt(random, -2, size + 1);
+                input << "prefix " << index << '\n';
+                if (index < 0 || index >= size) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << prefix(index) << '\n';
+                }
+                break;
+            }
+            case 4: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                input << "range " << left << ' ' << right << '\n';
+                if (left < 0 || left >= size || right < 0 || right >= size ||
+                    left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << (prefix(right) - prefix(left - 1)) << '\n';
+                }
+                break;
+            }
+            default:
+                input << "size\n";
+                output << size << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateFenwickRangePoint(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "A02-fenwick-range-update-point-query requires operation_limit "
+            "of at least 4"
+        );
+    }
+    const int size = randomInt(random, 1, 20);
+    std::vector<long long> values(static_cast<std::size_t>(size));
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << size << ' ' << operationCount << '\n';
+    for (int index = 0; index < size; ++index) {
+        values[static_cast<std::size_t>(index)] = randomValue(random);
+        if (index != 0) {
+            input << ' ';
+        }
+        input << values[static_cast<std::size_t>(index)];
+    }
+    input << '\n';
+
+    const int prologueLeft = size == 1 ? 0 : randomInt(random, 0, size - 2);
+    const int prologueDelta = randomValue(random);
+    input << "range_add " << prologueLeft << ' ' << (size - 1) << ' '
+          << prologueDelta << '\n';
+    for (int index = prologueLeft; index < size; ++index) {
+        values[static_cast<std::size_t>(index)] += prologueDelta;
+    }
+    input << "get 0\n";
+    output << values.front() << '\n';
+    input << "get " << (size - 1) << '\n';
+    output << values.back() << '\n';
+    input << "get " << size << '\n';
+    appendLine(output, "OUT_OF_RANGE");
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 3)) {
+            case 0: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int value = randomValue(random);
+                input << "range_add " << left << ' ' << right << ' ' << value
+                      << '\n';
+                if (left < 0 || left >= size || right < 0 || right >= size ||
+                    left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    for (int index = left; index <= right; ++index) {
+                        values[static_cast<std::size_t>(index)] += value;
+                    }
+                }
+                break;
+            }
+            case 1: {
+                const int index = randomInt(random, -2, size + 1);
+                const int value = randomValue(random);
+                input << "add " << index << ' ' << value << '\n';
+                if (index < 0 || index >= size) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    values[static_cast<std::size_t>(index)] += value;
+                }
+                break;
+            }
+            case 2: {
+                const int index = randomInt(random, -2, size + 1);
+                input << "get " << index << '\n';
+                if (index < 0 || index >= size) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << values[static_cast<std::size_t>(index)] << '\n';
+                }
+                break;
+            }
+            default:
+                input << "size\n";
+                output << size << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateFenwickDualRangeRange(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "A03-fenwick-dual-range-range requires operation_limit of at least 4"
+        );
+    }
+    const int size = randomInt(random, 1, 20);
+    std::vector<long long> values(static_cast<std::size_t>(size));
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << size << ' ' << operationCount << '\n';
+    for (int index = 0; index < size; ++index) {
+        values[static_cast<std::size_t>(index)] = randomValue(random);
+        if (index != 0) {
+            input << ' ';
+        }
+        input << values[static_cast<std::size_t>(index)];
+    }
+    input << '\n';
+
+    auto prefix = [&](int last) {
+        long long sum = 0;
+        for (int index = 0; index <= last; ++index) {
+            sum += values[static_cast<std::size_t>(index)];
+        }
+        return sum;
+    };
+
+    const int mid = size / 2;
+    const int firstDelta = randomValue(random);
+    input << "range_add 0 " << mid << ' ' << firstDelta << '\n';
+    for (int index = 0; index <= mid; ++index) {
+        values[static_cast<std::size_t>(index)] += firstDelta;
+    }
+    const int secondDelta = randomValue(random);
+    input << "range_add " << mid << ' ' << (size - 1) << ' ' << secondDelta
+          << '\n';
+    for (int index = mid; index <= size - 1; ++index) {
+        values[static_cast<std::size_t>(index)] += secondDelta;
+    }
+    input << "range_sum 0 " << (size - 1) << '\n';
+    output << prefix(size - 1) << '\n';
+    input << "prefix " << mid << '\n';
+    output << prefix(mid) << '\n';
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 3)) {
+            case 0: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int value = randomValue(random);
+                input << "range_add " << left << ' ' << right << ' ' << value
+                      << '\n';
+                if (left < 0 || left >= size || right < 0 || right >= size ||
+                    left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    for (int index = left; index <= right; ++index) {
+                        values[static_cast<std::size_t>(index)] += value;
+                    }
+                }
+                break;
+            }
+            case 1: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                input << "range_sum " << left << ' ' << right << '\n';
+                if (left < 0 || left >= size || right < 0 || right >= size ||
+                    left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << (prefix(right) - prefix(left - 1)) << '\n';
+                }
+                break;
+            }
+            case 2: {
+                const int index = randomInt(random, -2, size + 1);
+                input << "prefix " << index << '\n';
+                if (index < 0 || index >= size) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << prefix(index) << '\n';
+                }
+                break;
+            }
+            default:
+                input << "size\n";
+                output << size << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 GeneratedCase generateCase(
     const std::string& problemId,
     std::uint64_t seed,
@@ -6769,6 +7058,15 @@ GeneratedCase generateCase(
     }
     if (problemId == "F68-amortized-growth-ledger") {
         return generateAmortizedGrowthLedger(random, operationCount);
+    }
+    if (problemId == "A01-fenwick-point-prefix") {
+        return generateFenwickPointPrefix(random, operationCount);
+    }
+    if (problemId == "A02-fenwick-range-update-point-query") {
+        return generateFenwickRangePoint(random, operationCount);
+    }
+    if (problemId == "A03-fenwick-dual-range-range") {
+        return generateFenwickDualRangeRange(random, operationCount);
     }
     throw std::runtime_error(
         "stress generator is not available for problem: " + problemId

@@ -32,6 +32,9 @@ owner: project
 ADT、Big-O、Tree Traversal、Graph Traversal 等內容會保留，因為它們是理解與驗證資料結構
 不可缺少的基礎操作，但不延伸成獨立演算法課程。
 
+一般演算法（Sorting、DP、Greedy、圖論、字串、數學等）的個人學習路線，獨立記錄於
+`docs/algorithm-roadmap.md`，與本課綱並行但不改變本專案 DS-only 的實作範圍。
+
 ## 2. 已選定的訓練模式：B1
 
 ### 題庫密度

@@ -49,7 +49,7 @@ Use this file as the first lookup step. The goal is retrieval-first context, not
 | Design decision | `docs/design-system.md`, `docs/adr/*`, `docs/decisions.md` |
 | Accessibility / keyboard UX | `docs/accessibility.md`, `docs/testing.md` |
 | Performance | `docs/engineering-principles.md`, `docs/architecture.md`, `docs/testing.md`, related benchmark notes |
-| Curriculum planning | `docs/learning-roadmap.md`, `docs/project.md`, `docs/memory/current.md` |
+| Curriculum planning | `docs/learning-roadmap.md`, `docs/algorithm-roadmap.md`, `docs/project.md`, `docs/memory/current.md` |
 | Judge behavior / limits | `docs/judge-requirements.md`, `docs/architecture.md`, `docs/security.md`, `docs/testing.md` |
 | Release / deployment | `docs/release.md`, `docs/testing.md`, `docs/security.md` |
 | Historical question | `docs/tasks/completed.md`, `docs/memory/sessions/*`, `docs/memory/archive/*` |
@@ -75,6 +75,7 @@ Use this file as the first lookup step. The goal is retrieval-first context, not
 | `docs/accessibility.md` | `accessibility_policy` | `active` | `retrieve_when_planning` | Accessibility Policy |
 | `docs/adr/0000-template.md` | `adr` | `template` | `on_demand` | Decision Title |
 | `docs/adr/0001-local-judge-boundary.md` | `adr` | `accepted` | `on_demand` | Local Judge Core And Interface Boundary |
+| `docs/algorithm-roadmap.md` | `learning_roadmap` | `active` | `on_demand` | 演算法學習路線 |
 | `docs/architecture.md` | `architecture_spec` | `active` | `retrieve_only` | Architecture |
 | `docs/CLAUDE.md` | `agent_policy` | `active` | `on_demand` | AI Agent Governance And ADR Policy |
 | `docs/conventions.md` | `coding_conventions` | `active` | `retrieve_when_planning` | Coding Conventions |

@@ -1,0 +1,9 @@
+5 7
+0 0 0 0 0
+range_add 0 2 5
+get 0
+get 2
+get 3
+add 3 4
+get 3
+size
