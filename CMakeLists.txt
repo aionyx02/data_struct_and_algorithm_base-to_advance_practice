@@ -10,7 +10,17 @@ add_library(judge_core
     src/catalog.cpp
     src/judge_service.cpp
     src/stress_service.cpp
+    src/case_generator.cpp
+    src/generators/linear_generators.cpp
+    src/generators/tree_generators.cpp
+    src/generators/bst_generators.cpp
+    src/generators/forest_dsu_generators.cpp
+    src/generators/graph_generators.cpp
+    src/generators/hashing_generators.cpp
+    src/generators/advanced_generators.cpp
 )
+
+target_include_directories(judge_core PRIVATE src)
 
 if(WIN32)
     target_sources(judge_core PRIVATE src/process_runner_windows.cpp)
