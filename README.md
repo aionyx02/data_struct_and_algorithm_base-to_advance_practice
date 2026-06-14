@@ -3,47 +3,132 @@
 這是一個以 C++20、CLion 與 CMake 建立的漸進式資料結構學習專案。
 
 目前範圍只包含資料結構。題目主要依據 `資料結構/` 內的課程教材，再延伸到高等資料結構。
-專案會先建立本地 CLI Judge，之後才增加 Web 練習介面；兩者共用同一套判題核心。
+專案內建本地 CLI Judge，可驗證固定測資、執行可重播的隨機差分測試，並檢查時間限制、
+輸出限制與禁止使用的 API。
 
-## Current Plan
+## 環境需求
+
+- Windows 10/11
+- Node.js 20 或更新版本
+- CMake 3.25 或更新版本
+- MinGW `g++`，支援 C++20
+- CLion 可選；所有操作也能直接在 PowerShell 執行
+
+確認 `node`、`npm`、`cmake`、`g++` 都能從 PowerShell 的 `PATH` 找到。
+
+## 快速開始
+
+第一次使用：
+
+```powershell
+npm install
+npm run problems
+```
+
+選擇題目並建立解答：
+
+```powershell
+npm run problem -- F03-stack-array
+npm run new:solution -- F03-stack-array
+```
+
+這會建立：
+
+```text
+solutions/F03-stack-array.cpp
+```
+
+完成程式後執行固定測資與隨機測試：
+
+```powershell
+npm run judge -- F03-stack-array
+npm run stress -- F03-stack-array
+```
+
+`judge` 與 `stress` 第一次執行時，若找不到 Judge 執行檔，會自動執行 CMake 建置。
+
+## 日常練習流程
+
+1. 用 `npm run problems` 查看目前所有題目。
+2. 用 `npm run problem -- <problem-id>` 查看難度、限制與題目文件位置。
+3. 用 `npm run new:solution -- <problem-id>` 建立初始程式。
+4. 閱讀題目的 `statement.md`，在 `solutions/` 實作資料結構。
+5. 用 `npm run judge -- <problem-id>` 通過固定測資。
+6. 用 `npm run stress -- <problem-id>` 通過 seeded differential tests。
+7. 記錄時間、空間複雜度，以及失敗時破壞的 invariant。
+
+## 簡化指令
+
+| 指令 | 用途 |
+|---|---|
+| `npm run build` | 設定並建置本地 Judge |
+| `npm run problems` | 列出所有可練習題目 |
+| `npm run problem -- F03-stack-array` | 顯示指定題目的 metadata 與 statement 路徑 |
+| `npm run new:solution -- F03-stack-array` | 建立 `solutions/F03-stack-array.cpp` |
+| `npm run judge -- F03-stack-array` | 對預設 solution 執行固定測資 |
+| `npm run stress -- F03-stack-array` | 對預設 solution 執行隨機差分測試 |
+| `npm run check` | 建置並執行全部 C++ integration tests |
+| `npm run verify` | 執行 C++、文件、lint 與 Node.js 完整驗證 |
+
+也可以指定自己的來源檔，不必放在 `solutions/`：
+
+```powershell
+npm run judge -- F03-stack-array .\my-solutions\stack.cpp
+npm run stress -- F03-stack-array .\my-solutions\stack.cpp --seed 20260614 --cases 300
+```
+
+只執行符合名稱的 integration tests：
+
+```powershell
+npm run check -- "f5[2-8]"
+```
+
+所有簡化指令都由同一入口提供，可查看完整說明：
+
+```powershell
+npm run practice -- help
+```
+
+## 判題結果
+
+| Verdict | 意義 |
+|---|---|
+| `AC` | 所有測試通過 |
+| `WA` | 輸出錯誤或資料結構 invariant 被破壞 |
+| `TLE` | 超過題目時間限制 |
+| `RE` | 執行期間發生錯誤 |
+| `CE` | C++ 編譯失敗 |
+| `API` | 使用題目禁止的容器或 API |
+
+`stress` 預設依題目 metadata 執行 100 cases，每個 case 100 次操作。失敗時會顯示
+master seed、case seed、重播指令與完整 failing input，因此可以重現同一個錯誤。
+
+## 專案結構
+
+| 路徑 | 內容 |
+|---|---|
+| `problems/` | 題目 metadata、敘述與固定測資 |
+| `solutions/` | 使用 `new:solution` 建立的個人解答 |
+| `src/`、`include/` | 本地 Judge 核心與 CLI |
+| `tests/fixtures/submissions/` | Judge 自我驗證用的正確與刻意錯誤程式 |
+| `資料結構/` | 資料結構教材 |
+| `演算法/` | 已加入專案但目前暫不納入課程規劃的演算法教材 |
+| `docs/` | 學習路線、Judge 規格、架構與 context engineering |
+
+## 題庫範圍
 
 - 68 題教材基礎。
 - 64 題高等資料結構。
-- ADT 實作題限制會直接完成核心工作的 STL 容器。
-- Judge 驗證答案、invariant、時間、記憶體、禁止 API 與複雜度成長。
+- ADT 實作題會限制可直接完成核心工作的 STL 容器。
+- 目前只規劃資料結構；一般演算法、MST、最短路徑與排序課程仍暫緩。
 
-詳細規劃：
+詳細規劃請見：
 
 - `docs/learning-roadmap.md`
 - `docs/judge-requirements.md`
 - `docs/architecture.md`
 
-## Context Workflow
-
-```powershell
-npm install
-npm run team:status
-npm run lint
-npm run security:scan
-npm test
-npm run team:guard
-npm run docs:refresh
-npm run docs:ready
-```
-
-AI 或開發者開始工作前，先讀取 `CLAUDE.md`，再依 `docs/index.md` 路由到最小必要文件。
-
-## C++ Workflow
-
-使用 MinGW Debug preset：
-
-```powershell
-cmake --preset dev
-cmake --build --preset dev
-ctest --preset dev
-```
-
-目前可練習的第一章：
+### 第一組 Linear Storage
 
 | ID | 題目 | 難度 |
 |---|---|---|
@@ -53,7 +138,7 @@ ctest --preset dev
 | `F04-circular-queue` | Fixed Capacity Circular Queue | D1 |
 | `F05-array-deque` | Fixed Capacity Array Deque | D2 |
 
-第二章 Pointer-Based Linear Structures：
+### 第二組 Pointer-Based Linear Structures
 
 | ID | 題目 | 難度 |
 |---|---|---|
@@ -63,7 +148,7 @@ ctest --preset dev
 | `F09-doubly-linked-list` | Doubly Linked List | D2 |
 | `F10-circular-linked-list` | Circular Singly Linked List | D2 |
 
-第三章 List Transformations And Node Management：
+### 第三組 List Transformations And Node Management
 
 | ID | 題目 | 難度 |
 |---|---|---|
@@ -73,14 +158,14 @@ ctest --preset dev
 | `F14-doubly-list-splice` | Splice Doubly Linked Lists | D3 |
 | `F15-fixed-node-pool-list` | Fixed Node Pool List | D3 |
 
-第四章 Complete List Representations：
+### 第四組 Complete List Representations
 
 | ID | 題目 | 難度 |
 |---|---|---|
 | `F16-sentinel-doubly-list` | Sentinel Doubly Linked List | D2 |
 | `F17-cursor-doubly-list` | Cursor Doubly Linked List | D3 |
 
-第五組 Arrays And Structures：
+### 第五組 Arrays And Structures
 
 | ID | 題目 | 難度 |
 |---|---|---|
@@ -91,7 +176,7 @@ ctest --preset dev
 | `F22-row-major-matrix` | Two-Dimensional Row-Major Array | D1 |
 | `F23-row-major-tensor` | Three-Dimensional Row-Major Array | D2 |
 
-第六組 Stack And Queue Representations：
+### 第六組 Stack And Queue Representations
 
 | ID | 題目 | 難度 |
 |---|---|---|
@@ -99,7 +184,7 @@ ctest --preset dev
 | `F25-circular-linked-queue` | Circular Linked Queue | D2 |
 | `F26-linked-deque` | Linked Deque | D2 |
 
-第七組 Core Tree Representations：
+### 第七組 Core Tree Representations
 
 | ID | 題目 | 難度 |
 |---|---|---|
@@ -108,7 +193,7 @@ ctest --preset dev
 | `F29-inorder-threaded-tree` | Inorder Threaded Binary Tree | D3 |
 | `F30-binary-min-heap` | Fixed Capacity Binary Min Heap | D2 |
 
-第八組 Tree Traversal And Heap Views：
+### 第八組 Tree Traversal And Heap Views
 
 | ID | 題目 | 難度 |
 |---|---|---|
@@ -117,7 +202,7 @@ ctest --preset dev
 | `F33-bottom-up-min-heap-build` | Bottom-Up Binary Min Heap Build | D2 |
 | `F34-min-heap-removal-trace` | Binary Min Heap Removal Trace | D2 |
 
-第九組 Binary Search Tree Foundations：
+### 第九組 Binary Search Tree Foundations
 
 | ID | 題目 | 難度 |
 |---|---|---|
@@ -128,7 +213,7 @@ ctest --preset dev
 | `F39-bst-structural-validation` | Binary Search Tree Structural Validation | D3 |
 | `F40-bst-replacement-trace` | BST Replacement Node Trace | D3 |
 
-第十組 Forest And Union-Find Foundations：
+### 第十組 Forest And Union-Find Foundations
 
 | ID | 題目 | 難度 |
 |---|---|---|
@@ -139,7 +224,7 @@ ctest --preset dev
 | `F45-weighted-union-disjoint-set` | Weighted Union Disjoint Set | D2 |
 | `F46-path-compression-trace` | Union Find Path Compression Trace | D3 |
 
-第十一組 Graph ADT Representations：
+### 第十一組 Graph ADT Representations
 
 | ID | 題目 | 難度 |
 |---|---|---|
@@ -149,7 +234,7 @@ ctest --preset dev
 | `F50-directed-adjacency-list` | Directed Sorted Adjacency List | D2 |
 | `F51-fixed-edge-table-graph` | Fixed Capacity Edge Table Graph | D3 |
 
-第十二組 Hash Table Foundations：
+### 第十二組 Hash Table Foundations
 
 | ID | 題目 | 難度 |
 |---|---|---|
@@ -161,14 +246,12 @@ ctest --preset dev
 | `F57-node-pool-chained-hash-table` | Node Pool Chained Hash Table | D3 |
 | `F58-rehashing-linear-probing-table` | Rehashing Linear Probing Table | D3 |
 
-CLI 範例：
+## 維護者工作流程
+
+修改 Judge、題庫或文件後執行：
 
 ```powershell
-.\build\mingw-debug\algo.exe list
-.\build\mingw-debug\algo.exe show F03-stack-array
-.\build\mingw-debug\algo.exe test F03-stack-array tests\fixtures\submissions\stack_correct.cpp
-.\build\mingw-debug\algo.exe stress F03-stack-array tests\fixtures\submissions\stack_correct.cpp --seed 20260613
+npm run verify
 ```
 
-`stress` 預設依題目 metadata 執行 100 cases，每個 case 100 次操作。失敗時會輸出
-master seed、case seed、重播命令與完整 failing input；可用 `--cases` 調整 case 數。
+AI 或開發者開始工作前先讀取 `CLAUDE.md`，再依 `docs/index.md` 路由到最小必要文件。
