@@ -2,7 +2,7 @@
 type: task_index
 status: active
 priority: p0
-updated: 2026-06-13
+updated: 2026-06-14
 context_policy: always_retrievable
 owner: project
 ---
@@ -11,7 +11,7 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.011 - Build Graph ADT Representations
+### TASK.CURRICULUM.012 - Build Hash Table Foundations
 
 - Status: todo
 - Priority: P0
@@ -20,15 +20,16 @@ owner: project
   - `docs/learning-roadmap.md`
   - `docs/judge-requirements.md`
 - Acceptance criteria:
-  - [ ] Add five exercises to complete the CH6 Graph ADT allocation.
-  - [ ] Cover adjacency matrix and adjacency list representations.
-  - [ ] Cover directed and undirected edge insertion, removal, and lookup.
-  - [ ] Make degree and ordered neighbor views observable.
-  - [ ] Keep shortest paths, MST, topological sort, and other graph algorithms deferred.
-  - [ ] Preserve explicit complexity and storage contracts.
+  - [ ] Add seven exercises to complete the CH8 Hashing allocation.
+  - [ ] Cover direct bucket mapping and collision observability.
+  - [ ] Cover linear probing, quadratic probing, and double hashing.
+  - [ ] Cover deletion tombstones and separate chaining.
+  - [ ] Make load factor and rehash transitions observable.
+  - [ ] Preserve explicit average/worst-case complexity and storage contracts.
 - Validation:
   - [ ] Known correct submissions pass deterministic and seeded stress tests.
-  - [ ] Known asymmetric edge, duplicate edge, and stale degree mistakes receive non-AC verdicts.
+  - [ ] Known collision overwrite, broken probe, tombstone, and stale rehash
+        mistakes receive non-AC verdicts.
 
 ## Strategy
 

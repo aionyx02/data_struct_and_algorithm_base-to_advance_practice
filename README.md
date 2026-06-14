@@ -139,6 +139,16 @@ ctest --preset dev
 | `F45-weighted-union-disjoint-set` | Weighted Union Disjoint Set | D2 |
 | `F46-path-compression-trace` | Union Find Path Compression Trace | D3 |
 
+第十一組 Graph ADT Representations：
+
+| ID | 題目 | 難度 |
+|---|---|---|
+| `F47-undirected-adjacency-matrix` | Undirected Adjacency Matrix | D2 |
+| `F48-directed-adjacency-matrix` | Directed Adjacency Matrix | D2 |
+| `F49-undirected-adjacency-list` | Undirected Sorted Adjacency List | D2 |
+| `F50-directed-adjacency-list` | Directed Sorted Adjacency List | D2 |
+| `F51-fixed-edge-table-graph` | Fixed Capacity Edge Table Graph | D3 |
+
 CLI 範例：
 
 ```powershell

@@ -2,7 +2,7 @@
 type: working_memory
 status: active
 priority: p0
-updated: 2026-06-13
+updated: 2026-06-14
 context_policy: always_retrievable
 owner: project
 ---
@@ -17,9 +17,9 @@ owner: project
 
 ## Current Focus
 
-- Active priority: build the Graph ADT representation family.
-- Current phase: CH6 storage and edge-operation slice.
-- Current owner / handoff state: `TASK.CURRICULUM.011` is ready for `shawn`.
+- Active priority: build the Hash Table foundation family.
+- Current phase: CH8 collision handling and table lifecycle.
+- Current owner / handoff state: `TASK.CURRICULUM.012` is ready for `shawn`.
 
 ## Important Constraints
 
@@ -30,16 +30,16 @@ owner: project
 
 ## Next Step
 
-- Add five Graph ADT exercises covering adjacency matrix/list,
-  directed and undirected edges, degree, and neighbor views.
+- Add seven Hash Table exercises covering bucket mapping, open addressing,
+  tombstones, separate chaining, and observable rehash transitions.
 
 ## Last Validation Snapshot
 
-- Last C++ validation: 2026-06-13.
+- Last C++ validation: 2026-06-14.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 219 Judge integration tests passed. F41 through F46 each passed
-  10,000 differential operations with seed `20260613`.
-- Known one-hop root, missing sibling, first-root-only traversal, non-root
-  union, reversed weighting, and missing compression mistakes produced
-  reproducible `WA` verdicts.
+- Result: all 244 Judge integration tests passed. F47 through F51 each passed
+  10,000 differential operations with seed `20260614`.
+- Known asymmetric matrix, duplicate arc count, unsorted adjacency list,
+  stale in-degree, and missing edge-slot reuse mistakes produced reproducible
+  `WA` verdicts.
 - Known failing checks: none.

@@ -236,6 +236,22 @@ CH5-2 的六題從一般森林表示法銜接到 disjoint-set forest：
 固定 stress 前綴會命中只走一層 parent、忽略 sibling chain、只走第一棵樹、把非 root
 直接相連、反向 weighting，以及 find 不壓縮路徑等錯誤。至此 CH5-2 規劃的六題完成。
 
+### Foundation 11：Graph ADT Representations
+
+CH6 的五題只處理圖形儲存、邊操作與可觀察 invariant，不延伸到一般圖演算法：
+
+| ID | 題目 | 難度 | 核心能力 |
+|---|---|---|---|
+| `F47-undirected-adjacency-matrix` | Undirected Adjacency Matrix | D2 | symmetric cells、degree、row view |
+| `F48-directed-adjacency-matrix` | Directed Adjacency Matrix | D2 | ordered arcs、in/out degree、row view |
+| `F49-undirected-adjacency-list` | Undirected Sorted Adjacency List | D2 | fixed edge capacity、sorted symmetric neighbors |
+| `F50-directed-adjacency-list` | Directed Sorted Adjacency List | D2 | sorted outgoing lists、explicit in-degree |
+| `F51-fixed-edge-table-graph` | Fixed Capacity Edge Table Graph | D3 | edge records、stable IDs、smallest-slot reuse |
+
+固定 stress 前綴會命中只更新單側矩陣、重複 arc 錯算 edge count、未排序 adjacency
+list、刪除後 stale in-degree，以及 edge table 不重用最小空 slot 等錯誤。MST、
+Shortest Path、Topological Sort 與其他圖演算法仍維持暫緩。
+
 ### 暫緩的教材內容
 
 - CH1 Selection Sort、Binary Search 演算法題。

@@ -2,7 +2,7 @@
 type: task_archive_index
 status: archive
 priority: p3
-updated: 2026-06-13
+updated: 2026-06-14
 context_policy: on_demand
 owner: project
 ---
@@ -25,3 +25,4 @@ owner: project
 | `TASK.CURRICULUM.008` | Expanded Tree Traversal And Heap Views | `docs/memory/sessions/2026-06-13-shawn.md` |
 | `TASK.CURRICULUM.009` | Completed BST Foundations | `docs/memory/sessions/2026-06-13-shawn.md` |
 | `TASK.CURRICULUM.010` | Completed Forest And Union-Find Foundations | `docs/memory/sessions/2026-06-13-shawn.md` |
+| `TASK.CURRICULUM.011` | Built Graph ADT Representations | `docs/memory/sessions/2026-06-14-shawn.md` |
