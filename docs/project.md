@@ -2,7 +2,7 @@
 type: project_overview
 status: active
 priority: p1
-updated: 2026-06-13
+updated: 2026-06-16
 context_policy: always_retrievable
 owner: project
 ---
@@ -28,6 +28,12 @@ implementing, testing, and reviewing data structures.
 - The current phase does not include dynamic programming, number theory, geometry, or a full ICPC curriculum.
 - The Web interface will not own judging rules.
 - The project is not intended to execute code submitted by untrusted remote users.
+
+## Reference Materials
+
+- The data-structure course materials under `資料結構/` are Git LFS source assets for curriculum planning and problem sequencing.
+- The algorithm material under `演算法/` is an independent reference set and is not part of the current local Judge curriculum.
+- Binary source assets are not documentation entry points. Keep them when a roadmap, scope document, or task uses them to justify curriculum content; do not treat them as active docs that agents should read during normal startup.
 
 ## Stack
 

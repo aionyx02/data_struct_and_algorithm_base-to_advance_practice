@@ -2,7 +2,7 @@
 type: docs_index
 status: active
 priority: p1
-updated: 2026-06-04
+updated: 2026-06-16
 context_policy: on_demand
 owner: project
 ---
@@ -27,6 +27,20 @@ Use this file as the first lookup step. The goal is retrieval-first context, not
 - Startup context should stay below guard limits.
 - `completed`, `sessions`, and `archive` files are historical context only.
 - If sources conflict: active task + current memory > accepted ADRs > reference docs > sessions/archive.
+
+## Document Value Standard
+
+Keep a document only when it has at least one clear role:
+
+- Current-state routing, startup context, or active task coordination.
+- Durable engineering, product, security, testing, data, release, or style policy.
+- Accepted/proposed architecture decision or generated decision index.
+- Backlog, blocker, task template, team registry, or historical session/archive record.
+- Explicitly deferred phase boundary that states when it becomes relevant.
+
+Remove or merge a document when it only repeats another source, contains stale narrative without a routing role, or cannot be found through Intent Routing, Document Map, or a task/session reference.
+
+Future-phase documents must state the trigger that makes them relevant. Binary course materials under `資料結構/` and `演算法/` are Git LFS source/reference assets rather than documentation entry points; their value must be explained by README, project scope, or roadmap documents. There are currently no tracked `.docx` or `.doc` files.
 
 ## Intent Routing
 
