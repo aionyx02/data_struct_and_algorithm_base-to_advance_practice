@@ -41,15 +41,13 @@ owner: project
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-16.
-- Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, plus
-  targeted `algo test`/`algo stress` for `A19` (full `ctest --preset dev` was
-  not re-run to completion this session because the machine was overloaded and
-  unrelated catalog tests were timing out, not failing on logic).
-- Result: build is clean with `A19` added. `A19` passed all four fixed tests and
+- Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and
+  `ctest --preset dev`.
+- Result: all 426 Judge integration tests passed (199.88 s; previous 419 + 1
+  catalog, +3 Judge, +3 stress for `A19`). `A19` passed all four fixed tests and
   100 differential cases (20,000 operations) with seed `20260614`; both `A19`
   wrong fixtures (k-th descend that forgets to subtract the left count, and an
-  inclusive `<=` rank) receive `WA` on the first generated case. A01-A18 results
-  from the prior full run are unchanged (additive change only).
+  inclusive `<=` rank) receive `WA` on the first generated case.
 - Known off-by-one range, endpoint-only difference, single-tree range-query,
   upper-bound lower-bound walk, off-by-one rank, reversed coordinate mapping,
   wrong 2D update direction, point-only sparse storage, exclusive Segment Tree
