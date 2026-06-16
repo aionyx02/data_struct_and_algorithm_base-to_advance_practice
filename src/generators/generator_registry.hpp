@@ -14,5 +14,6 @@ void registerGraphGenerators(CaseGeneratorRegistry& registry);
 void registerHashingGenerators(CaseGeneratorRegistry& registry);
 void registerAdvancedGenerators(CaseGeneratorRegistry& registry);
 void registerSegmentTreeGenerators(CaseGeneratorRegistry& registry);
+void registerStaticRangeGenerators(CaseGeneratorRegistry& registry);
 
 }  // namespace judge::generators

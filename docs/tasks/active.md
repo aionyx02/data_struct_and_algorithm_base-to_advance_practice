@@ -11,11 +11,33 @@ owner: project
 
 ## Active Queue
 
-- No task is currently in progress. `TASK.CURRICULUM.016` (Stage A2 Segment Tree
-  family, `A09`-`A20`) was completed on 2026-06-16; see
-  `docs/memory/sessions/2026-06-16-shawn.md`.
-- Next candidate: open a task for Stage A3 Static Range Structures
-  (`docs/learning-roadmap.md`, section 5 A3) when the maintainer is ready.
+### TASK.CURRICULUM.017 - Build Static Range Structures
+
+- Status: doing
+- Priority: P0
+- Owner: shawn
+- Progress: one of eight Stage A3 problems is implemented: the Sparse Table
+  range-query tree (`A21`). `TASK.CURRICULUM.016` (Stage A2, `A09`-`A20`)
+  completed on 2026-06-16.
+- Related docs:
+  - `docs/learning-roadmap.md`
+  - `docs/judge-requirements.md`
+- Acceptance criteria:
+  - [ ] Add eight exercises for the Stage A3 Static Range Structures family.
+  - [x] Begin with the Sparse Table for idempotent range min/max.
+  - [ ] Add Disjoint Sparse Table.
+  - [ ] Add Square Root Decomposition.
+  - [ ] Add block decomposition with lazy tags.
+  - [ ] Add Merge Sort Tree.
+  - [ ] Add Wavelet Tree and Wavelet Matrix.
+  - [ ] Add a bitset-based set representation.
+  - [ ] Preserve observable query contracts and stated complexity limits.
+- Validation:
+  - [x] Known correct submission for `A21` passes deterministic and seeded
+        stress tests.
+  - [x] Known Sparse Table mistakes (dropping the right endpoint, using a
+        single block) for `A21` receive non-AC verdicts.
+  - [ ] Later Stage A3 structures have correct and known-wrong fixtures.
 
 ## Strategy
 

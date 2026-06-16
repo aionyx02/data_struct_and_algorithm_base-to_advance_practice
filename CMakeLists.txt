@@ -19,6 +19,7 @@ add_library(judge_core
     src/generators/hashing_generators.cpp
     src/generators/advanced_generators.cpp
     src/generators/segment_tree_generators.cpp
+    src/generators/static_range_generators.cpp
 )
 
 target_include_directories(judge_core PRIVATE src)
@@ -199,6 +200,7 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_a18 A18-segment-tree-persistent-versions)
 add_catalog_test(catalog_lists_a19 A19-segment-tree-order-statistic)
 add_catalog_test(catalog_lists_a20 A20-segment-tree-beats)
+add_catalog_test(catalog_lists_a21 A21-sparse-table-range-query)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1430,6 +1432,27 @@ add_catalog_test(catalog_lists_a20 A20-segment-tree-beats)
         judge_rejects_segment_tree_beats_full_count
         A20-segment-tree-beats
         tests/fixtures/submissions/segment_tree_beats_full_count.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_sparse_table_range_query
+        A21-sparse-table-range-query
+        tests/fixtures/submissions/sparse_table_range_query_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_sparse_table_range_query_drops_endpoint
+        A21-sparse-table-range-query
+        tests/fixtures/submissions/sparse_table_range_query_drops_endpoint.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_sparse_table_range_query_single_block
+        A21-sparse-table-range-query
+        tests/fixtures/submissions/sparse_table_range_query_single_block.cpp
         1
         "Verdict: WA"
     )
@@ -2782,6 +2805,30 @@ add_catalog_test(catalog_lists_a20 A20-segment-tree-beats)
         stress_rejects_segment_tree_beats_full_count
         A20-segment-tree-beats
         tests/fixtures/submissions/segment_tree_beats_full_count.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_sparse_table_range_query
+        A21-sparse-table-range-query
+        tests/fixtures/submissions/sparse_table_range_query_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_sparse_table_range_query_drops_endpoint
+        A21-sparse-table-range-query
+        tests/fixtures/submissions/sparse_table_range_query_drops_endpoint.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_sparse_table_range_query_single_block
+        A21-sparse-table-range-query
+        tests/fixtures/submissions/sparse_table_range_query_single_block.cpp
         1
         "Verdict: WA"
         TRUE

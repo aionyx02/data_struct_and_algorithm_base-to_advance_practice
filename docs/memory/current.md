@@ -18,13 +18,12 @@ owner: project
 ## Current Focus
 
 - Active priority: build out the high-level data-structure curriculum.
-- Current phase: Stage A2 Segment Tree family is complete at all twelve problems
-  (`A09`-`A20`): recursive/iterative range sum, minimum/maximum, GCD monoids,
-  isolated range-add and range-assign lazy propagation, mixed lazy propagation,
-  positional search, dynamic sparse and persistent Segment Trees, the
-  order-statistic Segment Tree, and Segment Tree Beats.
-- Current owner / handoff state: `TASK.CURRICULUM.016` is complete; no task is in
-  progress. Stage A1 remains complete at eight problems.
+- Current phase: Stage A3 Static Range Structures has begun. The Sparse Table
+  range-query tree (`A21`) is implemented; Disjoint Sparse Table, Sqrt
+  Decomposition, block decomposition with lazy tags, Merge Sort Tree, Wavelet
+  Tree/Matrix, and a bitset set remain. Stage A2 (`A09`-`A20`) and Stage A1
+  (`A01`-`A08`) are complete.
+- Current owner / handoff state: `TASK.CURRICULUM.017` is active with `shawn`.
 
 ## Important Constraints
 
@@ -35,23 +34,22 @@ owner: project
 
 ## Next Step
 
-- Stage A2 is closed. Begin Stage A3 Static Range Structures (Sparse Table,
-  Disjoint Sparse Table, Sqrt Decomposition, block decomposition, Merge Sort
-  Tree, Wavelet Tree/Matrix, bitset set) per `docs/learning-roadmap.md` when the
-  maintainer opens the next curriculum task.
+- Continue Stage A3: add the Disjoint Sparse Table (`A22`) for idempotent and
+  non-idempotent associative range queries, then Square Root Decomposition.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-16.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and
   `ctest --preset dev`.
-- Result: all 433 Judge integration tests passed (212.66 s; previous 419 + 7 for
-  `A19` and +7 for `A20`, each 1 catalog, +3 Judge, +3 stress). `A19` and `A20`
-  each passed all four fixed tests and 100 differential cases (20,000 operations)
-  with seed `20260614`; their wrong fixtures (`A19`: k-th descend that forgets to
+- Result: all 440 Judge integration tests passed (207.23 s; `A19`, `A20`, and
+  `A21` each add 1 catalog, +3 Judge, +3 stress). `A19`, `A20`, and `A21` each
+  passed all four fixed tests and 100 differential cases (20,000 operations) with
+  seed `20260614`; their wrong fixtures (`A19`: k-th descend that forgets to
   subtract the left count, inclusive `<=` rank; `A20`: a `chmin` that skips the
-  Beats recursion, and one that scales the sum by the whole node size) receive
-  `WA` on the first generated case.
+  Beats recursion, and one that scales the sum by the whole node size; `A21`: a
+  Sparse Table query that drops the right endpoint, and one that uses a single
+  block) receive `WA` on the first generated case.
 - Known off-by-one range, endpoint-only difference, single-tree range-query,
   upper-bound lower-bound walk, off-by-one rank, reversed coordinate mapping,
   wrong 2D update direction, point-only sparse storage, exclusive Segment Tree
@@ -63,5 +61,6 @@ owner: project
   fail; persistent trees that mutate old versions in place fail; order-statistic
   trees with a wrong k-th descend branch or inclusive rank fail; Segment Tree
   Beats variants that skip the second-max recursion or scale by the whole node
-  size fail. Earlier F-series mistakes still fail.
+  size fail; Sparse Table queries that drop the right endpoint or use a single
+  block fail. Earlier F-series mistakes still fail.
 - Known failing checks: none.
