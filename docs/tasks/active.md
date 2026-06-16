@@ -16,10 +16,11 @@ owner: project
 - Status: doing
 - Priority: P0
 - Owner: shawn
-- Progress: three of eight Stage A3 problems are implemented: the Sparse Table
-  range-query tree (`A21`), the Disjoint Sparse Table range sum (`A22`), and the
-  Square Root Decomposition range sum (`A23`). `TASK.CURRICULUM.016` (Stage A2,
-  `A09`-`A20`) completed on 2026-06-16.
+- Progress: four of eight Stage A3 problems are implemented: the Sparse Table
+  range-query tree (`A21`), the Disjoint Sparse Table range sum (`A22`), the
+  Square Root Decomposition range sum (`A23`), and block decomposition with lazy
+  tags (`A24`). `TASK.CURRICULUM.016` (Stage A2, `A09`-`A20`) completed on
+  2026-06-16.
 - Related docs:
   - `docs/learning-roadmap.md`
   - `docs/judge-requirements.md`
@@ -28,7 +29,7 @@ owner: project
   - [x] Begin with the Sparse Table for idempotent range min/max.
   - [x] Add Disjoint Sparse Table.
   - [x] Add Square Root Decomposition.
-  - [ ] Add block decomposition with lazy tags.
+  - [x] Add block decomposition with lazy tags.
   - [ ] Add Merge Sort Tree.
   - [ ] Add Wavelet Tree and Wavelet Matrix.
   - [ ] Add a bitset-based set representation.
@@ -43,6 +44,9 @@ owner: project
         non-AC verdicts.
   - [x] Known Square Root Decomposition mistakes (stale cached block sum,
         whole-block sums that ignore partial boundaries) for `A23` receive
+        non-AC verdicts.
+  - [x] Known block-lazy mistakes (partial reads that ignore the block lazy tag,
+        a full-block add that skips the cached-sum update) for `A24` receive
         non-AC verdicts.
   - [ ] Later Stage A3 structures have correct and known-wrong fixtures.
 

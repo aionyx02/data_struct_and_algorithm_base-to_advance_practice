@@ -203,6 +203,7 @@ add_catalog_test(catalog_lists_a20 A20-segment-tree-beats)
 add_catalog_test(catalog_lists_a21 A21-sparse-table-range-query)
 add_catalog_test(catalog_lists_a22 A22-disjoint-sparse-table-sum)
 add_catalog_test(catalog_lists_a23 A23-sqrt-decomposition-range-sum)
+add_catalog_test(catalog_lists_a24 A24-block-decomposition-lazy)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1497,6 +1498,27 @@ add_catalog_test(catalog_lists_a23 A23-sqrt-decomposition-range-sum)
         judge_rejects_sqrt_decomposition_range_sum_whole_block_sums
         A23-sqrt-decomposition-range-sum
         tests/fixtures/submissions/sqrt_decomposition_range_sum_whole_block_sums.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_block_decomposition_lazy
+        A24-block-decomposition-lazy
+        tests/fixtures/submissions/block_decomposition_lazy_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_block_decomposition_lazy_partial_ignores_lazy
+        A24-block-decomposition-lazy
+        tests/fixtures/submissions/block_decomposition_lazy_partial_ignores_lazy.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_block_decomposition_lazy_full_add_skips_sum
+        A24-block-decomposition-lazy
+        tests/fixtures/submissions/block_decomposition_lazy_full_add_skips_sum.cpp
         1
         "Verdict: WA"
     )
@@ -2921,6 +2943,30 @@ add_catalog_test(catalog_lists_a23 A23-sqrt-decomposition-range-sum)
         stress_rejects_sqrt_decomposition_range_sum_whole_block_sums
         A23-sqrt-decomposition-range-sum
         tests/fixtures/submissions/sqrt_decomposition_range_sum_whole_block_sums.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_block_decomposition_lazy
+        A24-block-decomposition-lazy
+        tests/fixtures/submissions/block_decomposition_lazy_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_block_decomposition_lazy_partial_ignores_lazy
+        A24-block-decomposition-lazy
+        tests/fixtures/submissions/block_decomposition_lazy_partial_ignores_lazy.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_block_decomposition_lazy_full_add_skips_sum
+        A24-block-decomposition-lazy
+        tests/fixtures/submissions/block_decomposition_lazy_full_add_skips_sum.cpp
         1
         "Verdict: WA"
         TRUE

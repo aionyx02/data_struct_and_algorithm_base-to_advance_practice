@@ -318,6 +318,112 @@ GeneratedCase generateSqrtDecompositionRangeSum(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateBlockDecompositionLazy(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "A24-block-decomposition-lazy requires operation_limit of at "
+            "least 4"
+        );
+    }
+    // At least three blocks so that block 1 becomes a strict interior block that
+    // receives a lazy tag from a full-array range add.
+    const int size = randomInt(random, 9, 30);
+    int blockSize = 1;
+    while ((blockSize + 1) * (blockSize + 1) <= size) {
+        ++blockSize;
+    }
+    std::vector<long long> values(static_cast<std::size_t>(size));
+    for (int index = 0; index < size; ++index) {
+        values[static_cast<std::size_t>(index)] = randomValue(random);
+    }
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << size << ' ' << operationCount << '\n';
+    for (int index = 0; index < size; ++index) {
+        if (index != 0) {
+            input << ' ';
+        }
+        input << values[static_cast<std::size_t>(index)];
+    }
+    input << '\n';
+
+    auto valid = [&](int index) {
+        return index >= 0 && index < size;
+    };
+    auto rangeAdd = [&](int left, int right, long long delta) {
+        for (int index = left; index <= right; ++index) {
+            values[static_cast<std::size_t>(index)] += delta;
+        }
+    };
+    auto rangeSum = [&](int left, int right) {
+        long long sum = 0;
+        for (int index = left; index <= right; ++index) {
+            sum += values[static_cast<std::size_t>(index)];
+        }
+        return sum;
+    };
+
+    // A full-array range add gives block 1 a lazy tag. The following full-array
+    // sum catches a solution that forgets to fold the lazy tag into the cached
+    // block sum, and the get over block 1 catches a solution that reads partial
+    // cells without adding the block's lazy tag.
+    input << "add 0 " << (size - 1) << " 10\n";
+    rangeAdd(0, size - 1, 10);
+    input << "sum 0 " << (size - 1) << '\n';
+    output << rangeSum(0, size - 1) << '\n';
+    input << "get " << blockSize << '\n';
+    output << values[static_cast<std::size_t>(blockSize)] << '\n';
+    input << "size\n";
+    output << size << '\n';
+
+    for (int operation = 4; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 3)) {
+            case 0: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int delta = randomValue(random);
+                input << "add " << left << ' ' << right << ' ' << delta << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    rangeAdd(left, right, delta);
+                }
+                break;
+            }
+            case 1: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                input << "sum " << left << ' ' << right << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << rangeSum(left, right) << '\n';
+                }
+                break;
+            }
+            case 2: {
+                const int index = randomInt(random, -2, size + 1);
+                input << "get " << index << '\n';
+                if (!valid(index)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << values[static_cast<std::size_t>(index)] << '\n';
+                }
+                break;
+            }
+            default:
+                input << "size\n";
+                output << size << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 }  // namespace
 
 void registerStaticRangeGenerators(CaseGeneratorRegistry& registry) {
@@ -332,6 +438,10 @@ void registerStaticRangeGenerators(CaseGeneratorRegistry& registry) {
     registry.emplace(
         "A23-sqrt-decomposition-range-sum",
         generateSqrtDecompositionRangeSum
+    );
+    registry.emplace(
+        "A24-block-decomposition-lazy",
+        generateBlockDecompositionLazy
     );
 }
 

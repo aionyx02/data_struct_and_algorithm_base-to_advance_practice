@@ -1,0 +1,14 @@
+10 12
+2 7 1 5 3 8 4 6 9 5
+sum 0 9
+add 2 7 10
+sum 0 9
+sum 3 6
+add 0 9 1
+sum 0 9
+get 5
+sum 6 9
+get 0
+add 4 4 100
+sum 4 4
+size

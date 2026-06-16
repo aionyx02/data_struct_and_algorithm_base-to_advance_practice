@@ -19,10 +19,11 @@ owner: project
 
 - Active priority: build out the high-level data-structure curriculum.
 - Current phase: Stage A3 Static Range Structures is underway. The Sparse Table
-  range-query tree (`A21`), the Disjoint Sparse Table range sum (`A22`), and the
-  Square Root Decomposition range sum (`A23`) are implemented; block decomposition
-  with lazy tags, Merge Sort Tree, Wavelet Tree/Matrix, and a bitset set remain.
-  Stage A2 (`A09`-`A20`) and Stage A1 (`A01`-`A08`) are complete.
+  range-query tree (`A21`), the Disjoint Sparse Table range sum (`A22`), the
+  Square Root Decomposition range sum (`A23`), and block decomposition with lazy
+  tags (`A24`) are implemented; Merge Sort Tree, Wavelet Tree/Matrix, and a
+  bitset set remain. Stage A2 (`A09`-`A20`) and Stage A1 (`A01`-`A08`) are
+  complete.
 - Current owner / handoff state: `TASK.CURRICULUM.017` is active with `shawn`.
 
 ## Important Constraints
@@ -34,16 +35,16 @@ owner: project
 
 ## Next Step
 
-- Continue Stage A3: add block decomposition with lazy tags (`A24`) for range
-  update plus range query, then the Merge Sort Tree.
+- Continue Stage A3: add the Merge Sort Tree (`A25`) for range order-statistic /
+  count-less-than queries, then the Wavelet Tree.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-16.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and
   `ctest --preset dev`.
-- Result: all 454 Judge integration tests passed (207.02 s; `A19`-`A23` each add
-  1 catalog, +3 Judge, +3 stress). Each of `A19`-`A23` passed all four fixed
+- Result: all 461 Judge integration tests passed (207.54 s; `A19`-`A24` each add
+  1 catalog, +3 Judge, +3 stress). Each of `A19`-`A24` passed all four fixed
   tests and 100 differential cases (20,000 operations) with seed `20260614`.
   Their wrong fixtures receive `WA` on the first generated case (`A19`: k-th
   descend without subtracting the left count, inclusive `<=` rank; `A20`: a
@@ -51,7 +52,9 @@ owner: project
   size; `A21`: a Sparse Table query that drops the right endpoint, and one that
   uses a single block; `A22`: an overlapping Sparse Table that double-counts sum,
   and one that doubles a single element; `A23`: a stale cached block sum, and
-  whole-block sums that ignore partial boundaries).
+  whole-block sums that ignore partial boundaries; `A24`: partial reads that
+  ignore the block lazy tag, and a full-block add that skips the cached-sum
+  update).
 - Judge runtime self-check (2026-06-17): `algo list` enumerates 91 problems;
   correct submissions verdict `AC`, known-wrong `WA`, broken sources `CE`, null
   dereference `RE`, infinite loop `TLE`, and out-of-root sources are refused by
@@ -69,6 +72,9 @@ owner: project
   Beats variants that skip the second-max recursion or scale by the whole node
   size fail; Sparse Table queries that drop the right endpoint or use a single
   block fail; Disjoint Sparse Table variants that reuse overlapping blocks
-  (double-counting sum) or miss the single-element case fail. Earlier F-series
-  mistakes still fail.
+  (double-counting sum) or miss the single-element case fail; Square Root
+  Decomposition variants with a stale cached block sum or whole-block sums that
+  ignore partial boundaries fail; block-lazy variants that ignore the block lazy
+  tag on partial reads or skip the cached-sum update on a full-block add fail.
+  Earlier F-series mistakes still fail.
 - Known failing checks: none.
