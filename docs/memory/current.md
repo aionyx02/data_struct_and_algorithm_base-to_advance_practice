@@ -20,8 +20,9 @@ owner: project
 - Active priority: build out the high-level data-structure curriculum.
 - Current phase: Stage A2 Segment Tree family; recursive/iterative range sum,
   minimum/maximum, GCD monoids, isolated range-add lazy propagation, and
-  isolated and mixed lazy propagation, positional search, and dynamic sparse
-  and persistent Segment Trees (`A09`-`A18`) are implemented.
+  isolated and mixed lazy propagation, positional search, dynamic sparse and
+  persistent Segment Trees, and the order-statistic Segment Tree (`A09`-`A19`)
+  are implemented.
 - Current owner / handoff state: `TASK.CURRICULUM.016` is active with `shawn`;
   Stage A1 remains complete at eight problems.
 
@@ -34,15 +35,21 @@ owner: project
 
 ## Next Step
 
-- Add order-statistic Segment Tree (`A19`) for frequency counts and kth/rank
-  queries.
+- Add Segment Tree Beats (`A20`, D5 unlock) to close the twelve-problem Stage A2
+  family and finish `TASK.CURRICULUM.016`.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-16.
-- Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 419 Judge integration tests passed. A01 through A18 each passed
-  1,000 differential cases (200,000 operations) with seed `20260614`.
+- Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, plus
+  targeted `algo test`/`algo stress` for `A19` (full `ctest --preset dev` was
+  not re-run to completion this session because the machine was overloaded and
+  unrelated catalog tests were timing out, not failing on logic).
+- Result: build is clean with `A19` added. `A19` passed all four fixed tests and
+  100 differential cases (20,000 operations) with seed `20260614`; both `A19`
+  wrong fixtures (k-th descend that forgets to subtract the left count, and an
+  inclusive `<=` rank) receive `WA` on the first generated case. A01-A18 results
+  from the prior full run are unchanged (additive change only).
 - Known off-by-one range, endpoint-only difference, single-tree range-query,
   upper-bound lower-bound walk, off-by-one rank, reversed coordinate mapping,
   wrong 2D update direction, point-only sparse storage, exclusive Segment Tree
@@ -51,6 +58,7 @@ owner: project
   that skip pushing pending tags also fail; mixed lazy variants with reversed
   assignment/add push order fail; positional searches that ignore their
   left/right boundary fail; dynamic trees that eagerly allocate both children
-  fail; persistent trees that mutate old versions in place fail. Earlier
+  fail; persistent trees that mutate old versions in place fail; order-statistic
+  trees with a wrong k-th descend branch or inclusive rank fail. Earlier
   F-series mistakes still fail.
 - Known failing checks: none.

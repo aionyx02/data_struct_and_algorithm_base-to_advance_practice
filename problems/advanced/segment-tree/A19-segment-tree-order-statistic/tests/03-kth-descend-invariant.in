@@ -1,0 +1,13 @@
+8 12
+insert 0
+insert 0
+insert 5
+insert 6
+insert 7
+kth 3
+kth 5
+kth 1
+less 5
+less 6
+count 0
+size

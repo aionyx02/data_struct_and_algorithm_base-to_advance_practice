@@ -43,6 +43,13 @@ target_link_libraries(algo PRIVATE judge_core)
 if(WIN32)
     target_link_libraries(algo PRIVATE Shell32)
 endif()
+
+# 靜態連結 GCC / C++ 執行庫，讓 algo.exe 自包含，
+# 不再依賴外部 libstdc++-6.dll / libgcc_s / libwinpthread（避免版本不符的「找不到輸入點」）。
+if(MINGW)
+    target_link_options(algo PRIVATE -static -static-libgcc -static-libstdc++)
+endif()
+
 target_compile_definitions(algo PRIVATE
     DATA_STRUCTURES_PROJECT_ROOT="${CMAKE_SOURCE_DIR}"
 )
@@ -190,6 +197,7 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_a16 A16-segment-tree-positional-search)
     add_catalog_test(catalog_lists_a17 A17-segment-tree-dynamic-sparse)
     add_catalog_test(catalog_lists_a18 A18-segment-tree-persistent-versions)
+add_catalog_test(catalog_lists_a19 A19-segment-tree-order-statistic)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1379,6 +1387,27 @@ if(BUILD_TESTING AND WIN32)
         judge_rejects_segment_tree_persistent_versions_in_place
         A18-segment-tree-persistent-versions
         tests/fixtures/submissions/segment_tree_persistent_versions_in_place.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_segment_tree_order_statistic
+        A19-segment-tree-order-statistic
+        tests/fixtures/submissions/segment_tree_order_statistic_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_order_statistic_kth_wrong_branch
+        A19-segment-tree-order-statistic
+        tests/fixtures/submissions/segment_tree_order_statistic_kth_wrong_branch.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_order_statistic_less_inclusive
+        A19-segment-tree-order-statistic
+        tests/fixtures/submissions/segment_tree_order_statistic_less_inclusive.cpp
         1
         "Verdict: WA"
     )
@@ -2683,6 +2712,30 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_segment_tree_persistent_versions_in_place
         A18-segment-tree-persistent-versions
         tests/fixtures/submissions/segment_tree_persistent_versions_in_place.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_segment_tree_order_statistic
+        A19-segment-tree-order-statistic
+        tests/fixtures/submissions/segment_tree_order_statistic_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_order_statistic_kth_wrong_branch
+        A19-segment-tree-order-statistic
+        tests/fixtures/submissions/segment_tree_order_statistic_kth_wrong_branch.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_order_statistic_less_inclusive
+        A19-segment-tree-order-statistic
+        tests/fixtures/submissions/segment_tree_order_statistic_less_inclusive.cpp
         1
         "Verdict: WA"
         TRUE

@@ -1310,6 +1310,134 @@ GeneratedCase generateSegmentTreePersistentVersions(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateSegmentTreeOrderStatistic(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 6) {
+        throw std::runtime_error(
+            "A19-segment-tree-order-statistic requires operation_limit of at "
+            "least 6"
+        );
+    }
+    const int universe = randomInt(random, 4, 20);
+    std::vector<long long> freq(static_cast<std::size_t>(universe));
+    long long total = 0;
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << universe << ' ' << operationCount << '\n';
+
+    // Number of stored elements strictly less than bound, bound in [0, universe].
+    auto less = [&](int bound) {
+        long long sum = 0;
+        for (int key = 0; key < bound; ++key) {
+            sum += freq[static_cast<std::size_t>(key)];
+        }
+        return sum;
+    };
+    // One-based k-th smallest key; -1 when order is below 1 or above total.
+    auto kth = [&](long long order) {
+        if (order < 1 || order > total) {
+            return -1;
+        }
+        long long accumulated = 0;
+        for (int key = 0; key < universe; ++key) {
+            accumulated += freq[static_cast<std::size_t>(key)];
+            if (accumulated >= order) {
+                return key;
+            }
+        }
+        return -1;
+    };
+
+    // Fixed invariant prefix: keys 0, 2, 3 leave the second-smallest element in
+    // the tree's right half, so a k-th walk that forgets to subtract the left
+    // count descends the wrong way and answers 3 instead of 2. The `less 2`
+    // probe lands on a stored key, so an inclusive (<=) rank answers 2 not 1.
+    input << "insert 0\n";
+    freq[0] += 1;
+    total += 1;
+    input << "insert 2\n";
+    freq[2] += 1;
+    total += 1;
+    input << "insert 3\n";
+    freq[3] += 1;
+    total += 1;
+    input << "kth 2\n";
+    output << kth(2) << '\n';
+    input << "less 2\n";
+    output << less(2) << '\n';
+    input << "size\n";
+    output << total << '\n';
+
+    for (int operation = 6; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 5)) {
+            case 0: {
+                const int key = randomInt(random, -2, universe + 1);
+                input << "insert " << key << '\n';
+                if (key < 0 || key >= universe) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    freq[static_cast<std::size_t>(key)] += 1;
+                    total += 1;
+                }
+                break;
+            }
+            case 1: {
+                const int key = randomInt(random, -2, universe + 1);
+                input << "erase " << key << '\n';
+                if (key < 0 || key >= universe) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else if (freq[static_cast<std::size_t>(key)] == 0) {
+                    appendLine(output, "NOT_FOUND");
+                } else {
+                    freq[static_cast<std::size_t>(key)] -= 1;
+                    total -= 1;
+                }
+                break;
+            }
+            case 2: {
+                const long long order =
+                    randomInt(random, -1, static_cast<int>(total) + 2);
+                input << "kth " << order << '\n';
+                const int key = kth(order);
+                if (key < 0) {
+                    appendLine(output, "NONE");
+                } else {
+                    output << key << '\n';
+                }
+                break;
+            }
+            case 3: {
+                const int bound = randomInt(random, -2, universe + 1);
+                input << "less " << bound << '\n';
+                if (bound < 0 || bound > universe) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << less(bound) << '\n';
+                }
+                break;
+            }
+            case 4: {
+                const int key = randomInt(random, -2, universe + 1);
+                input << "count " << key << '\n';
+                if (key < 0 || key >= universe) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << freq[static_cast<std::size_t>(key)] << '\n';
+                }
+                break;
+            }
+            default:
+                input << "size\n";
+                output << total << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 }  // namespace
 
 void registerSegmentTreeGenerators(CaseGeneratorRegistry& registry) {
@@ -1352,6 +1480,10 @@ void registerSegmentTreeGenerators(CaseGeneratorRegistry& registry) {
     registry.emplace(
         "A18-segment-tree-persistent-versions",
         generateSegmentTreePersistentVersions
+    );
+    registry.emplace(
+        "A19-segment-tree-order-statistic",
+        generateSegmentTreeOrderStatistic
     );
 }
 

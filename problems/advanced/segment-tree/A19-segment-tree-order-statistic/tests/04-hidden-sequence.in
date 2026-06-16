@@ -1,0 +1,21 @@
+10 20
+insert 4
+insert 7
+insert 4
+insert 1
+insert 9
+kth 1
+kth 4
+less 4
+less 5
+erase 4
+count 4
+kth 2
+insert 12
+erase 3
+less 10
+kth 4
+erase 1
+kth 1
+size
+count -5
