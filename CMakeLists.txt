@@ -201,6 +201,7 @@ if(BUILD_TESTING AND WIN32)
 add_catalog_test(catalog_lists_a19 A19-segment-tree-order-statistic)
 add_catalog_test(catalog_lists_a20 A20-segment-tree-beats)
 add_catalog_test(catalog_lists_a21 A21-sparse-table-range-query)
+add_catalog_test(catalog_lists_a22 A22-disjoint-sparse-table-sum)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1453,6 +1454,27 @@ add_catalog_test(catalog_lists_a21 A21-sparse-table-range-query)
         judge_rejects_sparse_table_range_query_single_block
         A21-sparse-table-range-query
         tests/fixtures/submissions/sparse_table_range_query_single_block.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_disjoint_sparse_table_sum
+        A22-disjoint-sparse-table-sum
+        tests/fixtures/submissions/disjoint_sparse_table_sum_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_disjoint_sparse_table_sum_overlapping_blocks
+        A22-disjoint-sparse-table-sum
+        tests/fixtures/submissions/disjoint_sparse_table_sum_overlapping_blocks.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_disjoint_sparse_table_sum_missing_single_case
+        A22-disjoint-sparse-table-sum
+        tests/fixtures/submissions/disjoint_sparse_table_sum_missing_single_case.cpp
         1
         "Verdict: WA"
     )
@@ -2829,6 +2851,30 @@ add_catalog_test(catalog_lists_a21 A21-sparse-table-range-query)
         stress_rejects_sparse_table_range_query_single_block
         A21-sparse-table-range-query
         tests/fixtures/submissions/sparse_table_range_query_single_block.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_disjoint_sparse_table_sum
+        A22-disjoint-sparse-table-sum
+        tests/fixtures/submissions/disjoint_sparse_table_sum_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_disjoint_sparse_table_sum_overlapping_blocks
+        A22-disjoint-sparse-table-sum
+        tests/fixtures/submissions/disjoint_sparse_table_sum_overlapping_blocks.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_disjoint_sparse_table_sum_missing_single_case
+        A22-disjoint-sparse-table-sum
+        tests/fixtures/submissions/disjoint_sparse_table_sum_missing_single_case.cpp
         1
         "Verdict: WA"
         TRUE

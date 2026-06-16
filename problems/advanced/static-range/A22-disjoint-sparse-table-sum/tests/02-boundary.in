@@ -1,0 +1,9 @@
+1 7
+7
+sum 0 0
+get 0
+get 1
+sum 0 1
+sum 1 0
+sum -1 0
+size

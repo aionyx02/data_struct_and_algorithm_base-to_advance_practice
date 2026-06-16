@@ -1,0 +1,8 @@
+5 6
+3 5 2 4 6
+sum 0 2
+sum 1 1
+sum 0 4
+sum 2 4
+get 1
+size
