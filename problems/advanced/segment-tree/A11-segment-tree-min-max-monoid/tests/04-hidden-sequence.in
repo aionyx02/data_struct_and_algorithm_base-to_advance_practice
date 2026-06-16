@@ -1,0 +1,13 @@
+6 11
+10 3 8 15 6 12
+minimum 1 4
+maximum 2 5
+set 3 -4
+bounds 0 5
+set 0 20
+minimum 0 2
+maximum 0 2
+get 3
+bounds 4 5
+minimum -1 2
+all

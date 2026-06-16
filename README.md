@@ -47,6 +47,32 @@ npm run stress -- F03-stack-array
 
 `judge` 與 `stress` 第一次執行時，若找不到 Judge 執行檔，會自動執行 CMake 建置。
 
+## 解答放置與執行位置
+
+使用者的解答原始碼預設放在專案根目錄下：
+
+```text
+solutions/<problem-id>.cpp
+```
+
+例如 `npm run new:solution -- A09-segment-tree-recursive-sum` 會建立
+`solutions/A09-segment-tree-recursive-sum.cpp`。之後執行 `judge` 或 `stress`
+時若未指定來源檔，就會使用這個預設路徑。
+
+也可以將解答放在專案內的其他資料夾，並在指令中指定 `.cpp` 路徑：
+
+```powershell
+npm run judge -- A09-segment-tree-recursive-sum .\my-solutions\a09.cpp
+npm run stress -- A09-segment-tree-recursive-sum .\my-solutions\a09.cpp
+```
+
+來源檔必須位於本專案根目錄內。Judge 會使用 C++20 將來源檔編譯成
+`.judge/runtime/.../submission.exe`，在該暫存目錄執行測資，完成後自動清除；
+使用者不需要自行管理編譯產物。
+
+目前 `solutions/` 沒有列在 `.gitignore`，因此個人解答會出現在
+`git status`，可依需求納入版本控制。
+
 ## 日常練習流程
 
 1. 用 `npm run problems` 查看目前所有題目。

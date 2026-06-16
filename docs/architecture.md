@@ -56,6 +56,7 @@ src/
     generator_support.hpp   Shared inline helpers (RNG, list printing)
     generator_registry.hpp  Declares each register<Domain>Generators(...)
     linear_/tree_/bst_/forest_dsu_/graph_/hashing_/advanced_generators.cpp
+    segment_tree_generators.cpp   Stage A2 Segment Tree brute-force oracles
 problems/<stage>/<category>/<id>/
   problem.json            Metadata contract (judge mode, limits, forbidden APIs)
   statement.md            Problem statement

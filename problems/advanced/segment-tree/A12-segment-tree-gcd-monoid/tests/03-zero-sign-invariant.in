@@ -1,0 +1,12 @@
+6 10
+0 -8 12 -20 0 28
+gcd 0 0
+gcd 0 1
+gcd 1 4
+all
+set 2 -18
+all
+add 1 2
+gcd 1 3
+get 1
+size

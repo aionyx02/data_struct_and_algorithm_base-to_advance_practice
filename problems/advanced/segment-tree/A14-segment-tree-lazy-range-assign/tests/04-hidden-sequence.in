@@ -1,0 +1,16 @@
+7 14
+5 -1 0 2 3 4 -2
+range_assign 0 6 1
+range 0 6
+range 3 5
+range_assign 2 4 -3
+get 2
+range 0 3
+set 6 8
+all
+range_assign 0 0 -6
+get 0
+range 4 6
+range_assign 7 7 1
+range 5 4
+size

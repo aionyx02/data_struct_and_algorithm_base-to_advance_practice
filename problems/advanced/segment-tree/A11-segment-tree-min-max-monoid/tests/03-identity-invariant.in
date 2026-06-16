@@ -1,0 +1,10 @@
+4 8
+-5 -9 -2 -7
+maximum 0 3
+minimum 1 2
+set 2 -12
+maximum 0 3
+minimum 0 3
+bounds 2 3
+bounds 3 2
+size

@@ -2,7 +2,7 @@
 type: working_memory
 status: active
 priority: p0
-updated: 2026-06-14
+updated: 2026-06-16
 context_policy: always_retrievable
 owner: project
 ---
@@ -18,10 +18,11 @@ owner: project
 ## Current Focus
 
 - Active priority: build out the high-level data-structure curriculum.
-- Current phase: Stage A1 Fenwick Tree family is complete; all eight problems
-  (`A01`-`A08`) are implemented under `problems/advanced/fenwick/`.
-- Current owner / handoff state: `TASK.CURRICULUM.015` is complete and there is
-  no active task. Stage A2 Segment Tree work needs a new assigned task.
+- Current phase: Stage A2 Segment Tree family; recursive/iterative range sum,
+  minimum/maximum, GCD monoids, isolated range-add lazy propagation, and
+  isolated range-assign lazy propagation (`A09`-`A14`) are implemented.
+- Current owner / handoff state: `TASK.CURRICULUM.016` is active with `shawn`;
+  Stage A1 remains complete at eight problems.
 
 ## Important Constraints
 
@@ -32,17 +33,19 @@ owner: project
 
 ## Next Step
 
-- Create and assign the Stage A2 Segment Tree task, then begin with recursive
-  and iterative point-update range-query representations.
+- Add mixed lazy propagation (`A15`) to verify range-add/range-assign tag
+  composition order.
 
 ## Last Validation Snapshot
 
-- Last C++ validation: 2026-06-14.
+- Last C++ validation: 2026-06-16.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and `ctest --preset dev`.
-- Result: all 369 Judge integration tests passed. A01 through A08 each passed
+- Result: all 399 Judge integration tests passed. A01 through A14 each passed
   1,000 differential cases (200,000 operations) with seed `20260614`.
 - Known off-by-one range, endpoint-only difference, single-tree range-query,
   upper-bound lower-bound walk, off-by-one rank, reversed coordinate mapping,
-  wrong 2D update direction, and point-only sparse-storage mistakes produced
-  reproducible `WA` verdicts; earlier F-series invariant mistakes still fail.
+  wrong 2D update direction, point-only sparse storage, exclusive Segment Tree
+  endpoints, stale parent aggregates, and invalid min/max or GCD identities
+  produced reproducible `WA` verdicts; range-add and range-assign lazy variants
+  that skip pushing pending tags also fail. Earlier F-series mistakes still fail.
 - Known failing checks: none.

@@ -1,0 +1,15 @@
+6 13
+3 -1 0 8 -2 4
+range 0 5
+add 1 6
+range 0 2
+set 3 -3
+all
+add 5 -4
+range 3 5
+get 5
+set 2 9
+range 1 4
+range 4 3
+get 6
+size

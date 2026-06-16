@@ -1,0 +1,10 @@
+1 8
+7
+all
+add 0 -2
+range 0 0
+set 0 -4
+get 0
+range 0 1
+range 1 0
+get -1

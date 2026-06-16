@@ -13,5 +13,6 @@ void registerForestDsuGenerators(CaseGeneratorRegistry& registry);
 void registerGraphGenerators(CaseGeneratorRegistry& registry);
 void registerHashingGenerators(CaseGeneratorRegistry& registry);
 void registerAdvancedGenerators(CaseGeneratorRegistry& registry);
+void registerSegmentTreeGenerators(CaseGeneratorRegistry& registry);
 
 }  // namespace judge::generators

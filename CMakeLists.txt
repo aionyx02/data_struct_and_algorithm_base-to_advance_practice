@@ -18,6 +18,7 @@ add_library(judge_core
     src/generators/graph_generators.cpp
     src/generators/hashing_generators.cpp
     src/generators/advanced_generators.cpp
+    src/generators/segment_tree_generators.cpp
 )
 
 target_include_directories(judge_core PRIVATE src)
@@ -179,6 +180,12 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_a06 A06-fenwick-coordinate-indexed)
     add_catalog_test(catalog_lists_a07 A07-fenwick-two-dimensional)
     add_catalog_test(catalog_lists_a08 A08-fenwick-sparse)
+    add_catalog_test(catalog_lists_a09 A09-segment-tree-recursive-sum)
+    add_catalog_test(catalog_lists_a10 A10-segment-tree-iterative-sum)
+    add_catalog_test(catalog_lists_a11 A11-segment-tree-min-max-monoid)
+    add_catalog_test(catalog_lists_a12 A12-segment-tree-gcd-monoid)
+    add_catalog_test(catalog_lists_a13 A13-segment-tree-lazy-range-add)
+    add_catalog_test(catalog_lists_a14 A14-segment-tree-lazy-range-assign)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1228,6 +1235,90 @@ if(BUILD_TESTING AND WIN32)
         judge_rejects_fenwick_sparse_point_only_storage
         A08-fenwick-sparse
         tests/fixtures/submissions/fenwick_sparse_point_only.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_segment_tree_recursive_sum
+        A09-segment-tree-recursive-sum
+        tests/fixtures/submissions/segment_tree_recursive_sum_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_exclusive_right
+        A09-segment-tree-recursive-sum
+        tests/fixtures/submissions/segment_tree_recursive_sum_exclusive_right.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_segment_tree_iterative_sum
+        A10-segment-tree-iterative-sum
+        tests/fixtures/submissions/segment_tree_iterative_sum_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_stale_parent
+        A10-segment-tree-iterative-sum
+        tests/fixtures/submissions/segment_tree_iterative_sum_stale_parent.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_segment_tree_min_max
+        A11-segment-tree-min-max-monoid
+        tests/fixtures/submissions/segment_tree_min_max_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_min_max_zero_identity
+        A11-segment-tree-min-max-monoid
+        tests/fixtures/submissions/segment_tree_min_max_zero_identity.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_segment_tree_gcd
+        A12-segment-tree-gcd-monoid
+        tests/fixtures/submissions/segment_tree_gcd_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_gcd_identity_one
+        A12-segment-tree-gcd-monoid
+        tests/fixtures/submissions/segment_tree_gcd_identity_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_segment_tree_lazy_add
+        A13-segment-tree-lazy-range-add
+        tests/fixtures/submissions/segment_tree_lazy_add_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_lazy_add_without_push
+        A13-segment-tree-lazy-range-add
+        tests/fixtures/submissions/segment_tree_lazy_add_no_push.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_segment_tree_lazy_assign
+        A14-segment-tree-lazy-range-assign
+        tests/fixtures/submissions/segment_tree_lazy_assign_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_lazy_assign_without_push
+        A14-segment-tree-lazy-range-assign
+        tests/fixtures/submissions/segment_tree_lazy_assign_no_push.cpp
         1
         "Verdict: WA"
     )
@@ -2372,6 +2463,102 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_fenwick_sparse_point_only_storage
         A08-fenwick-sparse
         tests/fixtures/submissions/fenwick_sparse_point_only.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_segment_tree_recursive_sum
+        A09-segment-tree-recursive-sum
+        tests/fixtures/submissions/segment_tree_recursive_sum_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_exclusive_right
+        A09-segment-tree-recursive-sum
+        tests/fixtures/submissions/segment_tree_recursive_sum_exclusive_right.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_segment_tree_iterative_sum
+        A10-segment-tree-iterative-sum
+        tests/fixtures/submissions/segment_tree_iterative_sum_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_stale_parent
+        A10-segment-tree-iterative-sum
+        tests/fixtures/submissions/segment_tree_iterative_sum_stale_parent.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_segment_tree_min_max
+        A11-segment-tree-min-max-monoid
+        tests/fixtures/submissions/segment_tree_min_max_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_min_max_zero_identity
+        A11-segment-tree-min-max-monoid
+        tests/fixtures/submissions/segment_tree_min_max_zero_identity.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_segment_tree_gcd
+        A12-segment-tree-gcd-monoid
+        tests/fixtures/submissions/segment_tree_gcd_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_gcd_identity_one
+        A12-segment-tree-gcd-monoid
+        tests/fixtures/submissions/segment_tree_gcd_identity_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_segment_tree_lazy_add
+        A13-segment-tree-lazy-range-add
+        tests/fixtures/submissions/segment_tree_lazy_add_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_lazy_add_without_push
+        A13-segment-tree-lazy-range-add
+        tests/fixtures/submissions/segment_tree_lazy_add_no_push.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_segment_tree_lazy_assign
+        A14-segment-tree-lazy-range-assign
+        tests/fixtures/submissions/segment_tree_lazy_assign_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_lazy_assign_without_push
+        A14-segment-tree-lazy-range-assign
+        tests/fixtures/submissions/segment_tree_lazy_assign_no_push.cpp
         1
         "Verdict: WA"
         TRUE
