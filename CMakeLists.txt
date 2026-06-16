@@ -202,6 +202,7 @@ add_catalog_test(catalog_lists_a19 A19-segment-tree-order-statistic)
 add_catalog_test(catalog_lists_a20 A20-segment-tree-beats)
 add_catalog_test(catalog_lists_a21 A21-sparse-table-range-query)
 add_catalog_test(catalog_lists_a22 A22-disjoint-sparse-table-sum)
+add_catalog_test(catalog_lists_a23 A23-sqrt-decomposition-range-sum)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1475,6 +1476,27 @@ add_catalog_test(catalog_lists_a22 A22-disjoint-sparse-table-sum)
         judge_rejects_disjoint_sparse_table_sum_missing_single_case
         A22-disjoint-sparse-table-sum
         tests/fixtures/submissions/disjoint_sparse_table_sum_missing_single_case.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_sqrt_decomposition_range_sum
+        A23-sqrt-decomposition-range-sum
+        tests/fixtures/submissions/sqrt_decomposition_range_sum_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_sqrt_decomposition_range_sum_stale_block_sum
+        A23-sqrt-decomposition-range-sum
+        tests/fixtures/submissions/sqrt_decomposition_range_sum_stale_block_sum.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_sqrt_decomposition_range_sum_whole_block_sums
+        A23-sqrt-decomposition-range-sum
+        tests/fixtures/submissions/sqrt_decomposition_range_sum_whole_block_sums.cpp
         1
         "Verdict: WA"
     )
@@ -2875,6 +2897,30 @@ add_catalog_test(catalog_lists_a22 A22-disjoint-sparse-table-sum)
         stress_rejects_disjoint_sparse_table_sum_missing_single_case
         A22-disjoint-sparse-table-sum
         tests/fixtures/submissions/disjoint_sparse_table_sum_missing_single_case.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_sqrt_decomposition_range_sum
+        A23-sqrt-decomposition-range-sum
+        tests/fixtures/submissions/sqrt_decomposition_range_sum_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_sqrt_decomposition_range_sum_stale_block_sum
+        A23-sqrt-decomposition-range-sum
+        tests/fixtures/submissions/sqrt_decomposition_range_sum_stale_block_sum.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_sqrt_decomposition_range_sum_whole_block_sums
+        A23-sqrt-decomposition-range-sum
+        tests/fixtures/submissions/sqrt_decomposition_range_sum_whole_block_sums.cpp
         1
         "Verdict: WA"
         TRUE

@@ -1,0 +1,13 @@
+10 11
+2 7 1 5 3 8 4 6 9 5
+sum 0 9
+sum 2 7
+add 5 10
+sum 0 9
+set 8 0
+sum 4 9
+get 5
+add 0 5
+sum 0 3
+sum 6 9
+size

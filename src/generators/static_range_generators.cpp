@@ -203,6 +203,121 @@ GeneratedCase generateDisjointSparseTableSum(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateSqrtDecompositionRangeSum(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 5) {
+        throw std::runtime_error(
+            "A23-sqrt-decomposition-range-sum requires operation_limit of at "
+            "least 5"
+        );
+    }
+    // At least three blocks so that block 1 is a strict interior block whose
+    // cached sum is consulted by a full-array query.
+    const int size = randomInt(random, 9, 30);
+    int blockSize = 1;
+    while ((blockSize + 1) * (blockSize + 1) <= size) {
+        ++blockSize;
+    }
+    std::vector<long long> values(static_cast<std::size_t>(size));
+    for (int index = 0; index < size; ++index) {
+        values[static_cast<std::size_t>(index)] = randomValue(random);
+    }
+    // A non-zero first element makes a "sum of whole blocks" query that ignores
+    // the partial left block over-count by a[0].
+    values[0] = 7;
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << size << ' ' << operationCount << '\n';
+    for (int index = 0; index < size; ++index) {
+        if (index != 0) {
+            input << ' ';
+        }
+        input << values[static_cast<std::size_t>(index)];
+    }
+    input << '\n';
+
+    auto valid = [&](int index) {
+        return index >= 0 && index < size;
+    };
+    auto rangeSum = [&](int left, int right) {
+        long long sum = 0;
+        for (int index = left; index <= right; ++index) {
+            sum += values[static_cast<std::size_t>(index)];
+        }
+        return sum;
+    };
+
+    // sum 1 (n-1) over-counts a[0] for a whole-block solution that ignores the
+    // partial left block; the later interior update over a full-array query
+    // catches a solution that forgets to refresh the cached block sum.
+    input << "sum 1 " << (size - 1) << '\n';
+    output << rangeSum(1, size - 1) << '\n';
+    input << "add " << blockSize << " 100\n";
+    values[static_cast<std::size_t>(blockSize)] += 100;
+    input << "sum 0 " << (size - 1) << '\n';
+    output << rangeSum(0, size - 1) << '\n';
+    input << "get " << blockSize << '\n';
+    output << values[static_cast<std::size_t>(blockSize)] << '\n';
+    input << "size\n";
+    output << size << '\n';
+
+    for (int operation = 5; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 4)) {
+            case 0: {
+                const int index = randomInt(random, -2, size + 1);
+                const int value = randomValue(random);
+                input << "set " << index << ' ' << value << '\n';
+                if (!valid(index)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    values[static_cast<std::size_t>(index)] = value;
+                }
+                break;
+            }
+            case 1: {
+                const int index = randomInt(random, -2, size + 1);
+                const int delta = randomValue(random);
+                input << "add " << index << ' ' << delta << '\n';
+                if (!valid(index)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    values[static_cast<std::size_t>(index)] += delta;
+                }
+                break;
+            }
+            case 2: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                input << "sum " << left << ' ' << right << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << rangeSum(left, right) << '\n';
+                }
+                break;
+            }
+            case 3: {
+                const int index = randomInt(random, -2, size + 1);
+                input << "get " << index << '\n';
+                if (!valid(index)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << values[static_cast<std::size_t>(index)] << '\n';
+                }
+                break;
+            }
+            default:
+                input << "size\n";
+                output << size << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 }  // namespace
 
 void registerStaticRangeGenerators(CaseGeneratorRegistry& registry) {
@@ -213,6 +328,10 @@ void registerStaticRangeGenerators(CaseGeneratorRegistry& registry) {
     registry.emplace(
         "A22-disjoint-sparse-table-sum",
         generateDisjointSparseTableSum
+    );
+    registry.emplace(
+        "A23-sqrt-decomposition-range-sum",
+        generateSqrtDecompositionRangeSum
     );
 }
 
