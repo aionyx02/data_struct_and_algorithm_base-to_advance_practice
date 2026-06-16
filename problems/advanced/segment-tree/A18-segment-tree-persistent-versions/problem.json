@@ -1,0 +1,16 @@
+{
+  "id": "A18-segment-tree-persistent-versions",
+  "title": "Persistent Segment Tree Versions",
+  "stage": "A",
+  "difficulty": "D4",
+  "judge_mode": "stdio",
+  "time_limit_ms": 500,
+  "memory_limit_mb": 32,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(log n) per update or query",
+  "expected_space": "O(n + V log n)",
+  "forbidden_symbols": ["std::vector", "std::map", "std::unordered_map", "std::set", "std::list"],
+  "random_tests": 100,
+  "operation_limit": 200,
+  "tests_directory": "tests"
+}

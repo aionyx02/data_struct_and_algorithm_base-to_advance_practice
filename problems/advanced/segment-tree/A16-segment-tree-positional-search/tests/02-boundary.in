@@ -1,0 +1,12 @@
+1 10
+-4
+all_max
+first_at_least 0 -4
+last_at_least 0 -3
+add 0 10
+get 0
+range_max 0 0
+first_at_least -1 0
+last_at_least 1 0
+range_max 0 1
+size

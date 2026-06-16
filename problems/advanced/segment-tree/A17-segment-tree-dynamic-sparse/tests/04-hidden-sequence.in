@@ -1,0 +1,20 @@
+10 19
+add 2 5
+add 9 4
+range 0 9
+nodes
+prefix 8
+set 2 -1
+range 2 9
+get 2
+add 5 10
+nodes
+range 5 9
+set 9 0
+all
+prefix 9
+range -1 2
+prefix 10
+set 10 1
+nodes
+universe

@@ -1,0 +1,17 @@
+16 16
+nodes
+add 8 4
+nodes
+range 0 15
+prefix 7
+add 9 6
+nodes
+range 8 9
+get 8
+set 8 0
+nodes
+range 8 9
+prefix 9
+set 15 -3
+nodes
+all

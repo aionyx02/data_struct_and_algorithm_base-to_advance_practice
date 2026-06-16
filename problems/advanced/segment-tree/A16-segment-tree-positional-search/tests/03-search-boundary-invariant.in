@@ -1,0 +1,14 @@
+7 12
+100 1 80 2 70 3 90
+first_at_least 2 75
+last_at_least 4 75
+set 0 -5
+first_at_least 1 75
+set 6 -10
+last_at_least 5 75
+add 4 20
+first_at_least 3 85
+last_at_least 6 85
+range_max 0 6
+first_at_least 5 85
+last_at_least 1 75

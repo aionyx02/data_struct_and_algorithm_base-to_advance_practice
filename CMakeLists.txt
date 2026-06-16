@@ -186,6 +186,10 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_a12 A12-segment-tree-gcd-monoid)
     add_catalog_test(catalog_lists_a13 A13-segment-tree-lazy-range-add)
     add_catalog_test(catalog_lists_a14 A14-segment-tree-lazy-range-assign)
+    add_catalog_test(catalog_lists_a15 A15-segment-tree-lazy-mixed-tags)
+    add_catalog_test(catalog_lists_a16 A16-segment-tree-positional-search)
+    add_catalog_test(catalog_lists_a17 A17-segment-tree-dynamic-sparse)
+    add_catalog_test(catalog_lists_a18 A18-segment-tree-persistent-versions)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1319,6 +1323,62 @@ if(BUILD_TESTING AND WIN32)
         judge_rejects_segment_tree_lazy_assign_without_push
         A14-segment-tree-lazy-range-assign
         tests/fixtures/submissions/segment_tree_lazy_assign_no_push.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_segment_tree_lazy_mixed_tags
+        A15-segment-tree-lazy-mixed-tags
+        tests/fixtures/submissions/segment_tree_lazy_mixed_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_lazy_mixed_reversed_order
+        A15-segment-tree-lazy-mixed-tags
+        tests/fixtures/submissions/segment_tree_lazy_mixed_reversed_order.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_segment_tree_positional_search
+        A16-segment-tree-positional-search
+        tests/fixtures/submissions/segment_tree_positional_search_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_positional_search_ignores_bounds
+        A16-segment-tree-positional-search
+        tests/fixtures/submissions/segment_tree_positional_search_ignores_bounds.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_segment_tree_dynamic_sparse
+        A17-segment-tree-dynamic-sparse
+        tests/fixtures/submissions/segment_tree_dynamic_sparse_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_dynamic_sparse_eager_children
+        A17-segment-tree-dynamic-sparse
+        tests/fixtures/submissions/segment_tree_dynamic_sparse_eager_children.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_segment_tree_persistent_versions
+        A18-segment-tree-persistent-versions
+        tests/fixtures/submissions/segment_tree_persistent_versions_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_persistent_versions_in_place
+        A18-segment-tree-persistent-versions
+        tests/fixtures/submissions/segment_tree_persistent_versions_in_place.cpp
         1
         "Verdict: WA"
     )
@@ -2559,6 +2619,70 @@ if(BUILD_TESTING AND WIN32)
         stress_rejects_segment_tree_lazy_assign_without_push
         A14-segment-tree-lazy-range-assign
         tests/fixtures/submissions/segment_tree_lazy_assign_no_push.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_segment_tree_lazy_mixed_tags
+        A15-segment-tree-lazy-mixed-tags
+        tests/fixtures/submissions/segment_tree_lazy_mixed_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_lazy_mixed_reversed_order
+        A15-segment-tree-lazy-mixed-tags
+        tests/fixtures/submissions/segment_tree_lazy_mixed_reversed_order.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_segment_tree_positional_search
+        A16-segment-tree-positional-search
+        tests/fixtures/submissions/segment_tree_positional_search_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_positional_search_ignores_bounds
+        A16-segment-tree-positional-search
+        tests/fixtures/submissions/segment_tree_positional_search_ignores_bounds.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_segment_tree_dynamic_sparse
+        A17-segment-tree-dynamic-sparse
+        tests/fixtures/submissions/segment_tree_dynamic_sparse_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_dynamic_sparse_eager_children
+        A17-segment-tree-dynamic-sparse
+        tests/fixtures/submissions/segment_tree_dynamic_sparse_eager_children.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_segment_tree_persistent_versions
+        A18-segment-tree-persistent-versions
+        tests/fixtures/submissions/segment_tree_persistent_versions_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_persistent_versions_in_place
+        A18-segment-tree-persistent-versions
+        tests/fixtures/submissions/segment_tree_persistent_versions_in_place.cpp
         1
         "Verdict: WA"
         TRUE

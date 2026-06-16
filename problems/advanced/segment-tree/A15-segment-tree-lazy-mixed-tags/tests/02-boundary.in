@@ -1,0 +1,12 @@
+1 10
+4
+all
+range_add 0 0 -5
+get 0
+range_assign 0 0 0
+all
+range_add -1 0 3
+range_assign 0 1 2
+range 0 0
+set 1 9
+size
