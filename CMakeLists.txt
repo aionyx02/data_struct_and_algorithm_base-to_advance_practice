@@ -198,6 +198,7 @@ if(BUILD_TESTING AND WIN32)
     add_catalog_test(catalog_lists_a17 A17-segment-tree-dynamic-sparse)
     add_catalog_test(catalog_lists_a18 A18-segment-tree-persistent-versions)
 add_catalog_test(catalog_lists_a19 A19-segment-tree-order-statistic)
+add_catalog_test(catalog_lists_a20 A20-segment-tree-beats)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1408,6 +1409,27 @@ add_catalog_test(catalog_lists_a19 A19-segment-tree-order-statistic)
         judge_rejects_segment_tree_order_statistic_less_inclusive
         A19-segment-tree-order-statistic
         tests/fixtures/submissions/segment_tree_order_statistic_less_inclusive.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_segment_tree_beats
+        A20-segment-tree-beats
+        tests/fixtures/submissions/segment_tree_beats_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_beats_no_recurse
+        A20-segment-tree-beats
+        tests/fixtures/submissions/segment_tree_beats_no_recurse.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_segment_tree_beats_full_count
+        A20-segment-tree-beats
+        tests/fixtures/submissions/segment_tree_beats_full_count.cpp
         1
         "Verdict: WA"
     )
@@ -2736,6 +2758,30 @@ add_catalog_test(catalog_lists_a19 A19-segment-tree-order-statistic)
         stress_rejects_segment_tree_order_statistic_less_inclusive
         A19-segment-tree-order-statistic
         tests/fixtures/submissions/segment_tree_order_statistic_less_inclusive.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_segment_tree_beats
+        A20-segment-tree-beats
+        tests/fixtures/submissions/segment_tree_beats_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_beats_no_recurse
+        A20-segment-tree-beats
+        tests/fixtures/submissions/segment_tree_beats_no_recurse.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_segment_tree_beats_full_count
+        A20-segment-tree-beats
+        tests/fixtures/submissions/segment_tree_beats_full_count.cpp
         1
         "Verdict: WA"
         TRUE

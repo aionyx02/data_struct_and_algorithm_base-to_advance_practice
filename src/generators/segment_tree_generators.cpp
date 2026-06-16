@@ -1438,6 +1438,125 @@ GeneratedCase generateSegmentTreeOrderStatistic(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateSegmentTreeBeats(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 6) {
+        throw std::runtime_error(
+            "A20-segment-tree-beats requires operation_limit of at least 6"
+        );
+    }
+    const int size = randomInt(random, 2, 20);
+    std::vector<long long> values(static_cast<std::size_t>(size));
+    for (int index = 0; index < size; ++index) {
+        values[static_cast<std::size_t>(index)] = randomValue(random);
+    }
+    // Indices 0 and 1 always form a left-spine Segment Tree node. Seeding them
+    // with a unique node maximum (2000, above the random value range) over a
+    // smaller second element guarantees a `chmin` that lands strictly between
+    // the node's second maximum and maximum, then one that falls at or below the
+    // second maximum. The first exposes a `chmin` that scales by the whole node
+    // count instead of the max count; the second exposes a `chmin` that skips
+    // the Beats recursion when the bound is at or below the second maximum.
+    values[0] = 2000;
+    values[1] = 1000;
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << size << ' ' << operationCount << '\n';
+    for (int index = 0; index < size; ++index) {
+        if (index != 0) {
+            input << ' ';
+        }
+        input << values[static_cast<std::size_t>(index)];
+    }
+    input << '\n';
+
+    auto valid = [&](int index) {
+        return index >= 0 && index < size;
+    };
+    auto rangeSum = [&](int left, int right) {
+        long long sum = 0;
+        for (int index = left; index <= right; ++index) {
+            sum += values[static_cast<std::size_t>(index)];
+        }
+        return sum;
+    };
+    auto rangeMax = [&](int left, int right) {
+        long long result = values[static_cast<std::size_t>(left)];
+        for (int index = left + 1; index <= right; ++index) {
+            result = std::max(result, values[static_cast<std::size_t>(index)]);
+        }
+        return result;
+    };
+    auto applyChmin = [&](int left, int right, long long bound) {
+        for (int index = left; index <= right; ++index) {
+            values[static_cast<std::size_t>(index)] =
+                std::min(values[static_cast<std::size_t>(index)], bound);
+        }
+    };
+
+    input << "chmin 0 1 1500\n";
+    applyChmin(0, 1, 1500);
+    input << "sum 0 1\n";
+    output << rangeSum(0, 1) << '\n';
+    input << "chmin 0 1 500\n";
+    applyChmin(0, 1, 500);
+    input << "sum 0 1\n";
+    output << rangeSum(0, 1) << '\n';
+    input << "max 0 1\n";
+    output << rangeMax(0, 1) << '\n';
+    input << "size\n";
+    output << size << '\n';
+
+    for (int operation = 6; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 4)) {
+            case 0:
+            case 1: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const long long bound = randomValue(random);
+                input << "chmin " << left << ' ' << right << ' ' << bound
+                      << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    applyChmin(left, right, bound);
+                }
+                break;
+            }
+            case 2: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                input << "sum " << left << ' ' << right << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << rangeSum(left, right) << '\n';
+                }
+                break;
+            }
+            case 3: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                input << "max " << left << ' ' << right << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << rangeMax(left, right) << '\n';
+                }
+                break;
+            }
+            default:
+                input << "size\n";
+                output << size << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 }  // namespace
 
 void registerSegmentTreeGenerators(CaseGeneratorRegistry& registry) {
@@ -1484,6 +1603,10 @@ void registerSegmentTreeGenerators(CaseGeneratorRegistry& registry) {
     registry.emplace(
         "A19-segment-tree-order-statistic",
         generateSegmentTreeOrderStatistic
+    );
+    registry.emplace(
+        "A20-segment-tree-beats",
+        generateSegmentTreeBeats
     );
 }
 

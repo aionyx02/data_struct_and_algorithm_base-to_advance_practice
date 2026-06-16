@@ -11,44 +11,11 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.016 - Build Segment Tree Foundations
-
-- Status: doing
-- Priority: P0
-- Owner: shawn
-- Progress: eleven of twelve Stage A2 problems are implemented: recursive and
-  iterative range sum, minimum/maximum and GCD monoids, plus isolated range-add
-  and range-assign lazy propagation, mixed lazy tag composition, and
-  positional search, dynamic sparse Segment Tree, persistent versions, and the
-  order-statistic Segment Tree (`A09`-`A19`). Only Segment Tree Beats (`A20`)
-  remains.
-- Related docs:
-  - `docs/learning-roadmap.md`
-  - `docs/judge-requirements.md`
-- Acceptance criteria:
-  - [ ] Add twelve exercises for the Stage A2 Segment Tree family.
-  - [x] Begin with recursive and iterative point-update range-query trees.
-  - [x] Cover sum, minimum, maximum, and GCD monoids.
-  - [x] Add isolated range-add and range-assign lazy propagation.
-  - [x] Add mixed lazy propagation composition order.
-  - [x] Add positional search.
-  - [x] Add dynamic sparse Segment Tree.
-  - [x] Add persistent Segment Tree.
-  - [x] Add order-statistic variant.
-  - [ ] Add Segment Tree Beats variant.
-  - [ ] Preserve observable update/query contracts and stated complexity limits.
-- Validation:
-  - [x] Known correct submissions for `A09`-`A18` pass deterministic and seeded
-        stress tests.
-  - [x] Known wrong endpoint, stale-parent, invalid identity, and no-push lazy
-        mistakes for `A09`-`A14` receive non-AC verdicts.
-  - [x] Known mixed-tag composition mistakes for `A15` receive non-AC verdicts.
-  - [x] Known positional-search boundary mistakes for `A16` receive non-AC verdicts.
-  - [x] Known dynamic allocation mistakes for `A17` receive non-AC verdicts.
-  - [x] Known persistence mistakes for `A18` receive non-AC verdicts.
-  - [x] Known order-statistic mistakes (wrong k-th descend branch, inclusive
-        rank) for `A19` receive non-AC verdicts.
-  - [ ] Known Segment Tree Beats mistakes receive non-AC verdicts.
+- No task is currently in progress. `TASK.CURRICULUM.016` (Stage A2 Segment Tree
+  family, `A09`-`A20`) was completed on 2026-06-16; see
+  `docs/memory/sessions/2026-06-16-shawn.md`.
+- Next candidate: open a task for Stage A3 Static Range Structures
+  (`docs/learning-roadmap.md`, section 5 A3) when the maintainer is ready.
 
 ## Strategy
 

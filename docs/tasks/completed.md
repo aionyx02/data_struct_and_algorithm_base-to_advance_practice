@@ -2,7 +2,7 @@
 type: task_archive_index
 status: archive
 priority: p3
-updated: 2026-06-14
+updated: 2026-06-16
 context_policy: on_demand
 owner: project
 ---
@@ -30,3 +30,4 @@ owner: project
 | `TASK.CURRICULUM.013` | Built Advanced Search Tree Foundations | `docs/memory/sessions/2026-06-14-shawn.md` |
 | `TASK.CURRICULUM.014` | Completed Basic Concepts And Stage F | `docs/memory/sessions/2026-06-14-shawn.md` |
 | `TASK.CURRICULUM.015` | Built Fenwick Tree Foundations | `docs/memory/sessions/2026-06-14-shawn.md` |
+| `TASK.CURRICULUM.016` | Built the Stage A2 Segment Tree family | `docs/memory/sessions/2026-06-16-shawn.md` |
