@@ -1,0 +1,16 @@
+70 14
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 1
+count 0 63
+count 64 69
+count 63 64
+contains 64
+first_ge 1
+first_ge 65
+clear 63
+total
+count 0 63
+flip 64
+count 64 69
+set 68
+first_ge 65
+total

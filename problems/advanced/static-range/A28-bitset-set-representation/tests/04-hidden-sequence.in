@@ -1,0 +1,18 @@
+20 16
+0 1 0 1 0 1 0 0 1 0 0 0 0 1 0 0 0 0 0 1
+count 0 19
+first_ge 0
+first_ge 6
+flip 8
+contains 8
+set 6
+count 5 13
+clear 1
+total
+first_ge 0
+count 0 2
+flip 2
+first_ge 0
+count 0 3
+contains 19
+size

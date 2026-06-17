@@ -1,0 +1,11 @@
+6 9
+4 8 1 9 2 10
+count_le 0 5 4
+count_le 0 5 8
+kth 0 5 5
+kth 0 5 6
+count_le 3 5 9
+freq 0 5 8
+freq 1 4 9
+get 3
+size

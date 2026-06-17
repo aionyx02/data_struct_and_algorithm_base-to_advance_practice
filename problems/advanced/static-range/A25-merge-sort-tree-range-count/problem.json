@@ -1,0 +1,16 @@
+{
+  "id": "A25-merge-sort-tree-range-count",
+  "title": "Merge Sort Tree Range Count",
+  "stage": "A",
+  "difficulty": "D4",
+  "judge_mode": "stdio",
+  "time_limit_ms": 500,
+  "memory_limit_mb": 32,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(n log n) build, O(log^2 n) per count query, O(log n log^2 n) per kth query",
+  "expected_space": "O(n log n)",
+  "forbidden_symbols": ["std::vector", "std::map", "std::unordered_map", "std::set", "std::multiset", "std::list"],
+  "random_tests": 100,
+  "operation_limit": 200,
+  "tests_directory": "tests"
+}

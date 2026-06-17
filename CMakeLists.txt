@@ -204,6 +204,10 @@ add_catalog_test(catalog_lists_a21 A21-sparse-table-range-query)
 add_catalog_test(catalog_lists_a22 A22-disjoint-sparse-table-sum)
 add_catalog_test(catalog_lists_a23 A23-sqrt-decomposition-range-sum)
 add_catalog_test(catalog_lists_a24 A24-block-decomposition-lazy)
+add_catalog_test(catalog_lists_a25 A25-merge-sort-tree-range-count)
+add_catalog_test(catalog_lists_a26 A26-wavelet-tree-range-kth)
+add_catalog_test(catalog_lists_a27 A27-wavelet-matrix-range-kth)
+add_catalog_test(catalog_lists_a28 A28-bitset-set-representation)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1519,6 +1523,90 @@ add_catalog_test(catalog_lists_a24 A24-block-decomposition-lazy)
         judge_rejects_block_decomposition_lazy_full_add_skips_sum
         A24-block-decomposition-lazy
         tests/fixtures/submissions/block_decomposition_lazy_full_add_skips_sum.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_merge_sort_tree_range_count
+        A25-merge-sort-tree-range-count
+        tests/fixtures/submissions/merge_sort_tree_range_count_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_merge_sort_tree_range_count_le_exclusive
+        A25-merge-sort-tree-range-count
+        tests/fixtures/submissions/merge_sort_tree_range_count_le_exclusive.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_merge_sort_tree_range_count_drops_right
+        A25-merge-sort-tree-range-count
+        tests/fixtures/submissions/merge_sort_tree_range_count_drops_right.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_wavelet_tree_range_kth
+        A26-wavelet-tree-range-kth
+        tests/fixtures/submissions/wavelet_tree_range_kth_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_wavelet_tree_range_kth_no_subtract
+        A26-wavelet-tree-range-kth
+        tests/fixtures/submissions/wavelet_tree_range_kth_no_subtract.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_wavelet_tree_range_count_wrong_mapping
+        A26-wavelet-tree-range-kth
+        tests/fixtures/submissions/wavelet_tree_range_count_wrong_mapping.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_wavelet_matrix_range_kth
+        A27-wavelet-matrix-range-kth
+        tests/fixtures/submissions/wavelet_matrix_range_kth_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_wavelet_matrix_range_kth_missing_zero_offset
+        A27-wavelet-matrix-range-kth
+        tests/fixtures/submissions/wavelet_matrix_range_kth_missing_zero_offset.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_wavelet_matrix_range_count_missing_offset
+        A27-wavelet-matrix-range-kth
+        tests/fixtures/submissions/wavelet_matrix_range_count_missing_offset.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_bitset_set_representation
+        A28-bitset-set-representation
+        tests/fixtures/submissions/bitset_set_representation_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_bitset_set_representation_unmasked_count
+        A28-bitset-set-representation
+        tests/fixtures/submissions/bitset_set_representation_unmasked_count.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_bitset_set_representation_stale_total
+        A28-bitset-set-representation
+        tests/fixtures/submissions/bitset_set_representation_stale_total.cpp
         1
         "Verdict: WA"
     )
@@ -2967,6 +3055,102 @@ add_catalog_test(catalog_lists_a24 A24-block-decomposition-lazy)
         stress_rejects_block_decomposition_lazy_full_add_skips_sum
         A24-block-decomposition-lazy
         tests/fixtures/submissions/block_decomposition_lazy_full_add_skips_sum.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_merge_sort_tree_range_count
+        A25-merge-sort-tree-range-count
+        tests/fixtures/submissions/merge_sort_tree_range_count_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_merge_sort_tree_range_count_le_exclusive
+        A25-merge-sort-tree-range-count
+        tests/fixtures/submissions/merge_sort_tree_range_count_le_exclusive.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_merge_sort_tree_range_count_drops_right
+        A25-merge-sort-tree-range-count
+        tests/fixtures/submissions/merge_sort_tree_range_count_drops_right.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_wavelet_tree_range_kth
+        A26-wavelet-tree-range-kth
+        tests/fixtures/submissions/wavelet_tree_range_kth_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_wavelet_tree_range_kth_no_subtract
+        A26-wavelet-tree-range-kth
+        tests/fixtures/submissions/wavelet_tree_range_kth_no_subtract.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_wavelet_tree_range_count_wrong_mapping
+        A26-wavelet-tree-range-kth
+        tests/fixtures/submissions/wavelet_tree_range_count_wrong_mapping.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_wavelet_matrix_range_kth
+        A27-wavelet-matrix-range-kth
+        tests/fixtures/submissions/wavelet_matrix_range_kth_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_wavelet_matrix_range_kth_missing_zero_offset
+        A27-wavelet-matrix-range-kth
+        tests/fixtures/submissions/wavelet_matrix_range_kth_missing_zero_offset.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_wavelet_matrix_range_count_missing_offset
+        A27-wavelet-matrix-range-kth
+        tests/fixtures/submissions/wavelet_matrix_range_count_missing_offset.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_bitset_set_representation
+        A28-bitset-set-representation
+        tests/fixtures/submissions/bitset_set_representation_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_bitset_set_representation_unmasked_count
+        A28-bitset-set-representation
+        tests/fixtures/submissions/bitset_set_representation_unmasked_count.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_bitset_set_representation_stale_total
+        A28-bitset-set-representation
+        tests/fixtures/submissions/bitset_set_representation_stale_total.cpp
         1
         "Verdict: WA"
         TRUE

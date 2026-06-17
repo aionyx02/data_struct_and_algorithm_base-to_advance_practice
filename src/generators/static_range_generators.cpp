@@ -424,6 +424,611 @@ GeneratedCase generateBlockDecompositionLazy(
     return {input.str(), output.str()};
 }
 
+GeneratedCase generateMergeSortTreeRangeCount(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 6) {
+        throw std::runtime_error(
+            "A25-merge-sort-tree-range-count requires operation_limit of at "
+            "least 6"
+        );
+    }
+    const int size = randomInt(random, 6, 24);
+    std::vector<long long> values(static_cast<std::size_t>(size));
+    for (int index = 0; index < size; ++index) {
+        values[static_cast<std::size_t>(index)] = randomValue(random);
+    }
+    // Duplicates at the right endpoint expose count_le implementations that use
+    // lower_bound, and range traversals that accidentally drop the right edge.
+    values[0] = 4;
+    values[1] = 8;
+    values[2] = 1;
+    values[3] = 8;
+    values[4] = 2;
+    values[5] = 8;
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << size << ' ' << operationCount << '\n';
+    for (int index = 0; index < size; ++index) {
+        if (index != 0) {
+            input << ' ';
+        }
+        input << values[static_cast<std::size_t>(index)];
+    }
+    input << '\n';
+
+    auto valid = [&](int index) {
+        return index >= 0 && index < size;
+    };
+    auto countLess = [&](int left, int right, long long value) {
+        int count = 0;
+        for (int index = left; index <= right; ++index) {
+            if (values[static_cast<std::size_t>(index)] < value) {
+                ++count;
+            }
+        }
+        return count;
+    };
+    auto countLessEqual = [&](int left, int right, long long value) {
+        int count = 0;
+        for (int index = left; index <= right; ++index) {
+            if (values[static_cast<std::size_t>(index)] <= value) {
+                ++count;
+            }
+        }
+        return count;
+    };
+    auto kthSmallest = [&](int left, int right, int kth) {
+        std::vector<long long> sorted;
+        sorted.reserve(static_cast<std::size_t>(right - left + 1));
+        for (int index = left; index <= right; ++index) {
+            sorted.push_back(values[static_cast<std::size_t>(index)]);
+        }
+        std::sort(sorted.begin(), sorted.end());
+        return sorted[static_cast<std::size_t>(kth - 1)];
+    };
+
+    input << "count_le 0 5 8\n";
+    output << countLessEqual(0, 5, 8) << '\n';
+    input << "count_lt 0 5 8\n";
+    output << countLess(0, 5, 8) << '\n';
+    input << "count_le 3 5 8\n";
+    output << countLessEqual(3, 5, 8) << '\n';
+    input << "kth 0 5 5\n";
+    output << kthSmallest(0, 5, 5) << '\n';
+    input << "get 2\n";
+    output << values[2] << '\n';
+    input << "size\n";
+    output << size << '\n';
+
+    for (int operation = 6; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 4)) {
+            case 0: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int value = randomValue(random);
+                input << "count_lt " << left << ' ' << right << ' ' << value
+                      << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << countLess(left, right, value) << '\n';
+                }
+                break;
+            }
+            case 1: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int value = randomValue(random);
+                input << "count_le " << left << ' ' << right << ' ' << value
+                      << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << countLessEqual(left, right, value) << '\n';
+                }
+                break;
+            }
+            case 2: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int kth = randomInt(random, -1, size + 2);
+                input << "kth " << left << ' ' << right << ' ' << kth << '\n';
+                if (!valid(left) || !valid(right) || left > right || kth < 1 ||
+                    kth > right - left + 1) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << kthSmallest(left, right, kth) << '\n';
+                }
+                break;
+            }
+            case 3: {
+                const int index = randomInt(random, -2, size + 1);
+                input << "get " << index << '\n';
+                if (!valid(index)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << values[static_cast<std::size_t>(index)] << '\n';
+                }
+                break;
+            }
+            default:
+                input << "size\n";
+                output << size << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateWaveletTreeRangeKth(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 7) {
+        throw std::runtime_error(
+            "A26-wavelet-tree-range-kth requires operation_limit of at least 7"
+        );
+    }
+    const int size = randomInt(random, 6, 24);
+    std::vector<long long> values(static_cast<std::size_t>(size));
+    for (int index = 0; index < size; ++index) {
+        values[static_cast<std::size_t>(index)] = randomValue(random);
+    }
+    // This prefix forces kth queries into the right child after a non-empty
+    // left partition, and count queries over [3, 5] require correct right-child
+    // range translation.
+    values[0] = 4;
+    values[1] = 8;
+    values[2] = 1;
+    values[3] = 9;
+    values[4] = 2;
+    values[5] = 10;
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << size << ' ' << operationCount << '\n';
+    for (int index = 0; index < size; ++index) {
+        if (index != 0) {
+            input << ' ';
+        }
+        input << values[static_cast<std::size_t>(index)];
+    }
+    input << '\n';
+
+    auto valid = [&](int index) {
+        return index >= 0 && index < size;
+    };
+    auto countLessEqual = [&](int left, int right, long long value) {
+        int count = 0;
+        for (int index = left; index <= right; ++index) {
+            if (values[static_cast<std::size_t>(index)] <= value) {
+                ++count;
+            }
+        }
+        return count;
+    };
+    auto frequency = [&](int left, int right, long long value) {
+        int count = 0;
+        for (int index = left; index <= right; ++index) {
+            if (values[static_cast<std::size_t>(index)] == value) {
+                ++count;
+            }
+        }
+        return count;
+    };
+    auto kthSmallest = [&](int left, int right, int kth) {
+        std::vector<long long> sorted;
+        sorted.reserve(static_cast<std::size_t>(right - left + 1));
+        for (int index = left; index <= right; ++index) {
+            sorted.push_back(values[static_cast<std::size_t>(index)]);
+        }
+        std::sort(sorted.begin(), sorted.end());
+        return sorted[static_cast<std::size_t>(kth - 1)];
+    };
+
+    input << "count_le 0 5 4\n";
+    output << countLessEqual(0, 5, 4) << '\n';
+    input << "count_le 0 5 8\n";
+    output << countLessEqual(0, 5, 8) << '\n';
+    input << "kth 0 5 5\n";
+    output << kthSmallest(0, 5, 5) << '\n';
+    input << "count_le 3 5 9\n";
+    output << countLessEqual(3, 5, 9) << '\n';
+    input << "freq 0 5 8\n";
+    output << frequency(0, 5, 8) << '\n';
+    input << "get 3\n";
+    output << values[3] << '\n';
+    input << "size\n";
+    output << size << '\n';
+
+    for (int operation = 7; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 4)) {
+            case 0: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int kth = randomInt(random, -1, size + 2);
+                input << "kth " << left << ' ' << right << ' ' << kth << '\n';
+                if (!valid(left) || !valid(right) || left > right || kth < 1 ||
+                    kth > right - left + 1) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << kthSmallest(left, right, kth) << '\n';
+                }
+                break;
+            }
+            case 1: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int value = randomValue(random);
+                input << "count_le " << left << ' ' << right << ' ' << value
+                      << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << countLessEqual(left, right, value) << '\n';
+                }
+                break;
+            }
+            case 2: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int value = randomValue(random);
+                input << "freq " << left << ' ' << right << ' ' << value
+                      << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << frequency(left, right, value) << '\n';
+                }
+                break;
+            }
+            case 3: {
+                const int index = randomInt(random, -2, size + 1);
+                input << "get " << index << '\n';
+                if (!valid(index)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << values[static_cast<std::size_t>(index)] << '\n';
+                }
+                break;
+            }
+            default:
+                input << "size\n";
+                output << size << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateWaveletMatrixRangeKth(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 8) {
+        throw std::runtime_error(
+            "A27-wavelet-matrix-range-kth requires operation_limit of at least 8"
+        );
+    }
+    const int size = randomInt(random, 6, 24);
+    std::vector<long long> values(static_cast<std::size_t>(size));
+    for (int index = 0; index < size; ++index) {
+        values[static_cast<std::size_t>(index)] = randomValue(random);
+    }
+    // The prefix forces kth into the one-bit side at the top level and makes a
+    // non-prefix count query over [3, 5] depend on the level's zero-count offset.
+    values[0] = 4;
+    values[1] = 8;
+    values[2] = 1;
+    values[3] = 9;
+    values[4] = 2;
+    values[5] = 10;
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << size << ' ' << operationCount << '\n';
+    for (int index = 0; index < size; ++index) {
+        if (index != 0) {
+            input << ' ';
+        }
+        input << values[static_cast<std::size_t>(index)];
+    }
+    input << '\n';
+
+    auto valid = [&](int index) {
+        return index >= 0 && index < size;
+    };
+    auto countLess = [&](int left, int right, long long value) {
+        int count = 0;
+        for (int index = left; index <= right; ++index) {
+            if (values[static_cast<std::size_t>(index)] < value) {
+                ++count;
+            }
+        }
+        return count;
+    };
+    auto countLessEqual = [&](int left, int right, long long value) {
+        int count = 0;
+        for (int index = left; index <= right; ++index) {
+            if (values[static_cast<std::size_t>(index)] <= value) {
+                ++count;
+            }
+        }
+        return count;
+    };
+    auto frequency = [&](int left, int right, long long value) {
+        int count = 0;
+        for (int index = left; index <= right; ++index) {
+            if (values[static_cast<std::size_t>(index)] == value) {
+                ++count;
+            }
+        }
+        return count;
+    };
+    auto kthSmallest = [&](int left, int right, int kth) {
+        std::vector<long long> sorted;
+        sorted.reserve(static_cast<std::size_t>(right - left + 1));
+        for (int index = left; index <= right; ++index) {
+            sorted.push_back(values[static_cast<std::size_t>(index)]);
+        }
+        std::sort(sorted.begin(), sorted.end());
+        return sorted[static_cast<std::size_t>(kth - 1)];
+    };
+
+    input << "count_lt 0 5 4\n";
+    output << countLess(0, 5, 4) << '\n';
+    input << "count_le 0 5 4\n";
+    output << countLessEqual(0, 5, 4) << '\n';
+    input << "count_le 0 5 8\n";
+    output << countLessEqual(0, 5, 8) << '\n';
+    input << "kth 0 5 5\n";
+    output << kthSmallest(0, 5, 5) << '\n';
+    input << "count_le 3 5 9\n";
+    output << countLessEqual(3, 5, 9) << '\n';
+    input << "freq 0 5 8\n";
+    output << frequency(0, 5, 8) << '\n';
+    input << "get 3\n";
+    output << values[3] << '\n';
+    input << "size\n";
+    output << size << '\n';
+
+    for (int operation = 8; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 5)) {
+            case 0: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int kth = randomInt(random, -1, size + 2);
+                input << "kth " << left << ' ' << right << ' ' << kth << '\n';
+                if (!valid(left) || !valid(right) || left > right || kth < 1 ||
+                    kth > right - left + 1) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << kthSmallest(left, right, kth) << '\n';
+                }
+                break;
+            }
+            case 1: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int value = randomValue(random);
+                input << "count_lt " << left << ' ' << right << ' ' << value
+                      << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << countLess(left, right, value) << '\n';
+                }
+                break;
+            }
+            case 2: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int value = randomValue(random);
+                input << "count_le " << left << ' ' << right << ' ' << value
+                      << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << countLessEqual(left, right, value) << '\n';
+                }
+                break;
+            }
+            case 3: {
+                const int left = randomInt(random, -2, size + 1);
+                const int right = randomInt(random, -2, size + 1);
+                const int value = randomValue(random);
+                input << "freq " << left << ' ' << right << ' ' << value
+                      << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << frequency(left, right, value) << '\n';
+                }
+                break;
+            }
+            case 4: {
+                const int index = randomInt(random, -2, size + 1);
+                input << "get " << index << '\n';
+                if (!valid(index)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << values[static_cast<std::size_t>(index)] << '\n';
+                }
+                break;
+            }
+            default:
+                input << "size\n";
+                output << size << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
+GeneratedCase generateBitsetSetRepresentation(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 10) {
+        throw std::runtime_error(
+            "A28-bitset-set-representation requires operation_limit of at "
+            "least 10"
+        );
+    }
+    const int size = randomInt(random, 70, 150);
+    std::vector<int> present(static_cast<std::size_t>(size), 0);
+    present[0] = 1;
+    present[63] = 1;
+    present[64] = 1;
+    present[static_cast<std::size_t>(size - 1)] = 1;
+    for (int index = 70; index + 1 < size; ++index) {
+        present[static_cast<std::size_t>(index)] =
+            randomInt(random, 0, 4) == 0 ? 1 : 0;
+    }
+
+    std::ostringstream input;
+    std::ostringstream output;
+    input << size << ' ' << operationCount << '\n';
+    for (int index = 0; index < size; ++index) {
+        if (index != 0) {
+            input << ' ';
+        }
+        input << present[static_cast<std::size_t>(index)];
+    }
+    input << '\n';
+
+    auto valid = [&](int index) {
+        return index >= 0 && index < size;
+    };
+    auto totalCount = [&]() {
+        int count = 0;
+        for (int value : present) {
+            count += value;
+        }
+        return count;
+    };
+    auto rangeCount = [&](int left, int right) {
+        int count = 0;
+        for (int index = left; index <= right; ++index) {
+            count += present[static_cast<std::size_t>(index)];
+        }
+        return count;
+    };
+    auto firstGreaterEqual = [&](int key) {
+        for (int index = key; index < size; ++index) {
+            if (present[static_cast<std::size_t>(index)] != 0) {
+                return index;
+            }
+        }
+        return -1;
+    };
+
+    input << "count 1 62\n";
+    output << rangeCount(1, 62) << '\n';
+    input << "count 0 63\n";
+    output << rangeCount(0, 63) << '\n';
+    input << "count 63 64\n";
+    output << rangeCount(63, 64) << '\n';
+    input << "first_ge 1\n";
+    output << firstGreaterEqual(1) << '\n';
+    input << "clear 63\n";
+    present[63] = 0;
+    input << "total\n";
+    output << totalCount() << '\n';
+    input << "flip 64\n";
+    present[64] = 1 - present[64];
+    input << "set 68\n";
+    present[68] = 1;
+    input << "count 64 69\n";
+    output << rangeCount(64, 69) << '\n';
+    input << "first_ge 65\n";
+    output << firstGreaterEqual(65) << '\n';
+
+    for (int operation = 10; operation < operationCount; ++operation) {
+        switch (randomInt(random, 0, 7)) {
+            case 0: {
+                const int key = randomInt(random, -2, size + 2);
+                input << "set " << key << '\n';
+                if (!valid(key)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    present[static_cast<std::size_t>(key)] = 1;
+                }
+                break;
+            }
+            case 1: {
+                const int key = randomInt(random, -2, size + 2);
+                input << "clear " << key << '\n';
+                if (!valid(key)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    present[static_cast<std::size_t>(key)] = 0;
+                }
+                break;
+            }
+            case 2: {
+                const int key = randomInt(random, -2, size + 2);
+                input << "flip " << key << '\n';
+                if (!valid(key)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    present[static_cast<std::size_t>(key)] =
+                        1 - present[static_cast<std::size_t>(key)];
+                }
+                break;
+            }
+            case 3: {
+                const int key = randomInt(random, -2, size + 2);
+                input << "contains " << key << '\n';
+                if (!valid(key)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << present[static_cast<std::size_t>(key)] << '\n';
+                }
+                break;
+            }
+            case 4: {
+                const int left = randomInt(random, -2, size + 2);
+                const int right = randomInt(random, -2, size + 2);
+                input << "count " << left << ' ' << right << '\n';
+                if (!valid(left) || !valid(right) || left > right) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    output << rangeCount(left, right) << '\n';
+                }
+                break;
+            }
+            case 5: {
+                const int key = randomInt(random, -2, size + 2);
+                input << "first_ge " << key << '\n';
+                if (!valid(key)) {
+                    appendLine(output, "OUT_OF_RANGE");
+                } else {
+                    const int found = firstGreaterEqual(key);
+                    if (found < 0) {
+                        appendLine(output, "NONE");
+                    } else {
+                        output << found << '\n';
+                    }
+                }
+                break;
+            }
+            case 6:
+                input << "total\n";
+                output << totalCount() << '\n';
+                break;
+            default:
+                input << "size\n";
+                output << size << '\n';
+                break;
+        }
+    }
+    return {input.str(), output.str()};
+}
+
 }  // namespace
 
 void registerStaticRangeGenerators(CaseGeneratorRegistry& registry) {
@@ -442,6 +1047,22 @@ void registerStaticRangeGenerators(CaseGeneratorRegistry& registry) {
     registry.emplace(
         "A24-block-decomposition-lazy",
         generateBlockDecompositionLazy
+    );
+    registry.emplace(
+        "A25-merge-sort-tree-range-count",
+        generateMergeSortTreeRangeCount
+    );
+    registry.emplace(
+        "A26-wavelet-tree-range-kth",
+        generateWaveletTreeRangeKth
+    );
+    registry.emplace(
+        "A27-wavelet-matrix-range-kth",
+        generateWaveletMatrixRangeKth
+    );
+    registry.emplace(
+        "A28-bitset-set-representation",
+        generateBitsetSetRepresentation
     );
 }
 

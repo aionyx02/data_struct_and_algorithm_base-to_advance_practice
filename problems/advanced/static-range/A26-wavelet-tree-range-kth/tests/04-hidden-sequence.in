@@ -1,0 +1,14 @@
+10 12
+10 -1 4 4 7 -3 4 9 0 7
+kth 0 9 1
+kth 0 9 10
+kth 0 9 6
+count_le 0 9 4
+freq 0 9 4
+count_le 2 6 4
+freq 2 6 4
+kth 2 6 4
+count_le 7 9 7
+freq 7 9 7
+get 5
+count_le 5 5 -3

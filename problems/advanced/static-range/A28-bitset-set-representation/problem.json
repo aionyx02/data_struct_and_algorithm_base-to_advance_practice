@@ -1,0 +1,16 @@
+{
+  "id": "A28-bitset-set-representation",
+  "title": "Bitset Set Representation",
+  "stage": "A",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 500,
+  "memory_limit_mb": 32,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(1) per point update or membership query, O(words in range) per count or successor query",
+  "expected_space": "O(n / word_bits)",
+  "forbidden_symbols": ["std::bitset", "std::vector", "std::map", "std::unordered_map", "std::set", "std::multiset", "std::list"],
+  "random_tests": 100,
+  "operation_limit": 200,
+  "tests_directory": "tests"
+}

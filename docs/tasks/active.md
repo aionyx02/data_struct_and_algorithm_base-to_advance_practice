@@ -2,7 +2,7 @@
 type: task_index
 status: active
 priority: p0
-updated: 2026-06-16
+updated: 2026-06-17
 context_policy: always_retrievable
 owner: project
 ---
@@ -11,44 +11,8 @@ owner: project
 
 ## Active Queue
 
-### TASK.CURRICULUM.017 - Build Static Range Structures
-
-- Status: doing
-- Priority: P0
-- Owner: shawn
-- Progress: four of eight Stage A3 problems are implemented: the Sparse Table
-  range-query tree (`A21`), the Disjoint Sparse Table range sum (`A22`), the
-  Square Root Decomposition range sum (`A23`), and block decomposition with lazy
-  tags (`A24`). `TASK.CURRICULUM.016` (Stage A2, `A09`-`A20`) completed on
-  2026-06-16.
-- Related docs:
-  - `docs/learning-roadmap.md`
-  - `docs/judge-requirements.md`
-- Acceptance criteria:
-  - [ ] Add eight exercises for the Stage A3 Static Range Structures family.
-  - [x] Begin with the Sparse Table for idempotent range min/max.
-  - [x] Add Disjoint Sparse Table.
-  - [x] Add Square Root Decomposition.
-  - [x] Add block decomposition with lazy tags.
-  - [ ] Add Merge Sort Tree.
-  - [ ] Add Wavelet Tree and Wavelet Matrix.
-  - [ ] Add a bitset-based set representation.
-  - [ ] Preserve observable query contracts and stated complexity limits.
-- Validation:
-  - [x] Known correct submission for `A21` passes deterministic and seeded
-        stress tests.
-  - [x] Known Sparse Table mistakes (dropping the right endpoint, using a
-        single block) for `A21` receive non-AC verdicts.
-  - [x] Known Disjoint Sparse Table mistakes (overlapping blocks that
-        double-count sum, missing single-element case) for `A22` receive
-        non-AC verdicts.
-  - [x] Known Square Root Decomposition mistakes (stale cached block sum,
-        whole-block sums that ignore partial boundaries) for `A23` receive
-        non-AC verdicts.
-  - [x] Known block-lazy mistakes (partial reads that ignore the block lazy tag,
-        a full-block add that skips the cached-sum update) for `A24` receive
-        non-AC verdicts.
-  - [ ] Later Stage A3 structures have correct and known-wrong fixtures.
+No active tasks. Select the next task from the roadmap or backlog before
+starting new implementation work.
 
 ## Strategy
 

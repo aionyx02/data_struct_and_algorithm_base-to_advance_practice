@@ -1,0 +1,12 @@
+5 10
+0 0 0 0 0
+contains -1
+set 5
+clear -2
+flip 5
+count -1 3
+count 3 2
+first_ge -1
+first_ge 5
+total
+size
