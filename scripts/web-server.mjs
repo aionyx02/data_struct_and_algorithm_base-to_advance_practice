@@ -249,6 +249,16 @@ function parsePort(arguments_) {
 if (path.resolve(process.argv[1] ?? '') === fileURLToPath(import.meta.url)) {
   const port = parsePort(process.argv.slice(2));
   const server = await createWebServer();
+  server.once('error', (error) => {
+    if (error.code === 'EADDRINUSE') {
+      console.error(`Port ${port} is already in use.`);
+      console.error(`StructLab may already be running at http://${HOST}:${port}`);
+      console.error('Choose another port with: npm run web -- --port <port>');
+    } else {
+      console.error(`Could not start StructLab Web: ${error.message}`);
+    }
+    process.exitCode = 1;
+  });
   server.listen(port, HOST, () => {
     console.log(`StructLab Web: http://${HOST}:${port}`);
   });
