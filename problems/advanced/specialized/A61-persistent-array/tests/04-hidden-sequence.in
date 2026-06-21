@@ -1,0 +1,10 @@
+3 8
+-1 0 1
+update 0 1 8
+update 1 2 9
+get 0 1
+get 1 2
+get 2 2
+sum 2 0 2
+versions
+sum 0 0 2

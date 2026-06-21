@@ -11,8 +11,7 @@ owner: project
 
 ## Active Queue
 
-No active tasks. Select the next task from the roadmap or backlog before
-starting new implementation work.
+No active tasks. The 132-problem core curriculum is complete.
 
 ## Strategy
 

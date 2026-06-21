@@ -1,0 +1,11 @@
+10
+add 5 -5 -1
+add 2 0 3
+add 9 3 7
+overlap -1 0
+stab 3
+remove 2
+stab 3
+count
+overlap -10 10
+remove 2

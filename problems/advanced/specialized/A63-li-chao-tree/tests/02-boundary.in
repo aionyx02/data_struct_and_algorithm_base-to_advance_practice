@@ -1,0 +1,7 @@
+6
+add_line 0 0
+query -100
+query 100
+clear
+query 0
+add_line 1 1

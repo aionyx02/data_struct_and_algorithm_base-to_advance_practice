@@ -24,6 +24,7 @@ add_library(judge_core
     src/generators/balanced_tree_generators.cpp
     src/generators/tree_query_generators.cpp
     src/generators/string_index_generators.cpp
+    src/generators/specialized_generators.cpp
 )
 
 target_include_directories(judge_core PRIVATE src)
@@ -244,6 +245,10 @@ add_catalog_test(catalog_lists_a57 A57-xor-trie-multiset)
 add_catalog_test(catalog_lists_a58 A58-aho-corasick-matching)
 add_catalog_test(catalog_lists_a59 A59-suffix-array-lcp)
 add_catalog_test(catalog_lists_a60 A60-suffix-automaton-index)
+add_catalog_test(catalog_lists_a61 A61-persistent-array)
+add_catalog_test(catalog_lists_a62 A62-persistent-trie)
+add_catalog_test(catalog_lists_a63 A63-li-chao-tree)
+add_catalog_test(catalog_lists_a64 A64-dynamic-interval-tree)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -2318,6 +2323,18 @@ add_catalog_test(catalog_lists_a60 A60-suffix-automaton-index)
         1
         "Verdict: WA"
     )
+    add_cli_judge_test(judge_accepts_persistent_array A61-persistent-array tests/fixtures/submissions/persistent_array_correct.cpp 0 "Verdict: AC")
+    add_cli_judge_test(judge_rejects_persistent_array_bug_one A61-persistent-array tests/fixtures/submissions/persistent_array_bug_one.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_rejects_persistent_array_bug_two A61-persistent-array tests/fixtures/submissions/persistent_array_bug_two.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_accepts_persistent_trie A62-persistent-trie tests/fixtures/submissions/persistent_trie_correct.cpp 0 "Verdict: AC")
+    add_cli_judge_test(judge_rejects_persistent_trie_bug_one A62-persistent-trie tests/fixtures/submissions/persistent_trie_bug_one.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_rejects_persistent_trie_bug_two A62-persistent-trie tests/fixtures/submissions/persistent_trie_bug_two.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_accepts_li_chao_tree A63-li-chao-tree tests/fixtures/submissions/li_chao_tree_correct.cpp 0 "Verdict: AC")
+    add_cli_judge_test(judge_rejects_li_chao_tree_bug_one A63-li-chao-tree tests/fixtures/submissions/li_chao_tree_bug_one.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_rejects_li_chao_tree_bug_two A63-li-chao-tree tests/fixtures/submissions/li_chao_tree_bug_two.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_accepts_dynamic_interval_tree A64-dynamic-interval-tree tests/fixtures/submissions/dynamic_interval_tree_correct.cpp 0 "Verdict: AC")
+    add_cli_judge_test(judge_rejects_dynamic_interval_tree_bug_one A64-dynamic-interval-tree tests/fixtures/submissions/dynamic_interval_tree_bug_one.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_rejects_dynamic_interval_tree_bug_two A64-dynamic-interval-tree tests/fixtures/submissions/dynamic_interval_tree_bug_two.cpp 1 "Verdict: WA")
 
     add_cli_stress_test(
         stress_accepts_array_adt
@@ -4631,4 +4648,16 @@ add_catalog_test(catalog_lists_a60 A60-suffix-automaton-index)
         "Verdict: WA"
         TRUE
     )
+    add_cli_stress_test(stress_accepts_persistent_array A61-persistent-array tests/fixtures/submissions/persistent_array_correct.cpp 0 "Verdict: AC" FALSE)
+    add_cli_stress_test(stress_rejects_persistent_array_bug_one A61-persistent-array tests/fixtures/submissions/persistent_array_bug_one.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_rejects_persistent_array_bug_two A61-persistent-array tests/fixtures/submissions/persistent_array_bug_two.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_accepts_persistent_trie A62-persistent-trie tests/fixtures/submissions/persistent_trie_correct.cpp 0 "Verdict: AC" FALSE)
+    add_cli_stress_test(stress_rejects_persistent_trie_bug_one A62-persistent-trie tests/fixtures/submissions/persistent_trie_bug_one.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_rejects_persistent_trie_bug_two A62-persistent-trie tests/fixtures/submissions/persistent_trie_bug_two.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_accepts_li_chao_tree A63-li-chao-tree tests/fixtures/submissions/li_chao_tree_correct.cpp 0 "Verdict: AC" FALSE)
+    add_cli_stress_test(stress_rejects_li_chao_tree_bug_one A63-li-chao-tree tests/fixtures/submissions/li_chao_tree_bug_one.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_rejects_li_chao_tree_bug_two A63-li-chao-tree tests/fixtures/submissions/li_chao_tree_bug_two.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_accepts_dynamic_interval_tree A64-dynamic-interval-tree tests/fixtures/submissions/dynamic_interval_tree_correct.cpp 0 "Verdict: AC" FALSE)
+    add_cli_stress_test(stress_rejects_dynamic_interval_tree_bug_one A64-dynamic-interval-tree tests/fixtures/submissions/dynamic_interval_tree_bug_one.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_rejects_dynamic_interval_tree_bug_two A64-dynamic-interval-tree tests/fixtures/submissions/dynamic_interval_tree_bug_two.cpp 1 "Verdict: WA" TRUE)
 endif()

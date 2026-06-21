@@ -1,0 +1,9 @@
+8
+add_line 100000 100000
+add_line -100000 7
+query 100000
+query -100000
+add_line 0 -9
+query 0
+query 99999
+query -99999

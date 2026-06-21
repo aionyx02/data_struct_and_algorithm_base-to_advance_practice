@@ -1,0 +1,12 @@
+11
+insert 0 app
+insert 1 apple
+insert 0 apt
+contains 2 apple
+contains 3 app
+prefix_count 2 app
+prefix_count 3 ap
+contains 0 app
+versions
+insert 1 bat
+prefix_count 4 a

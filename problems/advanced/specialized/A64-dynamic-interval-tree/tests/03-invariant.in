@@ -1,0 +1,13 @@
+12
+add 10 1 4
+add 20 4 8
+add 30 2 6
+stab 4
+overlap 4 4
+remove 20
+stab 4
+overlap 7 9
+add 40 8 8
+overlap 8 8
+count
+stab 1

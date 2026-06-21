@@ -1,0 +1,14 @@
+13
+add 1 0 5
+add 2 5 10
+add 3 -2 2
+stab 5
+overlap 2 5
+remove 1
+stab 5
+count
+add 2 0 1
+remove 99
+overlap -10 -2
+clear
+count

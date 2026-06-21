@@ -1,0 +1,10 @@
+9
+insert 0 cat
+insert 1 car
+insert 0 dog
+contains 2 car
+contains 3 cat
+prefix_count 2 ca
+prefix_count 3 d
+versions
+contains 0 dog

@@ -36,3 +36,4 @@ owner: project
 | `TASK.CURRICULUM.019` | Build Balanced, Randomized, And Meldable Trees | `docs/memory/sessions/2026-06-21-shawn.md` |
 | `TASK.CURRICULUM.020` | Build Tree Query Structures | `docs/memory/sessions/2026-06-21-shawn.md` |
 | `TASK.CURRICULUM.021` | Build String Index Structures | `docs/memory/sessions/2026-06-21-shawn.md` |
+| `TASK.CURRICULUM.022` | Complete Persistent And Specialized Structures | `docs/memory/sessions/2026-06-21-shawn.md` |

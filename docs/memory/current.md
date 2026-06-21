@@ -21,8 +21,8 @@ owner: project
 - Current phase: Stage A7 String Index Structures is complete. Trie, compressed
   Radix Tree, XOR Trie, Aho-Corasick, Suffix Array/LCP, and Suffix Automaton
   (`A55`-`A60`) are implemented. Stages A1-A6 (`A01`-`A54`) are complete.
-- Current owner / handoff state: no active task. `TASK.CURRICULUM.021`
-  completed with `shawn` on 2026-06-21.
+- Current phase: all 68 foundational and 64 advanced problems are implemented.
+- Current owner / handoff state: no active task. `TASK.CURRICULUM.022` complete.
 
 ## Important Constraints
 
@@ -33,20 +33,18 @@ owner: project
 
 ## Next Step
 
-- Select the next active task, likely Stage A8 Persistent And Specialized
-  Structures or a backlog item.
+- Begin the next product phase or select a backlog item.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-21.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and
   `ctest --preset dev`.
-- Result: all 713 Judge integration tests passed (~431 s; `A55`-`A60` each add
+- Result: all 741 Judge integration tests passed (~476 s; `A61`-`A64` each add
   1 catalog, +3 Judge, +3 stress). Each of `A55`-`A60` passed all four fixed
-  tests; a 100-case differential sweep (seed 99) returned `AC` for all 6
-  correct fixtures and `WA` for all 12 known-wrong fixtures.
-- Judge runtime self-check (2026-06-21): `algo list` enumerates 128 problems
-  (`F01`-`F68` and `A01`-`A60`);
+  tests; a 100-case differential sweep returned `AC` for all 4 correct fixtures
+  and `WA` for all 8 known-wrong fixtures.
+- Judge runtime self-check: `algo list` enumerates all 132 problems.
   correct submissions verdict `AC`, known-wrong `WA`, broken sources `CE`, null
   dereference `RE`, infinite loop `TLE`, and out-of-root sources are refused by
   the project-root boundary. Stress differential testing returns `AC`/`WA`.

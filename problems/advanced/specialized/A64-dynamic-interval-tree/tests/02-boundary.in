@@ -1,0 +1,9 @@
+8
+stab 0
+overlap 0 1
+count
+add 1 0 0
+stab 0
+remove 1
+remove 1
+count

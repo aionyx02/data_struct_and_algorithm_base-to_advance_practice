@@ -1,0 +1,11 @@
+10
+insert 0 he
+insert 1 her
+insert 1 hello
+insert 2 hers
+contains 3 her
+contains 4 hers
+prefix_count 2 he
+prefix_count 3 he
+prefix_count 4 he
+versions

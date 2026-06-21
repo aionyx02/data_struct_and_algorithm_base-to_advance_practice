@@ -1,0 +1,10 @@
+9
+add_line 3 7
+add_line -2 5
+add_line 1 -4
+query -10
+query 0
+query 2
+query 10
+clear
+query 1

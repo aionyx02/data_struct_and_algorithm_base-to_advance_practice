@@ -1,0 +1,1 @@
+{"id":"A62-persistent-trie","title":"Persistent Trie","stage":"A","difficulty":"D4","judge_mode":"stdio","time_limit_ms":1500,"memory_limit_mb":128,"output_limit_bytes":65536,"expected_time":"O(log n) per operation","expected_space":"O(n log n)","forbidden_symbols":["std::map","std::set","std::multiset"],"random_tests":100,"operation_limit":120,"tests_directory":"tests"}
