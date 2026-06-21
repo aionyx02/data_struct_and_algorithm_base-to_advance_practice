@@ -1,0 +1,15 @@
+14
+insert 0 100
+insert -5 50
+insert 5 90
+insert 3 95
+root
+erase 0
+root
+split 3
+rank 4
+kth 2
+contains 5
+erase -9
+size
+inorder

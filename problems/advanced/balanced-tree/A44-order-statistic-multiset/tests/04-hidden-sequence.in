@@ -1,0 +1,17 @@
+16
+insert 0
+insert -5
+insert 10
+insert 0
+insert 10
+order_of_key 0
+range_count 0 10
+kth 4
+erase_one 10
+count 10
+upper_bound 0
+lower_bound 11
+print
+size
+erase_one -5
+order_of_key 0

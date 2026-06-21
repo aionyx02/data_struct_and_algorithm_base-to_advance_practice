@@ -1,0 +1,16 @@
+{
+  "id": "A38-treap-split-merge",
+  "title": "Treap Split and Merge",
+  "stage": "A",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 1000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(log n) expected per operation",
+  "expected_space": "O(n)",
+  "forbidden_symbols": ["std::map", "std::unordered_map", "std::set", "std::multiset"],
+  "random_tests": 100,
+  "operation_limit": 120,
+  "tests_directory": "tests"
+}

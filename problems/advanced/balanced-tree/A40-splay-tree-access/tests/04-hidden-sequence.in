@@ -1,0 +1,16 @@
+15
+insert 0
+insert -10
+insert 10
+access -10
+root
+access 9
+root
+erase 0
+inorder
+rank 10
+kth 2
+root
+erase 99
+size
+contains 0

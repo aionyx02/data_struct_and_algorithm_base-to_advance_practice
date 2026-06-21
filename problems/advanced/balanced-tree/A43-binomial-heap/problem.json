@@ -1,0 +1,16 @@
+{
+  "id": "A43-binomial-heap",
+  "title": "Binomial Heap",
+  "stage": "A",
+  "difficulty": "D4",
+  "judge_mode": "stdio",
+  "time_limit_ms": 1200,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(log n) amortized per update",
+  "expected_space": "O(n)",
+  "forbidden_symbols": ["std::priority_queue", "std::multiset"],
+  "random_tests": 100,
+  "operation_limit": 120,
+  "tests_directory": "tests"
+}

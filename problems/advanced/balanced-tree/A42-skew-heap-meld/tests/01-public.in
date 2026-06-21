@@ -1,0 +1,17 @@
+3 16
+push 0 8
+push 0 3
+push 0 10
+push 1 7
+push 1 1
+top 0
+top 1
+meld 0 1
+size 0
+size 1
+preorder 0
+pop 0
+top 0
+preorder 0
+meld 0 0
+size 0

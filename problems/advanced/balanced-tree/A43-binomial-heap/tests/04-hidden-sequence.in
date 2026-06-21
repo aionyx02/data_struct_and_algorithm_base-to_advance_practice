@@ -1,0 +1,15 @@
+3 14
+push 2 9
+push 0 4
+push 1 2
+meld 0 2
+meld 0 1
+min 0
+size 0
+root_degrees 0
+extract_min 0
+min 0
+size 1
+size 2
+clear 0
+root_degrees 0

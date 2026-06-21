@@ -1,0 +1,21 @@
+2 20
+push 0 8
+push 0 7
+push 0 6
+push 0 5
+push 0 4
+push 0 3
+push 0 2
+push 0 1
+root_degrees 0
+size 0
+extract_min 0
+root_degrees 0
+min 0
+push 1 0
+push 1 9
+meld 0 1
+root_degrees 0
+size 1
+extract_min 0
+min 0

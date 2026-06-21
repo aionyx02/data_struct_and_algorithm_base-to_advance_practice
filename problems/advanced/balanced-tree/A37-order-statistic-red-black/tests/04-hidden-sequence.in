@@ -1,0 +1,17 @@
+16
+insert 0
+insert -10
+insert 20
+insert 10
+insert 30
+erase 0
+rank 20
+select 2
+predecessor -10
+successor 30
+range_count -10 10
+insert 10
+erase -10
+inorder
+size
+contains -10

@@ -1,0 +1,14 @@
+13
+root
+access 1
+kth 1
+insert -1
+insert -1
+contains -2
+root
+erase 9
+erase -1
+size
+inorder
+clear
+root

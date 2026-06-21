@@ -33,3 +33,4 @@ owner: project
 | `TASK.CURRICULUM.016` | Built the Stage A2 Segment Tree family | `docs/memory/sessions/2026-06-16-shawn.md` |
 | `TASK.CURRICULUM.017` | Build Static Range Structures | `docs/memory/sessions/2026-06-17-shawn.md` |
 | `TASK.CURRICULUM.018` | Build Union-Find Variants | `docs/memory/sessions/2026-06-21-shawn.md` |
+| `TASK.CURRICULUM.019` | Build Balanced, Randomized, And Meldable Trees | `docs/memory/sessions/2026-06-21-shawn.md` |

@@ -1,0 +1,19 @@
+18
+push_back 10
+push_back 20
+push_back 30
+push_back 40
+push_back 50
+push_back 60
+reverse 1 5
+print
+range_sum 1 5
+reverse 2 4
+print
+range_sum 2 4
+get 4
+erase 1
+insert 3 99
+print
+size
+range_sum 0 5

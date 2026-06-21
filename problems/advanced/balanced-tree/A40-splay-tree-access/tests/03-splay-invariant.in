@@ -1,0 +1,21 @@
+20
+insert 50
+insert 30
+insert 70
+insert 20
+insert 40
+insert 60
+insert 80
+access 20
+root
+access 60
+root
+access 65
+root
+kth 6
+root
+erase 60
+contains 60
+inorder
+rank 70
+size

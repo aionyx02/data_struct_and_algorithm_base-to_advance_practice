@@ -18,13 +18,12 @@ owner: project
 ## Current Focus
 
 - Active priority: build out the high-level data-structure curriculum.
-- Current phase: Stage A4 Union-Find Variants is complete. Union by rank with
-  path compression (`A29`), disjoint-set amortized cost (`A30`),
-  potential/weighted DSU (`A31`), parity DSU (`A32`), rollback DSU (`A33`),
-  persistent DSU (`A34`), and successor DSU (`A35`) are implemented. Stage A3
-  (`A21`-`A28`), Stage A2 (`A09`-`A20`), and Stage A1 (`A01`-`A08`) are
-  complete.
-- Current owner / handoff state: no active task. `TASK.CURRICULUM.018`
+- Current phase: Stage A5 Balanced/Randomized/Meldable Trees is complete.
+  Order-statistic AVL and red-black trees (`A36`-`A37`), explicit and implicit
+  Treaps (`A38`-`A39`), Splay Tree (`A40`), Leftist and Skew Heaps (`A41`-`A42`),
+  Binomial Heap (`A43`), and a duplicate-aware order-statistic tree (`A44`) are
+  implemented. Stages A1-A4 (`A01`-`A35`) are complete.
+- Current owner / handoff state: no active task. `TASK.CURRICULUM.019`
   completed with `shawn` on 2026-06-21.
 
 ## Important Constraints
@@ -36,27 +35,26 @@ owner: project
 
 ## Next Step
 
-- Select the next active task, likely Stage A5 Balanced/Randomized/Meldable
-  Trees or a backlog item.
+- Select the next active task, likely Stage A6 Tree Query Structures or a
+  backlog item.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-21.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and
   `ctest --preset dev`.
-- Result: all 538 Judge integration tests passed (~250 s; `A29`-`A35` each add
-  1 catalog, +3 Judge, +3 stress). Each of `A29`-`A35` passed all four fixed
-  tests; a 100-case differential sweep (seed 99) returned `AC` for all 7 correct
-  fixtures and `WA` for all 14 known-wrong fixtures.
-- Judge runtime self-check (2026-06-21): `algo list` enumerates 103 problems
-  (`F01`-`F68` and `A01`-`A35`);
+- Result: all 601 Judge integration tests passed (~349 s; `A36`-`A44` each add
+  1 catalog, +3 Judge, +3 stress). Each of `A36`-`A44` passed all four fixed
+  tests; a 100-case differential sweep (seed 99) returned `AC` for all 9 correct
+  fixtures and `WA` for all 18 known-wrong fixtures.
+- Judge runtime self-check (2026-06-21): `algo list` enumerates 112 problems
+  (`F01`-`F68` and `A01`-`A44`);
   correct submissions verdict `AC`, known-wrong `WA`, broken sources `CE`, null
   dereference `RE`, infinite loop `TLE`, and out-of-root sources are refused by
   the project-root boundary. Stress differential testing returns `AC`/`WA`.
 - Known-wrong fixtures across the F-series and Stage A still produce reproducible
-  non-AC verdicts. Stage A4 stress catches size-vs-rank confusion, missing path
-  compression, node-vs-edge cost off-by-one, weighted/parity compression
-  accumulation errors, merge-offset mistakes, rollback-with-compression,
-  partial-rollback, persistence base mutation, wrong fork version, and
-  successor marks-x / sentinel off-by-one mistakes.
+  non-AC verdicts. Stage A5 stress catches inclusive rank/split boundaries,
+  missing AVL/Treap/Splay rebalancing, stale deletion, implicit-Treap range-end
+  mistakes, incorrect Leftist NPL, missing Skew swaps, meld source ownership,
+  reversed Binomial root degrees, and duplicate erase/order-statistic mistakes.
 - Known failing checks: none.

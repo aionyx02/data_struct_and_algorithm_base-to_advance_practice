@@ -16,5 +16,6 @@ void registerAdvancedGenerators(CaseGeneratorRegistry& registry);
 void registerSegmentTreeGenerators(CaseGeneratorRegistry& registry);
 void registerStaticRangeGenerators(CaseGeneratorRegistry& registry);
 void registerUnionFindGenerators(CaseGeneratorRegistry& registry);
+void registerBalancedTreeGenerators(CaseGeneratorRegistry& registry);
 
 }  // namespace judge::generators

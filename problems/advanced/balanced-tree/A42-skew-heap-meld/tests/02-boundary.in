@@ -1,0 +1,12 @@
+2 11
+top 0
+pop 0
+preorder 0
+push 0 -5
+meld 1 0
+top 1
+size 0
+clear 1
+size 1
+preorder 1
+pop 1

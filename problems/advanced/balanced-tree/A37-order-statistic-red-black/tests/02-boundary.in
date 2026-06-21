@@ -1,0 +1,15 @@
+14
+min
+max
+select 1
+insert -5
+insert -5
+rank -5
+predecessor -5
+successor -5
+erase 99
+erase -5
+size
+inorder
+clear
+contains -5

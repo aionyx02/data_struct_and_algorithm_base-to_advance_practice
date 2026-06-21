@@ -1,0 +1,21 @@
+20
+insert 10
+insert 20
+insert 30
+insert 40
+insert 50
+insert 25
+height
+size
+inorder
+select 1
+select 4
+select 6
+rank 25
+rank 30
+range_count 20 45
+contains 35
+erase 30
+inorder
+height
+rank 25

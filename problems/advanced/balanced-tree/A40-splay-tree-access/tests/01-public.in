@@ -1,0 +1,19 @@
+18
+insert 10
+insert 5
+insert 15
+insert 2
+root
+access 10
+root
+access 7
+root
+contains 15
+root
+rank 10
+kth 2
+root
+erase 5
+inorder
+size
+contains 5

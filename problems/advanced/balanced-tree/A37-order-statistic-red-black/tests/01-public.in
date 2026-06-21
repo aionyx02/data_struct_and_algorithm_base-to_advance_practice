@@ -1,0 +1,19 @@
+18
+insert 10
+insert 5
+insert 15
+insert 1
+insert 7
+insert 12
+insert 18
+inorder
+rank 10
+select 4
+predecessor 5
+successor 15
+range_count 6 15
+erase 10
+inorder
+contains 10
+size
+min

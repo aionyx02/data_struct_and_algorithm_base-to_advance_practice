@@ -21,6 +21,7 @@ add_library(judge_core
     src/generators/segment_tree_generators.cpp
     src/generators/static_range_generators.cpp
     src/generators/union_find_generators.cpp
+    src/generators/balanced_tree_generators.cpp
 )
 
 target_include_directories(judge_core PRIVATE src)
@@ -216,6 +217,15 @@ add_catalog_test(catalog_lists_a32 A32-parity-dsu)
 add_catalog_test(catalog_lists_a33 A33-rollback-dsu)
 add_catalog_test(catalog_lists_a34 A34-persistent-dsu)
 add_catalog_test(catalog_lists_a35 A35-successor-dsu)
+add_catalog_test(catalog_lists_a36 A36-order-statistic-avl)
+add_catalog_test(catalog_lists_a37 A37-order-statistic-red-black)
+add_catalog_test(catalog_lists_a38 A38-treap-split-merge)
+add_catalog_test(catalog_lists_a39 A39-implicit-treap-sequence)
+add_catalog_test(catalog_lists_a40 A40-splay-tree-access)
+add_catalog_test(catalog_lists_a41 A41-leftist-heap-meld)
+add_catalog_test(catalog_lists_a42 A42-skew-heap-meld)
+add_catalog_test(catalog_lists_a43 A43-binomial-heap)
+add_catalog_test(catalog_lists_a44 A44-order-statistic-multiset)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1762,6 +1772,195 @@ add_catalog_test(catalog_lists_a35 A35-successor-dsu)
         judge_rejects_successor_dsu_off_by_one_sentinel
         A35-successor-dsu
         tests/fixtures/submissions/successor_dsu_off_by_one_sentinel.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_order_statistic_avl
+        A36-order-statistic-avl
+        tests/fixtures/submissions/order_statistic_avl_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_order_statistic_avl_rank_inclusive
+        A36-order-statistic-avl
+        tests/fixtures/submissions/order_statistic_avl_rank_inclusive.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_order_statistic_avl_no_rebalance
+        A36-order-statistic-avl
+        tests/fixtures/submissions/order_statistic_avl_no_rebalance.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_order_statistic_red_black
+        A37-order-statistic-red-black
+        tests/fixtures/submissions/order_statistic_red_black_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_order_statistic_red_black_rank_inclusive
+        A37-order-statistic-red-black
+        tests/fixtures/submissions/order_statistic_red_black_rank_inclusive.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_order_statistic_red_black_stale_erase
+        A37-order-statistic-red-black
+        tests/fixtures/submissions/order_statistic_red_black_stale_erase.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_treap_split_merge
+        A38-treap-split-merge
+        tests/fixtures/submissions/treap_split_merge_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_treap_min_priority
+        A38-treap-split-merge
+        tests/fixtures/submissions/treap_split_merge_min_priority.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_treap_inclusive_split
+        A38-treap-split-merge
+        tests/fixtures/submissions/treap_split_merge_inclusive_split.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_implicit_treap_sequence
+        A39-implicit-treap-sequence
+        tests/fixtures/submissions/implicit_treap_sequence_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_implicit_treap_reverse_exclusive
+        A39-implicit-treap-sequence
+        tests/fixtures/submissions/implicit_treap_sequence_reverse_exclusive.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_implicit_treap_sum_exclusive
+        A39-implicit-treap-sequence
+        tests/fixtures/submissions/implicit_treap_sequence_sum_exclusive.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_splay_tree_access
+        A40-splay-tree-access
+        tests/fixtures/submissions/splay_tree_access_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_splay_tree_no_splay
+        A40-splay-tree-access
+        tests/fixtures/submissions/splay_tree_access_no_splay.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_splay_tree_stale_erase
+        A40-splay-tree-access
+        tests/fixtures/submissions/splay_tree_access_stale_erase.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_leftist_heap_meld
+        A41-leftist-heap-meld
+        tests/fixtures/submissions/leftist_heap_meld_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_leftist_heap_wrong_npl
+        A41-leftist-heap-meld
+        tests/fixtures/submissions/leftist_heap_meld_wrong_npl.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_leftist_heap_discards_source
+        A41-leftist-heap-meld
+        tests/fixtures/submissions/leftist_heap_meld_discards_source.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_skew_heap_meld
+        A42-skew-heap-meld
+        tests/fixtures/submissions/skew_heap_meld_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_skew_heap_no_swap
+        A42-skew-heap-meld
+        tests/fixtures/submissions/skew_heap_meld_no_swap.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_skew_heap_aliases_source
+        A42-skew-heap-meld
+        tests/fixtures/submissions/skew_heap_meld_aliases_source.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_binomial_heap
+        A43-binomial-heap
+        tests/fixtures/submissions/binomial_heap_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_binomial_heap_reversed_degrees
+        A43-binomial-heap
+        tests/fixtures/submissions/binomial_heap_reversed_degrees.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_binomial_heap_aliases_source
+        A43-binomial-heap
+        tests/fixtures/submissions/binomial_heap_aliases_source.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_order_statistic_multiset
+        A44-order-statistic-multiset
+        tests/fixtures/submissions/order_statistic_multiset_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_order_statistic_multiset_inclusive_order
+        A44-order-statistic-multiset
+        tests/fixtures/submissions/order_statistic_multiset_inclusive_order.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_order_statistic_multiset_erase_all
+        A44-order-statistic-multiset
+        tests/fixtures/submissions/order_statistic_multiset_erase_all.cpp
         1
         "Verdict: WA"
     )
@@ -3474,6 +3673,222 @@ add_catalog_test(catalog_lists_a35 A35-successor-dsu)
         stress_rejects_successor_dsu_off_by_one_sentinel
         A35-successor-dsu
         tests/fixtures/submissions/successor_dsu_off_by_one_sentinel.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_order_statistic_avl
+        A36-order-statistic-avl
+        tests/fixtures/submissions/order_statistic_avl_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_order_statistic_avl_rank_inclusive
+        A36-order-statistic-avl
+        tests/fixtures/submissions/order_statistic_avl_rank_inclusive.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_order_statistic_avl_no_rebalance
+        A36-order-statistic-avl
+        tests/fixtures/submissions/order_statistic_avl_no_rebalance.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_order_statistic_red_black
+        A37-order-statistic-red-black
+        tests/fixtures/submissions/order_statistic_red_black_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_order_statistic_red_black_rank_inclusive
+        A37-order-statistic-red-black
+        tests/fixtures/submissions/order_statistic_red_black_rank_inclusive.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_order_statistic_red_black_stale_erase
+        A37-order-statistic-red-black
+        tests/fixtures/submissions/order_statistic_red_black_stale_erase.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_treap_split_merge
+        A38-treap-split-merge
+        tests/fixtures/submissions/treap_split_merge_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_treap_min_priority
+        A38-treap-split-merge
+        tests/fixtures/submissions/treap_split_merge_min_priority.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_treap_inclusive_split
+        A38-treap-split-merge
+        tests/fixtures/submissions/treap_split_merge_inclusive_split.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_implicit_treap_sequence
+        A39-implicit-treap-sequence
+        tests/fixtures/submissions/implicit_treap_sequence_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_implicit_treap_reverse_exclusive
+        A39-implicit-treap-sequence
+        tests/fixtures/submissions/implicit_treap_sequence_reverse_exclusive.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_implicit_treap_sum_exclusive
+        A39-implicit-treap-sequence
+        tests/fixtures/submissions/implicit_treap_sequence_sum_exclusive.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_splay_tree_access
+        A40-splay-tree-access
+        tests/fixtures/submissions/splay_tree_access_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_splay_tree_no_splay
+        A40-splay-tree-access
+        tests/fixtures/submissions/splay_tree_access_no_splay.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_splay_tree_stale_erase
+        A40-splay-tree-access
+        tests/fixtures/submissions/splay_tree_access_stale_erase.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_leftist_heap_meld
+        A41-leftist-heap-meld
+        tests/fixtures/submissions/leftist_heap_meld_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_leftist_heap_wrong_npl
+        A41-leftist-heap-meld
+        tests/fixtures/submissions/leftist_heap_meld_wrong_npl.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_leftist_heap_discards_source
+        A41-leftist-heap-meld
+        tests/fixtures/submissions/leftist_heap_meld_discards_source.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_skew_heap_meld
+        A42-skew-heap-meld
+        tests/fixtures/submissions/skew_heap_meld_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_skew_heap_no_swap
+        A42-skew-heap-meld
+        tests/fixtures/submissions/skew_heap_meld_no_swap.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_skew_heap_aliases_source
+        A42-skew-heap-meld
+        tests/fixtures/submissions/skew_heap_meld_aliases_source.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_binomial_heap
+        A43-binomial-heap
+        tests/fixtures/submissions/binomial_heap_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_binomial_heap_reversed_degrees
+        A43-binomial-heap
+        tests/fixtures/submissions/binomial_heap_reversed_degrees.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_binomial_heap_aliases_source
+        A43-binomial-heap
+        tests/fixtures/submissions/binomial_heap_aliases_source.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_order_statistic_multiset
+        A44-order-statistic-multiset
+        tests/fixtures/submissions/order_statistic_multiset_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_order_statistic_multiset_inclusive_order
+        A44-order-statistic-multiset
+        tests/fixtures/submissions/order_statistic_multiset_inclusive_order.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_order_statistic_multiset_erase_all
+        A44-order-statistic-multiset
+        tests/fixtures/submissions/order_statistic_multiset_erase_all.cpp
         1
         "Verdict: WA"
         TRUE
