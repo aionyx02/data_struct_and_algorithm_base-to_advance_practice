@@ -1,0 +1,17 @@
+16
+insert app
+insert apple
+insert app
+insert apt
+prefix_count app
+count app
+contains apple
+autocomplete ap
+erase app
+count app
+prefix_count app
+erase missing
+size
+erase app
+contains app
+autocomplete app

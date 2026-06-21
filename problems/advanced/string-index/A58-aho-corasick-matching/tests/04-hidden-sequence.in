@@ -1,0 +1,13 @@
+5 7
+ab
+bab
+bc
+bca
+c
+count abccab
+distinct abccab
+count babca
+distinct babca
+count cccc
+distinct cccc
+count z

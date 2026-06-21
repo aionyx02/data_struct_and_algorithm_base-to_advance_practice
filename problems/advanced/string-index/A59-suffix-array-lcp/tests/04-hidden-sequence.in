@@ -1,0 +1,9 @@
+abracadabra 8
+suffix_array
+lcp_array
+lcp 0 7
+lcp 3 5
+rank 3
+compare 0 2 7 9
+compare 3 5 5 7
+lcp 10 10

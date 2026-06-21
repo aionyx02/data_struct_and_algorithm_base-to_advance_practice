@@ -1,0 +1,8 @@
+{
+  "id": "A58-aho-corasick-matching", "title": "Aho-Corasick Matching", "stage": "A", "difficulty": "D4",
+  "judge_mode": "stdio", "time_limit_ms": 1500, "memory_limit_mb": 128,
+  "output_limit_bytes": 65536, "expected_time": "O(total input length log n) or better",
+  "expected_space": "O(total input length)",
+  "forbidden_symbols": ["std::map", "std::unordered_map", "std::set", "std::multiset"],
+  "random_tests": 100, "operation_limit": 120, "tests_directory": "tests"
+}

@@ -1,0 +1,11 @@
+10
+max_xor 0
+min_xor 7
+size
+insert 0
+max_xor 0
+min_xor 4294967295
+erase_one 0
+erase_one 0
+count 0
+size

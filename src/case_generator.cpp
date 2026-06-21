@@ -21,6 +21,7 @@ const CaseGeneratorRegistry& caseGenerators() {
         generators::registerUnionFindGenerators(assembled);
         generators::registerBalancedTreeGenerators(assembled);
         generators::registerTreeQueryGenerators(assembled);
+        generators::registerStringIndexGenerators(assembled);
         return assembled;
     }();
     return registry;

@@ -1,0 +1,13 @@
+12
+insert cat
+insert car
+insert cart
+insert dog
+prefix_count ca
+autocomplete car
+erase car
+contains car
+prefix_count car
+count cart
+size
+autocomplete d

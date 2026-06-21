@@ -1,0 +1,15 @@
+14
+insert he
+insert her
+insert hers
+insert he
+insert hello
+prefix_count he
+count he
+autocomplete her
+erase he
+prefix_count he
+count he
+contains hers
+size
+autocomplete x

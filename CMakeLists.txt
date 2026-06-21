@@ -23,6 +23,7 @@ add_library(judge_core
     src/generators/union_find_generators.cpp
     src/generators/balanced_tree_generators.cpp
     src/generators/tree_query_generators.cpp
+    src/generators/string_index_generators.cpp
 )
 
 target_include_directories(judge_core PRIVATE src)
@@ -237,6 +238,12 @@ add_catalog_test(catalog_lists_a51 A51-dsu-on-tree)
 add_catalog_test(catalog_lists_a52 A52-centroid-decomposition)
 add_catalog_test(catalog_lists_a53 A53-virtual-tree)
 add_catalog_test(catalog_lists_a54 A54-link-cut-tree)
+add_catalog_test(catalog_lists_a55 A55-trie-multiset)
+add_catalog_test(catalog_lists_a56 A56-radix-tree-dictionary)
+add_catalog_test(catalog_lists_a57 A57-xor-trie-multiset)
+add_catalog_test(catalog_lists_a58 A58-aho-corasick-matching)
+add_catalog_test(catalog_lists_a59 A59-suffix-array-lcp)
+add_catalog_test(catalog_lists_a60 A60-suffix-automaton-index)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -2182,6 +2189,132 @@ add_catalog_test(catalog_lists_a54 A54-link-cut-tree)
         judge_rejects_link_cut_tree_bug_two
         A54-link-cut-tree
         tests/fixtures/submissions/link_cut_tree_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_trie_multiset
+        A55-trie-multiset
+        tests/fixtures/submissions/trie_multiset_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_trie_multiset_bug_one
+        A55-trie-multiset
+        tests/fixtures/submissions/trie_multiset_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_trie_multiset_bug_two
+        A55-trie-multiset
+        tests/fixtures/submissions/trie_multiset_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_radix_tree_dictionary
+        A56-radix-tree-dictionary
+        tests/fixtures/submissions/radix_tree_dictionary_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_radix_tree_dictionary_bug_one
+        A56-radix-tree-dictionary
+        tests/fixtures/submissions/radix_tree_dictionary_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_radix_tree_dictionary_bug_two
+        A56-radix-tree-dictionary
+        tests/fixtures/submissions/radix_tree_dictionary_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_xor_trie_multiset
+        A57-xor-trie-multiset
+        tests/fixtures/submissions/xor_trie_multiset_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_xor_trie_multiset_bug_one
+        A57-xor-trie-multiset
+        tests/fixtures/submissions/xor_trie_multiset_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_xor_trie_multiset_bug_two
+        A57-xor-trie-multiset
+        tests/fixtures/submissions/xor_trie_multiset_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_aho_corasick_matching
+        A58-aho-corasick-matching
+        tests/fixtures/submissions/aho_corasick_matching_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_aho_corasick_matching_bug_one
+        A58-aho-corasick-matching
+        tests/fixtures/submissions/aho_corasick_matching_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_aho_corasick_matching_bug_two
+        A58-aho-corasick-matching
+        tests/fixtures/submissions/aho_corasick_matching_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_suffix_array_lcp
+        A59-suffix-array-lcp
+        tests/fixtures/submissions/suffix_array_lcp_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_suffix_array_lcp_bug_one
+        A59-suffix-array-lcp
+        tests/fixtures/submissions/suffix_array_lcp_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_suffix_array_lcp_bug_two
+        A59-suffix-array-lcp
+        tests/fixtures/submissions/suffix_array_lcp_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_suffix_automaton_index
+        A60-suffix-automaton-index
+        tests/fixtures/submissions/suffix_automaton_index_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_suffix_automaton_index_bug_one
+        A60-suffix-automaton-index
+        tests/fixtures/submissions/suffix_automaton_index_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_suffix_automaton_index_bug_two
+        A60-suffix-automaton-index
+        tests/fixtures/submissions/suffix_automaton_index_bug_two.cpp
         1
         "Verdict: WA"
     )
@@ -4350,6 +4483,150 @@ add_catalog_test(catalog_lists_a54 A54-link-cut-tree)
         stress_rejects_link_cut_tree_bug_two
         A54-link-cut-tree
         tests/fixtures/submissions/link_cut_tree_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_trie_multiset
+        A55-trie-multiset
+        tests/fixtures/submissions/trie_multiset_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_trie_multiset_bug_one
+        A55-trie-multiset
+        tests/fixtures/submissions/trie_multiset_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_trie_multiset_bug_two
+        A55-trie-multiset
+        tests/fixtures/submissions/trie_multiset_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_radix_tree_dictionary
+        A56-radix-tree-dictionary
+        tests/fixtures/submissions/radix_tree_dictionary_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_radix_tree_dictionary_bug_one
+        A56-radix-tree-dictionary
+        tests/fixtures/submissions/radix_tree_dictionary_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_radix_tree_dictionary_bug_two
+        A56-radix-tree-dictionary
+        tests/fixtures/submissions/radix_tree_dictionary_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_xor_trie_multiset
+        A57-xor-trie-multiset
+        tests/fixtures/submissions/xor_trie_multiset_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_xor_trie_multiset_bug_one
+        A57-xor-trie-multiset
+        tests/fixtures/submissions/xor_trie_multiset_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_xor_trie_multiset_bug_two
+        A57-xor-trie-multiset
+        tests/fixtures/submissions/xor_trie_multiset_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_aho_corasick_matching
+        A58-aho-corasick-matching
+        tests/fixtures/submissions/aho_corasick_matching_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_aho_corasick_matching_bug_one
+        A58-aho-corasick-matching
+        tests/fixtures/submissions/aho_corasick_matching_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_aho_corasick_matching_bug_two
+        A58-aho-corasick-matching
+        tests/fixtures/submissions/aho_corasick_matching_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_suffix_array_lcp
+        A59-suffix-array-lcp
+        tests/fixtures/submissions/suffix_array_lcp_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_suffix_array_lcp_bug_one
+        A59-suffix-array-lcp
+        tests/fixtures/submissions/suffix_array_lcp_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_suffix_array_lcp_bug_two
+        A59-suffix-array-lcp
+        tests/fixtures/submissions/suffix_array_lcp_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_suffix_automaton_index
+        A60-suffix-automaton-index
+        tests/fixtures/submissions/suffix_automaton_index_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_suffix_automaton_index_bug_one
+        A60-suffix-automaton-index
+        tests/fixtures/submissions/suffix_automaton_index_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_suffix_automaton_index_bug_two
+        A60-suffix-automaton-index
+        tests/fixtures/submissions/suffix_automaton_index_bug_two.cpp
         1
         "Verdict: WA"
         TRUE

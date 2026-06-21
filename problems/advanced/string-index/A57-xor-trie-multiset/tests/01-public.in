@@ -1,0 +1,16 @@
+15
+insert 5
+insert 10
+insert 5
+insert 25
+max_xor 7
+min_xor 7
+count 5
+size
+erase_one 5
+count 5
+max_xor 0
+erase_one 99
+min_xor 31
+erase_one 5
+count 5

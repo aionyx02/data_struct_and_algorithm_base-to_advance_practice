@@ -1,0 +1,15 @@
+14
+insert romane
+insert romanus
+insert romulus
+insert rubens
+insert ruber
+insert rubicon
+prefix_count rom
+longest_prefix romanusx
+longest_prefix ruby
+words
+erase romane
+contains romanus
+prefix_count ru
+size

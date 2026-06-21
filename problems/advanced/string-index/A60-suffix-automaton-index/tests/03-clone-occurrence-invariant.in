@@ -1,0 +1,16 @@
+15
+append a
+append b
+append b
+append a
+append b
+append b
+append a
+contains bba
+contains aba
+occurrences ab
+occurrences bb
+distinct_substrings
+longest_repeated
+contains babba
+occurrences a

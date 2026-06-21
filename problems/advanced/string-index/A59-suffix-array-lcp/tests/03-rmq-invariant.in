@@ -1,0 +1,10 @@
+mississippi 9
+suffix_array
+lcp_array
+lcp 1 4
+lcp 2 5
+lcp 3 6
+rank 0
+rank 10
+compare 1 4 4 7
+compare 0 3 7 10

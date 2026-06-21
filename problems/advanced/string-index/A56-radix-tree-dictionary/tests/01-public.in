@@ -1,0 +1,16 @@
+15
+insert bear
+insert bell
+insert bid
+insert bull
+insert buy
+words
+prefix_count b
+longest_prefix bearish
+longest_prefix belt
+contains bid
+insert bid
+erase bell
+prefix_count be
+size
+words
