@@ -17,7 +17,7 @@
 namespace judge {
 namespace {
 
-constexpr int kSchemaVersion = 1;
+constexpr int kSchemaVersion = 2;
 
 std::string readText(const std::filesystem::path& path) {
     std::ifstream input(path, std::ios::binary);
@@ -44,7 +44,7 @@ public:
         expect('{');
         expectKey("schema_version");
         const int version = integer();
-        if (version != kSchemaVersion) {
+        if (version != 1 && version != kSchemaVersion) {
             throw error("unsupported schema_version " + std::to_string(version));
         }
         expect(',');
@@ -52,7 +52,7 @@ public:
         expect('[');
         std::vector<ProgressRecord> records;
         if (!consume(']')) {
-            do { records.push_back(record()); } while (consume(','));
+            do { records.push_back(record(version)); } while (consume(','));
             expect(']');
         }
         expect('}');
@@ -62,7 +62,7 @@ public:
     }
 
 private:
-    ProgressRecord record() {
+    ProgressRecord record(int version) {
         ProgressRecord value;
         expect('{');
         expectKey("problem_id"); value.problemId = string(); expect(',');
@@ -74,6 +74,16 @@ private:
         else value.bestTimeMs = nonNegativeInteger();
         expect(',');
         expectKey("last_verdict"); value.lastVerdict = string();
+        if (version >= 2) {
+            expect(','); expectKey("review_streak");
+            value.reviewStreak = nonNegativeInteger();
+            expect(','); expectKey("last_attempt_day");
+            if (consumeLiteral("null")) value.lastAttemptDay.reset();
+            else value.lastAttemptDay = nonNegativeInteger();
+            expect(','); expectKey("next_review_day");
+            if (consumeLiteral("null")) value.nextReviewDay.reset();
+            else value.nextReviewDay = nonNegativeInteger();
+        }
         expect('}');
         if (value.problemId.empty()) throw error("problem_id cannot be empty");
         if (value.acceptedAttempts > value.attempts) {
@@ -159,7 +169,7 @@ private:
 
 std::string serialize(const std::vector<ProgressRecord>& records) {
     std::ostringstream output;
-    output << "{\n  \"schema_version\": 1,\n  \"records\": [";
+    output << "{\n  \"schema_version\": 2,\n  \"records\": [";
     for (std::size_t index = 0; index < records.size(); ++index) {
         const ProgressRecord& record = records[index];
         output << (index == 0 ? "\n" : ",\n")
@@ -169,7 +179,15 @@ std::string serialize(const std::vector<ProgressRecord>& records) {
                << ", \"best_time_ms\": ";
         if (record.bestTimeMs.has_value()) output << *record.bestTimeMs;
         else output << "null";
-        output << ", \"last_verdict\": \"" << escapeJson(record.lastVerdict) << "\"}";
+        output << ", \"last_verdict\": \"" << escapeJson(record.lastVerdict)
+               << "\", \"review_streak\": " << record.reviewStreak
+               << ", \"last_attempt_day\": ";
+        if (record.lastAttemptDay.has_value()) output << *record.lastAttemptDay;
+        else output << "null";
+        output << ", \"next_review_day\": ";
+        if (record.nextReviewDay.has_value()) output << *record.nextReviewDay;
+        else output << "null";
+        output << '}';
     }
     output << (records.empty() ? "" : "\n") << "  ]\n}\n";
     return output.str();
@@ -215,7 +233,8 @@ std::vector<ProgressRecord> ProgressRepository::load() const {
 void ProgressRepository::recordAttempt(
     const std::string& problemId,
     Verdict verdict,
-    std::chrono::milliseconds elapsed
+    std::chrono::milliseconds elapsed,
+    std::chrono::sys_days attemptDay
 ) const {
     std::vector<ProgressRecord> records = load();
     auto position = std::lower_bound(records.begin(), records.end(), problemId,
@@ -229,16 +248,26 @@ void ProgressRepository::recordAttempt(
             .acceptedAttempts = 0,
             .bestTimeMs = std::nullopt,
             .lastVerdict = {},
+            .reviewStreak = 0,
+            .lastAttemptDay = std::nullopt,
+            .nextReviewDay = std::nullopt,
         });
     }
     ++position->attempts;
     position->lastVerdict = toString(verdict);
+    const int epochDay = static_cast<int>(attemptDay.time_since_epoch().count());
+    position->lastAttemptDay = epochDay;
     if (verdict == Verdict::kAccepted) {
         ++position->acceptedAttempts;
         const long long milliseconds = elapsed.count();
         if (!position->bestTimeMs.has_value() || milliseconds < *position->bestTimeMs) {
             position->bestTimeMs = milliseconds;
         }
+        ++position->reviewStreak;
+        position->nextReviewDay = epochDay + (position->reviewStreak == 1 ? 7 : 30);
+    } else {
+        position->reviewStreak = 0;
+        position->nextReviewDay = epochDay + 1;
     }
     save(records);
 }

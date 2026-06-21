@@ -2,7 +2,7 @@
 type: task_index
 status: backlog
 priority: p2
-updated: 2026-06-13
+updated: 2026-06-21
 context_policy: on_demand
 owner: project
 ---
@@ -21,7 +21,7 @@ owner: project
 
 - [x] Implement the 68 foundational data-structure problems.
 - [x] Implement the 64 advanced data-structure problems.
-- [ ] Add 7-day and 30-day spaced review scheduling.
+- [x] Add 7-day and 30-day spaced review scheduling.
 - [ ] Add operation-count instrumentation for complexity evidence.
 
 ## Future Web Phase

@@ -3,9 +3,11 @@
 #include <chrono>
 #include <cstdint>
 #include <filesystem>
+#include <iomanip>
 #include <iostream>
 #include <optional>
 #include <random>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -183,6 +185,7 @@ void printUsage() {
         << "  algo test <problem-id> <source.cpp> [--no-progress]"
            " [--root <project-root>]\n"
         << "  algo progress [problem-id] [--root <project-root>]\n"
+        << "  algo review [--root <project-root>]\n"
         << "  algo stress <problem-id> <source.cpp> [--seed <uint64>]"
            " [--cases <count>] [--root <project-root>]\n";
 }
@@ -203,7 +206,32 @@ void printProgress(const judge::ProgressRecord& record) {
     else std::cout << '-';
     std::cout << " | last "
               << (record.lastVerdict.empty() ? "-" : record.lastVerdict)
-              << '\n';
+              << " | review ";
+    if (record.nextReviewDay.has_value()) {
+        const std::chrono::year_month_day date{
+            std::chrono::sys_days{std::chrono::days{*record.nextReviewDay}}
+        };
+        std::cout << static_cast<int>(date.year()) << '-'
+                  << std::setfill('0') << std::setw(2)
+                  << static_cast<unsigned>(date.month()) << '-'
+                  << std::setw(2) << static_cast<unsigned>(date.day())
+                  << std::setfill(' ') << " (streak " << record.reviewStreak << ')';
+    } else {
+        std::cout << '-';
+    }
+    std::cout << '\n';
+}
+
+std::string formatEpochDay(int epochDay) {
+    const std::chrono::year_month_day date{
+        std::chrono::sys_days{std::chrono::days{epochDay}}
+    };
+    std::ostringstream output;
+    output << static_cast<int>(date.year()) << '-'
+           << std::setfill('0') << std::setw(2)
+           << static_cast<unsigned>(date.month()) << '-'
+           << std::setw(2) << static_cast<unsigned>(date.day());
+    return output.str();
 }
 
 int runCommand(const ParsedArguments& arguments) {
@@ -271,6 +299,43 @@ int runCommand(const ParsedArguments& arguments) {
             std::cout << "No progress recorded.\n";
         } else {
             for (const judge::ProgressRecord& record : records) printProgress(record);
+        }
+        return 0;
+    }
+
+    if (command == "review") {
+        rejectStressOptions(arguments);
+        rejectNoProgressOption(arguments);
+        if (arguments.positional.size() != 1) {
+            throw std::runtime_error("review does not accept positional arguments");
+        }
+        const auto today = std::chrono::floor<std::chrono::days>(
+            std::chrono::system_clock::now()
+        );
+        const int todayEpochDay = static_cast<int>(today.time_since_epoch().count());
+        const std::vector<judge::ProgressRecord> records =
+            judge::ProgressRepository(arguments.projectRoot).load();
+        std::vector<const judge::ProgressRecord*> due;
+        for (const judge::ProgressRecord& record : records) {
+            if (record.nextReviewDay.has_value() &&
+                *record.nextReviewDay <= todayEpochDay) {
+                due.push_back(&record);
+            }
+        }
+        std::sort(due.begin(), due.end(), [](const auto* left, const auto* right) {
+            if (left->nextReviewDay != right->nextReviewDay) {
+                return left->nextReviewDay < right->nextReviewDay;
+            }
+            return left->problemId < right->problemId;
+        });
+        if (due.empty()) {
+            std::cout << "No reviews due.\n";
+        } else {
+            for (const judge::ProgressRecord* record : due) {
+                std::cout << record->problemId
+                          << " | due " << formatEpochDay(*record->nextReviewDay)
+                          << " | streak " << record->reviewStreak << '\n';
+            }
         }
         return 0;
     }

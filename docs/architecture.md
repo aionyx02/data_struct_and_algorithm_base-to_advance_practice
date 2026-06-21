@@ -2,7 +2,7 @@
 type: architecture_spec
 status: active
 priority: p1
-updated: 2026-06-14
+updated: 2026-06-21
 context_policy: retrieve_only
 owner: project
 ---
@@ -108,8 +108,9 @@ scripts/                Repository tooling (practice CLI, docs/team guards)
   seed, asks the registry to generate cases into a temporary directory under
   `.judge/stress/`, reuses `JudgeService` to judge them, cleans the directory via
   RAII, and on failure reports the failing case seed plus a replay command.
-- **ProgressRepository** (`progress.cpp`) strictly reads schema-1 local JSON and
-  atomically replaces `.judge/progress.json` after a completed `test` command.
+- **ProgressRepository** (`progress.cpp`) reads schema-1/2 local JSON, applies
+  the 1/7/30-day review policy, and atomically replaces
+  `.judge/progress.json` after a completed `test` command.
 
 ## Runtime Flows
 
@@ -121,8 +122,10 @@ scripts/                Repository tooling (practice CLI, docs/team guards)
   `n` differential cases (defaulting to the package's `random_tests`) → judge the
   generated directory → on failure print the case seed and a reproducible replay.
 - `algo progress [id]`: read saved attempt counts, accepted counts, best AC
-  time, and latest verdict. Automated `test` calls may opt out with
+  time, latest verdict, and next review date. Automated `test` calls may opt out with
   `--no-progress`; stress never records learner progress.
+- `algo review`: filter schema-2 progress records to reviews due on or before
+  the current UTC day, ordered by due date and problem ID.
 
 ## Verdict Vocabulary
 
@@ -178,7 +181,6 @@ contract is already in use.
 
 ## Not Yet Built (Planned)
 
-- Spaced repetition and review scheduling on top of the progress repository.
 - Web dashboard and practice UI, after the CLI is stable on enough problems.
 - Memory-limit enforcement adapter and the `INV`/`CX` structural and complexity
   checks described in `docs/judge-requirements.md`.
@@ -186,5 +188,4 @@ contract is already in use.
 ## Open Questions
 
 - Which Windows mechanism reliably enforces memory limits for MinGW binaries?
-- Should the first progress store be one JSON file or one record per problem?
 - Which minimal HTTP adapter fits the Web phase?

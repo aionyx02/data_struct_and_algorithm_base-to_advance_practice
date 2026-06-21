@@ -16,6 +16,9 @@ struct ProgressRecord {
     int acceptedAttempts = 0;
     std::optional<long long> bestTimeMs;
     std::string lastVerdict;
+    int reviewStreak = 0;
+    std::optional<int> lastAttemptDay;
+    std::optional<int> nextReviewDay;
 };
 
 class ProgressRepository {
@@ -26,7 +29,9 @@ public:
     void recordAttempt(
         const std::string& problemId,
         Verdict verdict,
-        std::chrono::milliseconds elapsed
+        std::chrono::milliseconds elapsed,
+        std::chrono::sys_days attemptDay =
+            std::chrono::floor<std::chrono::days>(std::chrono::system_clock::now())
     ) const;
     [[nodiscard]] const std::filesystem::path& filePath() const;
 

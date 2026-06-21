@@ -26,7 +26,8 @@ Commands:
                                 Run deterministic Judge tests
   stress <problem-id> [source.cpp] [--seed N] [--cases N]
                                 Run seeded differential tests
-  progress [problem-id]           Show saved local Judge progress
+  progress [problem-id]         Show saved local Judge progress
+  review                        List problems due for review
   check [test-regex]            Build and run C++ integration tests
   verify                        Run C++ tests and documentation checks
 
@@ -149,6 +150,10 @@ try {
     if (args.length > 1) throw new Error('progress accepts at most one problem ID');
     ensureJudge();
     process.exit(run(JUDGE, ['progress', ...args]));
+  } else if (command === 'review') {
+    if (args.length !== 0) throw new Error('review does not accept arguments');
+    ensureJudge();
+    process.exit(run(JUDGE, ['review']));
   } else if (command === 'test' || command === 'stress') {
     ensureJudge();
     const parsed = parseSolutionArguments(command, args);
