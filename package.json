@@ -13,6 +13,7 @@
     "stress": "node scripts/practice.mjs stress",
     "progress": "node scripts/practice.mjs progress",
     "review": "node scripts/practice.mjs review",
+    "web": "node scripts/web-server.mjs",
     "check": "node scripts/practice.mjs check",
     "verify": "node scripts/practice.mjs verify",
     "lint": "node scripts/repo-lint.mjs",

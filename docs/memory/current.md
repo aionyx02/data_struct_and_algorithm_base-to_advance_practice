@@ -18,11 +18,11 @@ owner: project
 ## Current Focus
 
 - Active priority: build the product layer on the completed 132-problem catalog.
-- Current phase: local progress and spaced review scheduling are complete.
-  Schema 2 applies the 1/7/30-day policy, `algo progress [problem-id]` shows
-  the next review, and `algo review` lists due problems.
-- Current owner / handoff state: no active task. `TASK.REVIEW.001` completed
-  with `shawn` on 2026-06-21.
+- Current phase: the read-only Web workspace is complete. `npm run web` serves
+  the 132-problem catalog, statements, progress, review state, and browser-local
+  drafts through a loopback-only native Web UI.
+- Current owner / handoff state: no active task. `TASK.WEB.001` completed with
+  `shawn` on 2026-06-21.
 
 ## Important Constraints
 
@@ -33,7 +33,7 @@ owner: project
 
 ## Next Step
 
-- Select the next product slice: assessment mode or the Web stack ADR.
+- Select the next product slice: assessment mode or browser-triggered submission.
 
 ## Last Validation Snapshot
 
@@ -49,4 +49,7 @@ owner: project
 - Progress schema 2 reads schema 1, migrates on write, and rejects malformed
   JSON, unknown fields, duplicate IDs, invalid counts, and unsupported versions.
   Writes remain atomic; no source code or diagnostics are persisted.
+- Web validation: 15/15 Node tests passed; localhost browser checks covered the
+  real catalog, search, navigation, review filtering, desktop panes, mobile
+  drawers, accessible labels, and a clean console.
 - Known failing checks: none.

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="StructLab 本機資料結構練習工作區">
+  <title>StructLab · Data Structure Practice</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#problem-statement">跳到題目內容</a>
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="icon-button sidebar-toggle" id="sidebar-toggle" type="button" aria-label="開啟題目列表" aria-expanded="false">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <a class="brand" href="/" aria-label="StructLab 首頁">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>Struct<span>Lab</span></span>
+      </a>
+      <span class="topbar-divider" aria-hidden="true"></span>
+      <nav class="primary-nav" aria-label="主要導覽">
+        <button class="nav-item is-active" type="button" data-track="all">題庫</button>
+        <button class="nav-item" type="button" data-track="foundation">基礎</button>
+        <button class="nav-item" type="button" data-track="advanced">進階</button>
+        <button class="nav-item" type="button" data-track="review">今日複習</button>
+      </nav>
+    </div>
+    <div class="topbar-actions">
+      <div class="local-status" title="資料只在你的電腦上讀取">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>Local workspace</span>
+      </div>
+      <button class="avatar" type="button" aria-label="本機使用者">S</button>
+    </div>
+  </header>
+
+  <main class="workspace" id="app">
+    <aside class="problem-sidebar" id="problem-sidebar" aria-label="題目列表">
+      <div class="sidebar-heading">
+        <div>
+          <p class="eyebrow">CURRICULUM</p>
+          <h1>資料結構題庫</h1>
+        </div>
+        <span class="problem-total" id="problem-total">—</span>
+      </div>
+
+      <label class="search-field" for="problem-search">
+        <span aria-hidden="true">⌕</span>
+        <input id="problem-search" type="search" autocomplete="off" placeholder="搜尋 ID、題目或章節" aria-label="搜尋題目">
+        <kbd>/</kbd>
+      </label>
+
+      <div class="difficulty-filter" role="group" aria-label="難度篩選">
+        <button class="filter-chip is-active" type="button" data-difficulty="all">全部</button>
+        <button class="filter-chip" type="button" data-difficulty="D1">D1</button>
+        <button class="filter-chip" type="button" data-difficulty="D2">D2</button>
+        <button class="filter-chip" type="button" data-difficulty="D3">D3</button>
+        <button class="filter-chip" type="button" data-difficulty="D4">D4+</button>
+      </div>
+
+      <div class="list-labels" aria-hidden="true">
+        <span>STATUS / PROBLEM</span>
+        <span>LEVEL</span>
+      </div>
+      <div class="problem-list" id="problem-list" aria-live="polite"></div>
+      <div class="sidebar-footer">
+        <span><i class="legend-dot solved"></i>已通過</span>
+        <span><i class="legend-dot due"></i>待複習</span>
+      </div>
+    </aside>
+
+    <section class="problem-panel" aria-labelledby="problem-title">
+      <div class="panel-toolbar statement-toolbar">
+        <div class="breadcrumbs" id="breadcrumbs">題庫 / 載入中</div>
+        <div class="toolbar-actions">
+          <button class="toolbar-button" id="copy-link" type="button" title="複製題目連結" aria-label="複製題目連結">↗ <span>分享</span></button>
+          <button class="toolbar-button editor-toggle" id="editor-toggle" type="button" aria-label="開啟解題草稿">⌘ <span>草稿</span></button>
+        </div>
+      </div>
+
+      <div class="statement-scroll">
+        <div class="problem-heading">
+          <div class="problem-index" id="problem-index">—</div>
+          <div>
+            <h2 id="problem-title">正在載入題庫…</h2>
+            <div class="metadata-row" id="metadata-row"></div>
+          </div>
+        </div>
+
+        <div class="statement-tabs" role="tablist" aria-label="題目資訊">
+          <button class="statement-tab is-active" type="button" role="tab" aria-selected="true">題目描述</button>
+          <button class="statement-tab" type="button" role="tab" aria-selected="false" disabled>提交紀錄 <span>即將推出</span></button>
+        </div>
+
+        <article class="problem-statement" id="problem-statement" tabindex="-1">
+          <div class="skeleton-line wide"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line short"></div>
+        </article>
+      </div>
+    </section>
+
+    <aside class="practice-panel" id="practice-panel" aria-label="解題草稿與進度">
+      <div class="panel-toolbar editor-toolbar">
+        <div class="file-tab"><span class="cpp-icon">C++</span><strong>solution.cpp</strong><span class="unsaved-dot" aria-label="草稿儲存在瀏覽器"></span></div>
+        <div class="editor-actions">
+          <span class="language-badge">C++20</span>
+          <button class="icon-button close-editor" id="close-editor" type="button" aria-label="關閉草稿">×</button>
+        </div>
+      </div>
+
+      <div class="editor-shell">
+        <div class="line-number-rail" aria-hidden="true">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15</div>
+        <textarea id="draft-editor" spellcheck="false" aria-label="本機解題草稿" autocomplete="off"></textarea>
+      </div>
+
+      <section class="progress-card" aria-labelledby="progress-title">
+        <div class="card-heading">
+          <div>
+            <p class="eyebrow">PRACTICE SIGNALS</p>
+            <h3 id="progress-title">你的練習狀態</h3>
+          </div>
+          <span class="verdict-pill neutral" id="verdict-pill">尚未作答</span>
+        </div>
+        <div class="metric-grid">
+          <div><span>嘗試</span><strong id="attempt-count">0</strong></div>
+          <div><span>通過</span><strong id="accepted-count">0</strong></div>
+          <div><span>最佳時間</span><strong id="best-time">—</strong></div>
+        </div>
+        <div class="review-row">
+          <span class="review-icon" aria-hidden="true">↻</span>
+          <div><span>下次複習</span><strong id="review-date">尚未排程</strong></div>
+        </div>
+      </section>
+
+      <div class="command-bar">
+        <div>
+          <span class="command-label">LOCAL JUDGE</span>
+          <code id="judge-command">npm run judge -- …</code>
+        </div>
+        <button class="run-button" id="copy-command" type="button"><span aria-hidden="true">▸</span> 複製指令</button>
+      </div>
+    </aside>
+  </main>
+
+  <div class="mobile-scrim" id="mobile-scrim"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

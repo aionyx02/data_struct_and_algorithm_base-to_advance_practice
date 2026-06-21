@@ -17,3 +17,4 @@ owner: project
 | `0001` | accepted | ADR-0001: Local Judge Core And Interface Boundary |
 | `0002` | accepted | ADR-0002: Local Progress Persistence |
 | `0003` | accepted | ADR-0003: Spaced Review Scheduling |
+| `0004` | accepted | ADR-0004: Local Read-Only Web Adapter |

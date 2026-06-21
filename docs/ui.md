@@ -2,7 +2,7 @@
 type: ui_spec
 status: active
 priority: p1
-updated: 2026-06-13
+updated: 2026-06-21
 context_policy: retrieve_when_planning
 owner: project
 ---
@@ -11,8 +11,9 @@ owner: project
 
 ## Status
 
-The UI is deferred until the CLI Judge supports at least 25 stable problems. This document records
-boundaries so early backend work does not assume a specific frontend.
+The first read-only UI is active after the CLI reached 132 stable problems.
+ADR-0004 selects a dependency-free local Node.js adapter with native HTML, CSS,
+and ES modules. Submission and result history remain planned.
 
 ## UI Goals
 
@@ -25,10 +26,10 @@ boundaries so early backend work does not assume a specific frontend.
 
 | Page / Area | Responsibility | Notes |
 |---|---|---|
-| Problem catalog | Filter by stage, topic, difficulty, and review state | Read-only first |
-| Problem workspace | Show statement, limits, starter code, and submission controls | Local-only |
+| Problem catalog | Filter by stage, topic, difficulty, and review state | Implemented read-only |
+| Problem workspace | Show statement, limits, browser-local draft, and CLI command | Implemented read-only |
 | Result report | Present verdict, failed layer, timing, operations, and seed | Data comes from Judge API |
-| Progress dashboard | Show completion, weak topics, and scheduled reviews | No social features initially |
+| Progress dashboard | Show per-problem attempts, verdict, best time, and scheduled review | Initial signals implemented |
 | Assessment view | Run a 90/120-minute data-structure assessment | Not a full ICPC scoreboard |
 
 ## Component Boundary Rules
@@ -49,5 +50,6 @@ boundaries so early backend work does not assume a specific frontend.
 
 ## Decision Triggers
 
-Create an ADR before selecting the Web framework, editor, styling system, state library, HTTP transport,
-or local service exposure model.
+ADR-0004 covers the initial no-framework editor, styling, HTTP transport, and
+loopback exposure model. Create another ADR before adding a framework, remote
+exposure, repository writes, or a browser-triggered Judge process.

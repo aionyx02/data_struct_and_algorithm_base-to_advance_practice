@@ -26,8 +26,8 @@ owner: project
 
 ## Future Web Phase
 
-- [ ] Select a Web stack through an ADR when CLI coverage reaches 25 stable problems.
-- [ ] Build read-only problem and progress views first.
+- [x] Select a Web stack through an ADR when CLI coverage reaches 25 stable problems.
+- [x] Build read-only problem and progress views first.
 - [ ] Add local editing and submission only after the Judge API boundary is stable.
 
 ## Parking Lot

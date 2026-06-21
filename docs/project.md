@@ -2,7 +2,7 @@
 type: project_overview
 status: active
 priority: p1
-updated: 2026-06-16
+updated: 2026-06-21
 context_policy: always_retrievable
 owner: project
 ---
@@ -42,8 +42,9 @@ implementing, testing, and reviewing data structures.
 - Compiler: MinGW g++ on Windows; portable C++ is preferred.
 - IDE: CLion.
 - Context tooling: Node.js scripts from the context-engineering template.
-- Storage: repository files; JSON is planned for problem metadata and local progress.
-- Future UI: undecided Web stack behind a Judge API boundary.
+- Storage: repository files with versioned problem and local progress JSON.
+- Initial UI: native HTML/CSS/ES modules behind a loopback-only Node.js
+  read adapter; submission remains on the shared Judge boundary.
 
 ## Platform Targets
 
@@ -64,4 +65,4 @@ implementing, testing, and reviewing data structures.
 - Finish context-engineering initialization before application code.
 - Implement one CLI Judge vertical slice before creating the full problem catalog.
 - Keep the curriculum limited to data structures until the user explicitly expands scope.
-- Add the Web dashboard only after the CLI Judge is stable on at least 25 problems.
+- Evolve the read-only Web workspace without duplicating Judge behavior.

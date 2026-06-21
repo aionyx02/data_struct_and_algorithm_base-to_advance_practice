@@ -2,7 +2,7 @@
 type: dependency_policy
 status: active
 priority: p1
-updated: 2026-06-13
+updated: 2026-06-21
 context_policy: retrieve_when_planning
 owner: project
 ---
@@ -31,7 +31,7 @@ owner: project
 | Dependency | Reason | Status |
 |---|---|---|
 | GoogleTest | Defer until the C++ testing shape is known | deferred |
-| Web framework | Web phase has not started | deferred |
+| Web framework | Native modules cover the first read-only slice; revisit when component complexity justifies it | deferred |
 | Database | Local JSON storage is sufficient for the initial scope | deferred |
 | Container sandbox | Local single-user Judge does not yet justify the operational cost | deferred |
 

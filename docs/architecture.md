@@ -11,12 +11,12 @@ owner: project
 
 ## System Overview
 
-The local Judge is the single source of truth for verdicts. The `algo` CLI is the
-only interface today; a future Web adapter must call the same application
-services and must not implement separate judging behavior.
+The local Judge is the single source of truth for verdicts. The `algo` CLI owns
+submission flows; the first Web adapter is read-only and must not implement
+separate judging behavior.
 
 ```text
-algo CLI (src/main.cpp)            Web adapter (later)
+algo CLI (src/main.cpp)       Local Web read adapter (Node.js)
         \                                /
          v                              v
         Application services
@@ -75,6 +75,7 @@ scripts/                Repository tooling (practice CLI, docs/team guards)
 | Layer | Responsibility | Concrete code | Must not own |
 |---|---|---|---|
 | Interface | Parse args, dispatch `list`/`show`/`test`/`stress`, format output, set exit code | `src/main.cpp` | Judge rules |
+| Web read adapter | Serve allowlisted assets and map catalog/progress files to view models | `scripts/web-server.mjs`, `web/**` | Judge rules, repository mutation |
 | Application | Orchestrate the test and stress use cases | `JudgeService`, `StressService` | OS-specific process details |
 | Progress | Persist local attempt summaries behind a reusable contract | `ProgressRepository` | Judge rules, source code, UI policy |
 | Domain | Verdicts, metadata contract, generator contract, discovery rules | `judge_service.hpp`, `problem.hpp`, `case_generator.hpp`, `catalog.cpp` | CLI, Web, raw OS APIs |
@@ -111,6 +112,9 @@ scripts/                Repository tooling (practice CLI, docs/team guards)
 - **ProgressRepository** (`progress.cpp`) reads schema-1/2 local JSON, applies
   the 1/7/30-day review policy, and atomically replaces
   `.judge/progress.json` after a completed `test` command.
+- **Local Web adapter** (`scripts/web-server.mjs`) binds to `127.0.0.1`, caches
+  catalog metadata, rereads progress per request, and serves only the explicit
+  `index.html`, `styles.css`, and `app.js` asset allowlist.
 
 ## Runtime Flows
 
@@ -126,6 +130,8 @@ scripts/                Repository tooling (practice CLI, docs/team guards)
   `--no-progress`; stress never records learner progress.
 - `algo review`: filter schema-2 progress records to reviews due on or before
   the current UTC day, ordered by due date and problem ID.
+- `npm run web`: serve read-only `/api/problems`, problem detail, and due-review
+  views plus the native split-pane workspace at `127.0.0.1:4173`.
 
 ## Verdict Vocabulary
 
@@ -144,7 +150,8 @@ internal errors.
 - Infrastructure (`ProcessRunner`, `ProblemCatalog`) implements domain-facing
   behavior; domain code does not depend on CLI, Web, CMake, or OS APIs.
 - Problem packages and generators depend only on the stable contracts below.
-- A future Web adapter must invoke the same `JudgeService` / `StressService`.
+- A future write-enabled Web adapter must invoke the same `JudgeService` /
+  `StressService`; the current adapter exposes no execution route.
 
 ## Runtime Safety Boundary
 
@@ -162,7 +169,8 @@ internal errors.
 - Problem metadata schema (`problem.json` fields read by `catalog.cpp`).
 - Case generator contract (`GeneratedCase`, `CaseGenerator`).
 - Verdict and report shapes (`Verdict`, `TestResult`, `JudgeReport`, `StressReport`).
-- Progress schema version 1 and `ProgressRepository` record semantics.
+- Progress schema version 2 and `ProgressRepository` record semantics.
+- Read-only Web endpoint and view-model shapes from ADR-0004.
 - CLI command surface and exit-code behavior.
 
 Breaking changes to these require tests, migration notes, and an ADR when the
@@ -176,16 +184,15 @@ contract is already in use.
   registrar, add reference fixtures, and wire CTest entries in `CMakeLists.txt`.
 - **Add a judge mode** (`function`, `adt`): extend `catalog.cpp` validation and
   `JudgeService`; keep the `ProcessRunner` boundary unchanged.
-- **Add the Web layer**: place an HTTP adapter in front of the existing
-  application services without duplicating judging logic.
+- **Add Web submission**: place a narrow write adapter in front of the existing
+  application services without duplicating judging logic or accepting remote clients.
 
 ## Not Yet Built (Planned)
 
-- Web dashboard and practice UI, after the CLI is stable on enough problems.
+- Browser-triggered submission, result evidence, and assessment views.
 - Memory-limit enforcement adapter and the `INV`/`CX` structural and complexity
   checks described in `docs/judge-requirements.md`.
 
 ## Open Questions
 
 - Which Windows mechanism reliably enforces memory limits for MinGW binaries?
-- Which minimal HTTP adapter fits the Web phase?

@@ -2,7 +2,7 @@
 type: design_system
 status: active
 priority: p1
-updated: 2026-06-13
+updated: 2026-06-21
 context_policy: retrieve_when_planning
 owner: project
 ---
@@ -11,8 +11,9 @@ owner: project
 
 ## Status
 
-The Web phase has not started. These values are provisional constraints, not a commitment to a
-framework or component library.
+The first Web workspace implements these tokens with native CSS. The direction
+is intentionally compact and IDE-like, with an original split-pane composition
+inspired by programming practice workspaces rather than a branded clone.
 
 ## Visual Direction
 
@@ -24,10 +25,11 @@ framework or component library.
 
 | Token | Value |
 |---|---|
-| Page max width | 1440 px |
-| Section spacing | 24 px |
-| Card radius | 8 px |
-| Input height | 40 px |
+| Desktop layout | 260-300 px rail, flexible statement, 330-390 px draft |
+| Top bar | 54 px |
+| Section spacing | 14-30 px according to density |
+| Card radius | 7-8 px |
+| Accent | Amber on charcoal; green for accepted state |
 
 ## Typography
 
