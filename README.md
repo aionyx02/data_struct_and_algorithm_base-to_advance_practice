@@ -4,7 +4,8 @@
 
 目前範圍只包含資料結構。題目主要依據 `資料結構/` 內的課程教材，再延伸到高等資料結構。
 專案內建本地 CLI Judge，可驗證固定測資、執行可重播的隨機差分測試，並檢查時間限制、
-輸出限制與禁止使用的 API。固定測資結果會原子寫入本機進度檔。
+輸出限制與禁止使用的 API。固定測資結果會原子寫入本機進度檔，並可透過本機 Web
+工作區瀏覽完整題庫、題目內容、進度與複習排程。
 
 ## 環境需求
 
@@ -49,9 +50,44 @@ npm run web
 ```
 
 `judge` 與 `stress` 第一次執行時，若找不到 Judge 執行檔，會自動執行 CMake 建置。
-`web` 會在 [http://127.0.0.1:4173](http://127.0.0.1:4173) 啟動唯讀的本機練習
-工作區，顯示完整題庫、題目敘述、Judge 進度與今日複習。編輯器草稿只存於瀏覽器，
-目前執行判題仍使用畫面提供的 CLI 指令。
+
+## Web 練習工作區
+
+啟動本機 Web server：
+
+```powershell
+npm run web
+```
+
+接著開啟 [http://127.0.0.1:4173](http://127.0.0.1:4173)。如需改用其他連接埠：
+
+```powershell
+npm run web -- --port 4300
+```
+
+目前的 Web 工作區提供：
+
+- 132 題完整題庫，以及 Foundation、Advanced、難度與文字篩選。
+- Markdown 題目敘述、時間／記憶體限制與預期複雜度。
+- 本機嘗試次數、最近 verdict、最佳時間與到期複習狀態。
+- 每題獨立的 C++20 瀏覽器草稿，儲存在 `localStorage`，不會改寫 repository。
+- Desktop 三欄工作區，以及適合窄螢幕的題庫與草稿 drawers。
+
+Web server 只綁定 `127.0.0.1`，而且目前是唯讀介面：不提供 HTTP 提交、不啟動
+learner process，也不改寫題目或進度。完成解答後，使用介面右下角提供的
+`npm run judge -- <problem-id>` 指令執行本地 Judge。
+
+### 唯讀 API
+
+| Route | 內容 |
+|---|---|
+| `GET /api/health` | server 狀態與題目數量 |
+| `GET /api/problems` | 題目摘要與本機進度 |
+| `GET /api/problems/<problem-id>` | metadata、Markdown statement 與本機進度 |
+| `GET /api/reviews` | 今天以前已到期的複習題目 |
+
+所有其他靜態路徑與非 `GET` 方法都會拒絕。Web 邊界與後續擴充原則記錄於
+[`docs/adr/0004-local-read-only-web-adapter.md`](docs/adr/0004-local-read-only-web-adapter.md)。
 
 ## 解答放置與執行位置
 
