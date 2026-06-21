@@ -4,7 +4,7 @@
 
 目前範圍只包含資料結構。題目主要依據 `資料結構/` 內的課程教材，再延伸到高等資料結構。
 專案內建本地 CLI Judge，可驗證固定測資、執行可重播的隨機差分測試，並檢查時間限制、
-輸出限制與禁止使用的 API。
+輸出限制與禁止使用的 API。固定測資結果會原子寫入本機進度檔。
 
 ## 環境需求
 
@@ -43,6 +43,7 @@ solutions/F03-stack-array.cpp
 ```powershell
 npm run judge -- F03-stack-array
 npm run stress -- F03-stack-array
+npm run progress -- F03-stack-array
 ```
 
 `judge` 與 `stress` 第一次執行時，若找不到 Judge 執行檔，會自動執行 CMake 建置。
@@ -93,6 +94,7 @@ npm run stress -- A09-segment-tree-recursive-sum .\my-solutions\a09.cpp
 | `npm run new:solution -- F03-stack-array` | 建立 `solutions/F03-stack-array.cpp` |
 | `npm run judge -- F03-stack-array` | 對預設 solution 執行固定測資 |
 | `npm run stress -- F03-stack-array` | 對預設 solution 執行隨機差分測試 |
+| `npm run progress -- F03-stack-array` | 顯示指定題目的本機嘗試、AC 與最佳時間 |
 | `npm run check` | 建置並執行全部 C++ integration tests |
 | `npm run verify` | 執行 C++、文件、lint 與 Node.js 完整驗證 |
 
@@ -128,6 +130,10 @@ npm run practice -- help
 
 `stress` 預設依題目 metadata 執行 100 cases，每個 case 100 次操作。失敗時會顯示
 master seed、case seed、重播指令與完整 failing input，因此可以重現同一個錯誤。
+
+`judge` 會將每次 verdict 記錄在忽略版控的 `.judge/progress.json`。寫入採同目錄
+暫存檔與原子替換，避免中斷時截斷唯一紀錄。自動化可對 `algo test` 加
+`--no-progress`；`stress` 不會改寫學習進度。
 
 ## 專案結構
 

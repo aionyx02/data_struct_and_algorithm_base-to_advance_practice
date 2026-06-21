@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <charconv>
 #include <chrono>
 #include <cstdint>
@@ -12,6 +13,7 @@
 
 #include "judge/catalog.hpp"
 #include "judge/judge_service.hpp"
+#include "judge/progress.hpp"
 #include "judge/stress_service.hpp"
 
 #ifdef _WIN32
@@ -45,6 +47,7 @@ struct ParsedArguments {
         pathFromUtf8(DATA_STRUCTURES_PROJECT_ROOT);
     std::optional<std::uint64_t> seed;
     std::optional<int> caseCount;
+    bool recordProgress = true;
 };
 
 std::uint64_t parseSeed(std::string_view value) {
@@ -140,6 +143,10 @@ ParsedArguments parseArguments(const std::vector<std::string>& arguments) {
             parsed.caseCount = parseCaseCount(arguments[++index]);
             continue;
         }
+        if (argument == "--no-progress") {
+            parsed.recordProgress = false;
+            continue;
+        }
         parsed.positional.push_back(argument);
     }
     return parsed;
@@ -150,6 +157,12 @@ void rejectStressOptions(const ParsedArguments& arguments) {
         throw std::runtime_error(
             "--seed and --cases can only be used with the stress command"
         );
+    }
+}
+
+void rejectNoProgressOption(const ParsedArguments& arguments) {
+    if (!arguments.recordProgress) {
+        throw std::runtime_error("--no-progress can only be used with the test command");
     }
 }
 
@@ -167,7 +180,9 @@ void printUsage() {
         << "Usage:\n"
         << "  algo list [--root <project-root>]\n"
         << "  algo show <problem-id> [--root <project-root>]\n"
-        << "  algo test <problem-id> <source.cpp> [--root <project-root>]\n"
+        << "  algo test <problem-id> <source.cpp> [--no-progress]"
+           " [--root <project-root>]\n"
+        << "  algo progress [problem-id] [--root <project-root>]\n"
         << "  algo stress <problem-id> <source.cpp> [--seed <uint64>]"
            " [--cases <count>] [--root <project-root>]\n";
 }
@@ -177,6 +192,18 @@ void printProblem(const judge::Problem& problem) {
     std::cout << metadata.id << " | " << metadata.title
               << " | " << metadata.stage
               << " | " << metadata.difficulty << '\n';
+}
+
+void printProgress(const judge::ProgressRecord& record) {
+    std::cout << record.problemId
+              << " | attempts " << record.attempts
+              << " | accepted " << record.acceptedAttempts
+              << " | best ";
+    if (record.bestTimeMs.has_value()) std::cout << *record.bestTimeMs << " ms";
+    else std::cout << '-';
+    std::cout << " | last "
+              << (record.lastVerdict.empty() ? "-" : record.lastVerdict)
+              << '\n';
 }
 
 int runCommand(const ParsedArguments& arguments) {
@@ -190,6 +217,7 @@ int runCommand(const ParsedArguments& arguments) {
 
     if (command == "list") {
         rejectStressOptions(arguments);
+        rejectNoProgressOption(arguments);
         for (const judge::Problem& problem : catalog.list()) {
             printProblem(problem);
         }
@@ -198,6 +226,7 @@ int runCommand(const ParsedArguments& arguments) {
 
     if (command == "show") {
         rejectStressOptions(arguments);
+        rejectNoProgressOption(arguments);
         if (arguments.positional.size() != 2) {
             throw std::runtime_error("show requires exactly one problem ID");
         }
@@ -216,6 +245,36 @@ int runCommand(const ParsedArguments& arguments) {
         return 0;
     }
 
+    if (command == "progress") {
+        rejectStressOptions(arguments);
+        rejectNoProgressOption(arguments);
+        if (arguments.positional.size() > 2) {
+            throw std::runtime_error("progress accepts at most one problem ID");
+        }
+        const judge::ProgressRepository repository(arguments.projectRoot);
+        const std::vector<judge::ProgressRecord> records = repository.load();
+        if (arguments.positional.size() == 2) {
+            const std::string& problemId = arguments.positional[1];
+            static_cast<void>(catalog.findById(problemId));
+            const auto position = std::find_if(
+                records.begin(), records.end(),
+                [&](const judge::ProgressRecord& record) {
+                    return record.problemId == problemId;
+                }
+            );
+            if (position == records.end()) {
+                printProgress(judge::ProgressRecord{.problemId = problemId});
+            } else {
+                printProgress(*position);
+            }
+        } else if (records.empty()) {
+            std::cout << "No progress recorded.\n";
+        } else {
+            for (const judge::ProgressRecord& record : records) printProgress(record);
+        }
+        return 0;
+    }
+
     if (command == "test") {
         rejectStressOptions(arguments);
         if (arguments.positional.size() != 3) {
@@ -228,6 +287,16 @@ int runCommand(const ParsedArguments& arguments) {
                 problem,
                 pathFromUtf8(arguments.positional[2])
             );
+
+        std::chrono::milliseconds elapsed{0};
+        for (const judge::TestResult& test : report.tests) elapsed += test.elapsed;
+        if (arguments.recordProgress) {
+            judge::ProgressRepository(arguments.projectRoot).recordAttempt(
+                report.problemId,
+                report.verdict,
+                elapsed
+            );
+        }
 
         std::cout << "Problem: " << report.problemId << '\n'
                   << "Verdict: " << judge::toString(report.verdict) << '\n';
@@ -246,6 +315,7 @@ int runCommand(const ParsedArguments& arguments) {
     }
 
     if (command == "stress") {
+        rejectNoProgressOption(arguments);
         if (arguments.positional.size() != 3) {
             throw std::runtime_error(
                 "stress requires a problem ID and a C++ source path"

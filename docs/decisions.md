@@ -2,7 +2,7 @@
 type: decision_index
 status: active
 priority: p1
-updated: 2026-06-13
+updated: 2026-06-21
 context_policy: retrieve_only
 owner: project
 ---
@@ -15,3 +15,4 @@ owner: project
 |---|---|---|
 | `0000` | template | ADR-0000: Decision Title |
 | `0001` | accepted | ADR-0001: Local Judge Core And Interface Boundary |
+| `0002` | accepted | ADR-0002: Local Progress Persistence |

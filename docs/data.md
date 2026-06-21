@@ -33,6 +33,29 @@ Supported verdicts are `AC`, `WA`, `TLE`, `MLE`, `RE`, `CE`, `API`, `INV`, and `
 - Before minimization is implemented, stress failures retain the complete generated input.
 - Generated build files and temporary submissions are not committed.
 
+## Progress Schema Version 1
+
+The canonical local store is `.judge/progress.json`:
+
+```json
+{
+  "schema_version": 1,
+  "records": [
+    {
+      "problem_id": "F03-stack-array",
+      "attempts": 2,
+      "accepted_attempts": 1,
+      "best_time_ms": 42,
+      "last_verdict": "WA"
+    }
+  ]
+}
+```
+
+Records are sorted by `problem_id`; `best_time_ms` is `null` until the first
+AC. Unknown fields, duplicate problem IDs, invalid counts, malformed JSON, and
+unsupported schema versions are rejected explicitly.
+
 ## Migration Rules
 
 - Metadata and progress records carry a schema version once persistence is implemented.

@@ -9,6 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_library(judge_core
     src/catalog.cpp
     src/judge_service.cpp
+    src/progress.cpp
     src/stress_service.cpp
     src/case_generator.cpp
     src/generators/linear_generators.cpp
@@ -61,6 +62,12 @@ target_compile_definitions(algo PRIVATE
 )
 
 include(CTest)
+
+if(BUILD_TESTING)
+    add_executable(progress_repository_test tests/progress_repository_test.cpp)
+    target_link_libraries(progress_repository_test PRIVATE judge_core)
+    add_test(NAME progress_repository_round_trip COMMAND progress_repository_test)
+endif()
 
 if(BUILD_TESTING AND WIN32)
     function(add_catalog_test name expected_id)
@@ -116,6 +123,15 @@ if(BUILD_TESTING AND WIN32)
                 -P "${CMAKE_SOURCE_DIR}/tests/run_stress_test.cmake"
         )
     endfunction()
+
+    add_test(
+        NAME progress_cli_records_attempts
+        COMMAND ${CMAKE_COMMAND}
+            "-DALGO=$<TARGET_FILE:algo>"
+            "-DPROJECT_ROOT=${CMAKE_SOURCE_DIR}"
+            "-DWORK_ROOT=${CMAKE_BINARY_DIR}/progress-cli-test"
+            -P "${CMAKE_SOURCE_DIR}/tests/run_progress_cli_test.cmake"
+    )
 
     add_catalog_test(catalog_lists_f01 F01-array-adt)
     add_catalog_test(catalog_lists_f02 F02-dynamic-array)

@@ -20,7 +20,7 @@ algo CLI (src/main.cpp)            Web adapter (later)
         \                                /
          v                              v
         Application services
-        JudgeService  +  StressService
+        JudgeService  +  StressService  +  ProgressRepository
                      |
                      v
             Judge domain core
@@ -42,6 +42,7 @@ include/judge/          Public headers: domain contracts + service interfaces
   problem.hpp             Problem + ProblemMetadata value types
   judge_service.hpp       Verdict, TestResult, JudgeReport, JudgeService
   stress_service.hpp      StressReport, StressService
+  progress.hpp            ProgressRecord and local repository contract
   process_runner.hpp      ProcessRequest/ProcessResult + ProcessRunner port
   catalog.hpp             ProblemCatalog
   case_generator.hpp      GeneratedCase, CaseGenerator(Registry), generateCase
@@ -50,6 +51,7 @@ src/
   catalog.cpp             Filesystem discovery + JSON metadata parsing/validation
   judge_service.cpp       Compile, forbidden-symbol scan, run tests, verdicts
   stress_service.cpp      Seeded differential run orchestration (~166 lines)
+  progress.cpp            Versioned JSON parsing and atomic local replacement
   case_generator.cpp      Assembles the generator registry; ID-keyed dispatch
   process_runner_windows.cpp / _unsupported.cpp   ProcessRunner adapter impls
   generators/             Per-domain brute-force oracles (registry pattern)
@@ -74,6 +76,7 @@ scripts/                Repository tooling (practice CLI, docs/team guards)
 |---|---|---|---|
 | Interface | Parse args, dispatch `list`/`show`/`test`/`stress`, format output, set exit code | `src/main.cpp` | Judge rules |
 | Application | Orchestrate the test and stress use cases | `JudgeService`, `StressService` | OS-specific process details |
+| Progress | Persist local attempt summaries behind a reusable contract | `ProgressRepository` | Judge rules, source code, UI policy |
 | Domain | Verdicts, metadata contract, generator contract, discovery rules | `judge_service.hpp`, `problem.hpp`, `case_generator.hpp`, `catalog.cpp` | CLI, Web, raw OS APIs |
 | Infrastructure | Compile/run child processes, read the filesystem catalog | `ProcessRunner` impls, `ProblemCatalog` | Curriculum policy |
 | Problem packages | Statement, metadata, fixtures, and the matching brute-force oracle | `problems/**`, `src/generators/**` | Global process management |
@@ -105,6 +108,8 @@ scripts/                Repository tooling (practice CLI, docs/team guards)
   seed, asks the registry to generate cases into a temporary directory under
   `.judge/stress/`, reuses `JudgeService` to judge them, cleans the directory via
   RAII, and on failure reports the failing case seed plus a replay command.
+- **ProgressRepository** (`progress.cpp`) strictly reads schema-1 local JSON and
+  atomically replaces `.judge/progress.json` after a completed `test` command.
 
 ## Runtime Flows
 
@@ -115,6 +120,9 @@ scripts/                Repository tooling (practice CLI, docs/team guards)
 - `algo stress <id> <source.cpp> [--seed s] [--cases n]`: registry generates
   `n` differential cases (defaulting to the package's `random_tests`) → judge the
   generated directory → on failure print the case seed and a reproducible replay.
+- `algo progress [id]`: read saved attempt counts, accepted counts, best AC
+  time, and latest verdict. Automated `test` calls may opt out with
+  `--no-progress`; stress never records learner progress.
 
 ## Verdict Vocabulary
 
@@ -151,6 +159,7 @@ internal errors.
 - Problem metadata schema (`problem.json` fields read by `catalog.cpp`).
 - Case generator contract (`GeneratedCase`, `CaseGenerator`).
 - Verdict and report shapes (`Verdict`, `TestResult`, `JudgeReport`, `StressReport`).
+- Progress schema version 1 and `ProgressRepository` record semantics.
 - CLI command surface and exit-code behavior.
 
 Breaking changes to these require tests, migration notes, and an ADR when the
@@ -169,8 +178,7 @@ contract is already in use.
 
 ## Not Yet Built (Planned)
 
-- Progress repository (attempts, best time, spaced repetition) — schema and
-  storage shape still open.
+- Spaced repetition and review scheduling on top of the progress repository.
 - Web dashboard and practice UI, after the CLI is stable on enough problems.
 - Memory-limit enforcement adapter and the `INV`/`CX` structural and complexity
   checks described in `docs/judge-requirements.md`.

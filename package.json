@@ -11,6 +11,7 @@
     "new:solution": "node scripts/practice.mjs new",
     "judge": "node scripts/practice.mjs test",
     "stress": "node scripts/practice.mjs stress",
+    "progress": "node scripts/practice.mjs progress",
     "check": "node scripts/practice.mjs check",
     "verify": "node scripts/practice.mjs verify",
     "lint": "node scripts/repo-lint.mjs",

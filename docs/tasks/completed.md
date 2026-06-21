@@ -37,3 +37,4 @@ owner: project
 | `TASK.CURRICULUM.020` | Build Tree Query Structures | `docs/memory/sessions/2026-06-21-shawn.md` |
 | `TASK.CURRICULUM.021` | Build String Index Structures | `docs/memory/sessions/2026-06-21-shawn.md` |
 | `TASK.CURRICULUM.022` | Complete Persistent And Specialized Structures | `docs/memory/sessions/2026-06-21-shawn.md` |
+| `TASK.PROGRESS.001` | Add Atomic Local Progress Persistence | `docs/memory/sessions/2026-06-21-shawn.md` |

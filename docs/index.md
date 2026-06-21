@@ -89,6 +89,7 @@ Future-phase documents must state the trigger that makes them relevant. Binary c
 | `docs/accessibility.md` | `accessibility_policy` | `active` | `retrieve_when_planning` | Accessibility Policy |
 | `docs/adr/0000-template.md` | `adr` | `template` | `on_demand` | Decision Title |
 | `docs/adr/0001-local-judge-boundary.md` | `adr` | `accepted` | `on_demand` | Local Judge Core And Interface Boundary |
+| `docs/adr/0002-local-progress-persistence.md` | `adr` | `accepted` | `on_demand` | Local Progress Persistence |
 | `docs/algorithm-roadmap.md` | `learning_roadmap` | `active` | `on_demand` | 演算法學習路線 |
 | `docs/architecture.md` | `architecture_spec` | `active` | `retrieve_only` | Architecture |
 | `docs/CLAUDE.md` | `agent_policy` | `active` | `on_demand` | AI Agent Governance And ADR Policy |

@@ -26,6 +26,7 @@ Commands:
                                 Run deterministic Judge tests
   stress <problem-id> [source.cpp] [--seed N] [--cases N]
                                 Run seeded differential tests
+  progress [problem-id]           Show saved local Judge progress
   check [test-regex]            Build and run C++ integration tests
   verify                        Run C++ tests and documentation checks
 
@@ -144,6 +145,10 @@ try {
       throw new Error('new requires a problem ID and optional source path');
     }
     createSolution(args[0], args[1]);
+  } else if (command === 'progress') {
+    if (args.length > 1) throw new Error('progress accepts at most one problem ID');
+    ensureJudge();
+    process.exit(run(JUDGE, ['progress', ...args]));
   } else if (command === 'test' || command === 'stress') {
     ensureJudge();
     const parsed = parseSolutionArguments(command, args);

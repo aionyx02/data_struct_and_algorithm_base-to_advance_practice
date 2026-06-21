@@ -7,7 +7,8 @@ endif()
 
 execute_process(
     COMMAND
-        "${ALGO}" test "${PROBLEM_ID}" "${SOURCE_FILE}" --root "${PROJECT_ROOT}"
+        "${ALGO}" test "${PROBLEM_ID}" "${SOURCE_FILE}" --no-progress
+        --root "${PROJECT_ROOT}"
     RESULT_VARIABLE actual_exit
     OUTPUT_VARIABLE standard_output
     ERROR_VARIABLE standard_error
