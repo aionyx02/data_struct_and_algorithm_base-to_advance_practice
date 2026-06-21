@@ -18,12 +18,12 @@ owner: project
 ## Current Focus
 
 - Active priority: build out the high-level data-structure curriculum.
-- Current phase: Stage A5 Balanced/Randomized/Meldable Trees is complete.
-  Order-statistic AVL and red-black trees (`A36`-`A37`), explicit and implicit
-  Treaps (`A38`-`A39`), Splay Tree (`A40`), Leftist and Skew Heaps (`A41`-`A42`),
-  Binomial Heap (`A43`), and a duplicate-aware order-statistic tree (`A44`) are
-  implemented. Stages A1-A4 (`A01`-`A35`) are complete.
-- Current owner / handoff state: no active task. `TASK.CURRICULUM.019`
+- Current phase: Stage A6 Tree Query Structures is complete. Euler Tour,
+  Binary Lifting, LCA, HLD and HLD+Segment Tree (`A45`-`A49`), Small-to-Large
+  and DSU on Tree (`A50`-`A51`), Centroid Decomposition (`A52`), Virtual Tree
+  (`A53`), and Link-Cut Tree (`A54`) are implemented. Stages A1-A5
+  (`A01`-`A44`) are complete.
+- Current owner / handoff state: no active task. `TASK.CURRICULUM.020`
   completed with `shawn` on 2026-06-21.
 
 ## Important Constraints
@@ -35,7 +35,7 @@ owner: project
 
 ## Next Step
 
-- Select the next active task, likely Stage A6 Tree Query Structures or a
+- Select the next active task, likely Stage A7 String Index Structures or a
   backlog item.
 
 ## Last Validation Snapshot
@@ -43,18 +43,19 @@ owner: project
 - Last C++ validation: 2026-06-21.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and
   `ctest --preset dev`.
-- Result: all 601 Judge integration tests passed (~349 s; `A36`-`A44` each add
-  1 catalog, +3 Judge, +3 stress). Each of `A36`-`A44` passed all four fixed
-  tests; a 100-case differential sweep (seed 99) returned `AC` for all 9 correct
-  fixtures and `WA` for all 18 known-wrong fixtures.
-- Judge runtime self-check (2026-06-21): `algo list` enumerates 112 problems
-  (`F01`-`F68` and `A01`-`A44`);
+- Result: all 671 Judge integration tests passed (~415 s; `A45`-`A54` each add
+  1 catalog, +3 Judge, +3 stress). Each of `A45`-`A54` passed all four fixed
+  tests; a 100-case differential sweep (seed 99) returned `AC` for all 10
+  correct fixtures and `WA` for all 20 known-wrong fixtures.
+- Judge runtime self-check (2026-06-21): `algo list` enumerates 122 problems
+  (`F01`-`F68` and `A01`-`A54`);
   correct submissions verdict `AC`, known-wrong `WA`, broken sources `CE`, null
   dereference `RE`, infinite loop `TLE`, and out-of-root sources are refused by
   the project-root boundary. Stress differential testing returns `AC`/`WA`.
 - Known-wrong fixtures across the F-series and Stage A still produce reproducible
-  non-AC verdicts. Stage A5 stress catches inclusive rank/split boundaries,
-  missing AVL/Treap/Splay rebalancing, stale deletion, implicit-Treap range-end
-  mistakes, incorrect Leftist NPL, missing Skew swaps, meld source ownership,
-  reversed Binomial root degrees, and duplicate erase/order-statistic mistakes.
+  non-AC verdicts. Stage A6 stress catches Euler interval/order mistakes,
+  ancestor-table off-by-one errors, incomplete LCA climbing, wrong heavy-child
+  selection, dropped path/subtree endpoints, incomplete color-container merges,
+  missing DSU-on-tree self contribution, wrong centroid selection/nearest
+  choice, omitted virtual LCAs/duplicate handling, and Link-Cut path/cut errors.
 - Known failing checks: none.

@@ -1,0 +1,15 @@
+6 8
+4 1 4 2 1 2
+1 6
+1 2
+2 5
+2 3
+3 4
+distinct 1
+mode 1
+distinct 2
+mode 2
+count 2 1
+count 2 4
+distinct 3
+mode 3

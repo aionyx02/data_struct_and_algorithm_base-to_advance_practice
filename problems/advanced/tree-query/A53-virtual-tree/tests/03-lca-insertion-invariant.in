@@ -1,0 +1,16 @@
+9 7
+1 3
+1 2
+2 5
+2 4
+3 6
+6 8
+6 7
+7 9
+build 3 4 8 9
+virtual_size 3 4 8 9
+steiner_edges 3 4 8 9
+build 2 4 5
+build 2 4 9
+virtual_size 4 4 5 8 9
+steiner_edges 4 4 5 8 9

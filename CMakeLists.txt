@@ -22,6 +22,7 @@ add_library(judge_core
     src/generators/static_range_generators.cpp
     src/generators/union_find_generators.cpp
     src/generators/balanced_tree_generators.cpp
+    src/generators/tree_query_generators.cpp
 )
 
 target_include_directories(judge_core PRIVATE src)
@@ -226,6 +227,16 @@ add_catalog_test(catalog_lists_a41 A41-leftist-heap-meld)
 add_catalog_test(catalog_lists_a42 A42-skew-heap-meld)
 add_catalog_test(catalog_lists_a43 A43-binomial-heap)
 add_catalog_test(catalog_lists_a44 A44-order-statistic-multiset)
+add_catalog_test(catalog_lists_a45 A45-euler-tour-representation)
+add_catalog_test(catalog_lists_a46 A46-binary-lifting-table)
+add_catalog_test(catalog_lists_a47 A47-lca-query-structure)
+add_catalog_test(catalog_lists_a48 A48-heavy-light-decomposition)
+add_catalog_test(catalog_lists_a49 A49-hld-segment-tree)
+add_catalog_test(catalog_lists_a50 A50-small-to-large-merging)
+add_catalog_test(catalog_lists_a51 A51-dsu-on-tree)
+add_catalog_test(catalog_lists_a52 A52-centroid-decomposition)
+add_catalog_test(catalog_lists_a53 A53-virtual-tree)
+add_catalog_test(catalog_lists_a54 A54-link-cut-tree)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1961,6 +1972,216 @@ add_catalog_test(catalog_lists_a44 A44-order-statistic-multiset)
         judge_rejects_order_statistic_multiset_erase_all
         A44-order-statistic-multiset
         tests/fixtures/submissions/order_statistic_multiset_erase_all.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_euler_tour_representation
+        A45-euler-tour-representation
+        tests/fixtures/submissions/euler_tour_representation_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_euler_tour_representation_bug_one
+        A45-euler-tour-representation
+        tests/fixtures/submissions/euler_tour_representation_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_euler_tour_representation_bug_two
+        A45-euler-tour-representation
+        tests/fixtures/submissions/euler_tour_representation_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_binary_lifting_table
+        A46-binary-lifting-table
+        tests/fixtures/submissions/binary_lifting_table_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_binary_lifting_table_bug_one
+        A46-binary-lifting-table
+        tests/fixtures/submissions/binary_lifting_table_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_binary_lifting_table_bug_two
+        A46-binary-lifting-table
+        tests/fixtures/submissions/binary_lifting_table_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_lca_query_structure
+        A47-lca-query-structure
+        tests/fixtures/submissions/lca_query_structure_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_lca_query_structure_bug_one
+        A47-lca-query-structure
+        tests/fixtures/submissions/lca_query_structure_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_lca_query_structure_bug_two
+        A47-lca-query-structure
+        tests/fixtures/submissions/lca_query_structure_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_heavy_light_decomposition
+        A48-heavy-light-decomposition
+        tests/fixtures/submissions/heavy_light_decomposition_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_heavy_light_decomposition_bug_one
+        A48-heavy-light-decomposition
+        tests/fixtures/submissions/heavy_light_decomposition_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_heavy_light_decomposition_bug_two
+        A48-heavy-light-decomposition
+        tests/fixtures/submissions/heavy_light_decomposition_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_hld_segment_tree
+        A49-hld-segment-tree
+        tests/fixtures/submissions/hld_segment_tree_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_hld_segment_tree_bug_one
+        A49-hld-segment-tree
+        tests/fixtures/submissions/hld_segment_tree_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_hld_segment_tree_bug_two
+        A49-hld-segment-tree
+        tests/fixtures/submissions/hld_segment_tree_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_small_to_large_merging
+        A50-small-to-large-merging
+        tests/fixtures/submissions/small_to_large_merging_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_small_to_large_merging_bug_one
+        A50-small-to-large-merging
+        tests/fixtures/submissions/small_to_large_merging_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_small_to_large_merging_bug_two
+        A50-small-to-large-merging
+        tests/fixtures/submissions/small_to_large_merging_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_dsu_on_tree
+        A51-dsu-on-tree
+        tests/fixtures/submissions/dsu_on_tree_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_dsu_on_tree_bug_one
+        A51-dsu-on-tree
+        tests/fixtures/submissions/dsu_on_tree_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_dsu_on_tree_bug_two
+        A51-dsu-on-tree
+        tests/fixtures/submissions/dsu_on_tree_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_centroid_decomposition
+        A52-centroid-decomposition
+        tests/fixtures/submissions/centroid_decomposition_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_centroid_decomposition_bug_one
+        A52-centroid-decomposition
+        tests/fixtures/submissions/centroid_decomposition_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_centroid_decomposition_bug_two
+        A52-centroid-decomposition
+        tests/fixtures/submissions/centroid_decomposition_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_virtual_tree
+        A53-virtual-tree
+        tests/fixtures/submissions/virtual_tree_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_virtual_tree_bug_one
+        A53-virtual-tree
+        tests/fixtures/submissions/virtual_tree_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_virtual_tree_bug_two
+        A53-virtual-tree
+        tests/fixtures/submissions/virtual_tree_bug_two.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_link_cut_tree
+        A54-link-cut-tree
+        tests/fixtures/submissions/link_cut_tree_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_link_cut_tree_bug_one
+        A54-link-cut-tree
+        tests/fixtures/submissions/link_cut_tree_bug_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_link_cut_tree_bug_two
+        A54-link-cut-tree
+        tests/fixtures/submissions/link_cut_tree_bug_two.cpp
         1
         "Verdict: WA"
     )
@@ -3889,6 +4110,246 @@ add_catalog_test(catalog_lists_a44 A44-order-statistic-multiset)
         stress_rejects_order_statistic_multiset_erase_all
         A44-order-statistic-multiset
         tests/fixtures/submissions/order_statistic_multiset_erase_all.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_euler_tour_representation
+        A45-euler-tour-representation
+        tests/fixtures/submissions/euler_tour_representation_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_euler_tour_representation_bug_one
+        A45-euler-tour-representation
+        tests/fixtures/submissions/euler_tour_representation_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_euler_tour_representation_bug_two
+        A45-euler-tour-representation
+        tests/fixtures/submissions/euler_tour_representation_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_binary_lifting_table
+        A46-binary-lifting-table
+        tests/fixtures/submissions/binary_lifting_table_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_binary_lifting_table_bug_one
+        A46-binary-lifting-table
+        tests/fixtures/submissions/binary_lifting_table_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_binary_lifting_table_bug_two
+        A46-binary-lifting-table
+        tests/fixtures/submissions/binary_lifting_table_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_lca_query_structure
+        A47-lca-query-structure
+        tests/fixtures/submissions/lca_query_structure_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_lca_query_structure_bug_one
+        A47-lca-query-structure
+        tests/fixtures/submissions/lca_query_structure_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_lca_query_structure_bug_two
+        A47-lca-query-structure
+        tests/fixtures/submissions/lca_query_structure_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_heavy_light_decomposition
+        A48-heavy-light-decomposition
+        tests/fixtures/submissions/heavy_light_decomposition_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_heavy_light_decomposition_bug_one
+        A48-heavy-light-decomposition
+        tests/fixtures/submissions/heavy_light_decomposition_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_heavy_light_decomposition_bug_two
+        A48-heavy-light-decomposition
+        tests/fixtures/submissions/heavy_light_decomposition_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_hld_segment_tree
+        A49-hld-segment-tree
+        tests/fixtures/submissions/hld_segment_tree_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_hld_segment_tree_bug_one
+        A49-hld-segment-tree
+        tests/fixtures/submissions/hld_segment_tree_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_hld_segment_tree_bug_two
+        A49-hld-segment-tree
+        tests/fixtures/submissions/hld_segment_tree_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_small_to_large_merging
+        A50-small-to-large-merging
+        tests/fixtures/submissions/small_to_large_merging_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_small_to_large_merging_bug_one
+        A50-small-to-large-merging
+        tests/fixtures/submissions/small_to_large_merging_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_small_to_large_merging_bug_two
+        A50-small-to-large-merging
+        tests/fixtures/submissions/small_to_large_merging_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_dsu_on_tree
+        A51-dsu-on-tree
+        tests/fixtures/submissions/dsu_on_tree_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_dsu_on_tree_bug_one
+        A51-dsu-on-tree
+        tests/fixtures/submissions/dsu_on_tree_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_dsu_on_tree_bug_two
+        A51-dsu-on-tree
+        tests/fixtures/submissions/dsu_on_tree_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_centroid_decomposition
+        A52-centroid-decomposition
+        tests/fixtures/submissions/centroid_decomposition_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_centroid_decomposition_bug_one
+        A52-centroid-decomposition
+        tests/fixtures/submissions/centroid_decomposition_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_centroid_decomposition_bug_two
+        A52-centroid-decomposition
+        tests/fixtures/submissions/centroid_decomposition_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_virtual_tree
+        A53-virtual-tree
+        tests/fixtures/submissions/virtual_tree_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_virtual_tree_bug_one
+        A53-virtual-tree
+        tests/fixtures/submissions/virtual_tree_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_virtual_tree_bug_two
+        A53-virtual-tree
+        tests/fixtures/submissions/virtual_tree_bug_two.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_link_cut_tree
+        A54-link-cut-tree
+        tests/fixtures/submissions/link_cut_tree_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_link_cut_tree_bug_one
+        A54-link-cut-tree
+        tests/fixtures/submissions/link_cut_tree_bug_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_link_cut_tree_bug_two
+        A54-link-cut-tree
+        tests/fixtures/submissions/link_cut_tree_bug_two.cpp
         1
         "Verdict: WA"
         TRUE

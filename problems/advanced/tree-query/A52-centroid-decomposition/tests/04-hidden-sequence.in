@@ -1,0 +1,17 @@
+6 11
+1 6
+1 2
+2 5
+2 3
+3 4
+centroid_parent 2
+centroid_level 2
+centroid_parent 6
+activate 4
+nearest 5
+activate 6
+nearest 1
+nearest 5
+deactivate 4
+nearest 3
+nearest 4

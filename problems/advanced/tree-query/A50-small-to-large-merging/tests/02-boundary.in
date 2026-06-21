@@ -1,0 +1,8 @@
+1 6
+-5
+distinct 1
+count 1 -5
+count 1 0
+mode 1
+distinct 1
+mode 1

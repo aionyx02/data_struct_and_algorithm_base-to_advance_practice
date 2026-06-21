@@ -1,0 +1,8 @@
+1 7
+lca 1 1
+distance 1 1
+kth_on_path 1 1 0
+kth_on_path 1 1 1
+is_ancestor 1 1
+lca 1 1
+distance 1 1

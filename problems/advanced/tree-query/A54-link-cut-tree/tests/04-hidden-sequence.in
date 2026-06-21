@@ -1,0 +1,17 @@
+5 15
+5 4 3 2 1
+link 1 2
+link 2 3
+link 3 4
+path_sum 1 4
+path_add 2 4 -1
+value 1
+value 2
+path_sum 1 4
+cut 2 4
+cut 2 3
+connected 1 4
+link 1 5
+path_sum 5 2
+set 5 10
+path_sum 5 2

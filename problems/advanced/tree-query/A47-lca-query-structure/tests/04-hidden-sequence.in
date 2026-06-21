@@ -1,0 +1,15 @@
+6 9
+1 6
+1 2
+2 5
+2 3
+3 4
+lca 4 5
+lca 4 6
+distance 4 5
+distance 5 6
+kth_on_path 4 6 2
+kth_on_path 4 6 4
+kth_on_path 4 6 5
+is_ancestor 2 4
+is_ancestor 3 5

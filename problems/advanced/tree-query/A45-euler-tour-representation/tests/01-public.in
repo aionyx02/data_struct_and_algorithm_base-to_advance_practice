@@ -1,0 +1,19 @@
+9 10
+1 3
+1 2
+2 5
+2 4
+3 6
+6 8
+6 7
+7 9
+euler
+tin 6
+tout 6
+subtree 6
+depth 9
+is_ancestor 6 9
+is_ancestor 2 9
+tin 5
+tout 1
+subtree 2

@@ -1,0 +1,15 @@
+6 9
+1 6
+1 2
+2 5
+2 3
+3 4
+ancestor 4 1
+ancestor 4 2
+ancestor 4 3
+ancestor 4 4
+table 4
+depth 5
+ancestor 5 2
+table 6
+ancestor 6 0

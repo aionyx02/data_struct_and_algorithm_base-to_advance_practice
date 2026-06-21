@@ -1,0 +1,16 @@
+6 9
+4 1 4 2 1 2
+1 6
+1 2
+2 5
+2 3
+3 4
+dominant_sum 1
+max_frequency 1
+distinct 1
+dominant_sum 2
+max_frequency 2
+dominant_sum 3
+max_frequency 3
+dominant_sum 4
+distinct 5

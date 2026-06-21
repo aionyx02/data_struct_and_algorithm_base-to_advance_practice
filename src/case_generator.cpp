@@ -20,6 +20,7 @@ const CaseGeneratorRegistry& caseGenerators() {
         generators::registerStaticRangeGenerators(assembled);
         generators::registerUnionFindGenerators(assembled);
         generators::registerBalancedTreeGenerators(assembled);
+        generators::registerTreeQueryGenerators(assembled);
         return assembled;
     }();
     return registry;
