@@ -1,0 +1,15 @@
+8 14
+unite 0 1
+unite 2 3
+unite 0 2
+find 3
+find 3
+parent 3
+unite 4 5
+unite 6 7
+unite 4 6
+find 7
+connected 0 4
+unite 0 4
+find 7
+snapshot

@@ -2,7 +2,7 @@
 type: task_archive_index
 status: archive
 priority: p3
-updated: 2026-06-17
+updated: 2026-06-21
 context_policy: on_demand
 owner: project
 ---
@@ -32,3 +32,4 @@ owner: project
 | `TASK.CURRICULUM.015` | Built Fenwick Tree Foundations | `docs/memory/sessions/2026-06-14-shawn.md` |
 | `TASK.CURRICULUM.016` | Built the Stage A2 Segment Tree family | `docs/memory/sessions/2026-06-16-shawn.md` |
 | `TASK.CURRICULUM.017` | Build Static Range Structures | `docs/memory/sessions/2026-06-17-shawn.md` |
+| `TASK.CURRICULUM.018` | Build Union-Find Variants | `docs/memory/sessions/2026-06-21-shawn.md` |

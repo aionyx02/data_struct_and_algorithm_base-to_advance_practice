@@ -1,0 +1,8 @@
+1 7
+rollback
+checkpoint
+rollback
+unite 0 0
+connected 0 0
+unite -1 0
+snapshot

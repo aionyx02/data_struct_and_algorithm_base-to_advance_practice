@@ -1,0 +1,15 @@
+5 14
+unite 0 0 1
+unite 0 2 3
+connected 1 0 1
+connected 2 0 1
+unite 1 1 2
+connected 3 0 3
+connected 1 0 3
+components 3
+components 0
+snapshot 3
+unite 0 0 1
+component_size 3 0
+find 3 3
+snapshot 1

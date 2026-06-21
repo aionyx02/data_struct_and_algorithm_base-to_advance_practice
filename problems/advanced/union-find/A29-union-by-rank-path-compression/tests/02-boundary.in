@@ -1,0 +1,9 @@
+1 8
+find 0
+rank 0
+parent 0
+unite 0 0
+connected 0 0
+unite -1 0
+find 5
+snapshot

@@ -1,0 +1,16 @@
+{
+  "id": "A33-rollback-dsu",
+  "title": "Rollback Disjoint Set",
+  "stage": "A",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 500,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(log n) per union or find, O(k) per rollback of k unions",
+  "expected_space": "O(n + operations)",
+  "forbidden_symbols": ["std::map", "std::unordered_map", "std::set", "std::vector", "std::list", "std::stack"],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}

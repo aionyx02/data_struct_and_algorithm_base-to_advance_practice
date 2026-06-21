@@ -20,6 +20,7 @@ add_library(judge_core
     src/generators/advanced_generators.cpp
     src/generators/segment_tree_generators.cpp
     src/generators/static_range_generators.cpp
+    src/generators/union_find_generators.cpp
 )
 
 target_include_directories(judge_core PRIVATE src)
@@ -208,6 +209,13 @@ add_catalog_test(catalog_lists_a25 A25-merge-sort-tree-range-count)
 add_catalog_test(catalog_lists_a26 A26-wavelet-tree-range-kth)
 add_catalog_test(catalog_lists_a27 A27-wavelet-matrix-range-kth)
 add_catalog_test(catalog_lists_a28 A28-bitset-set-representation)
+add_catalog_test(catalog_lists_a29 A29-union-by-rank-path-compression)
+add_catalog_test(catalog_lists_a30 A30-dsu-amortized-cost)
+add_catalog_test(catalog_lists_a31 A31-potential-weighted-dsu)
+add_catalog_test(catalog_lists_a32 A32-parity-dsu)
+add_catalog_test(catalog_lists_a33 A33-rollback-dsu)
+add_catalog_test(catalog_lists_a34 A34-persistent-dsu)
+add_catalog_test(catalog_lists_a35 A35-successor-dsu)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -1607,6 +1615,153 @@ add_catalog_test(catalog_lists_a28 A28-bitset-set-representation)
         judge_rejects_bitset_set_representation_stale_total
         A28-bitset-set-representation
         tests/fixtures/submissions/bitset_set_representation_stale_total.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_union_by_rank_path_compression
+        A29-union-by-rank-path-compression
+        tests/fixtures/submissions/union_by_rank_path_compression_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_union_by_rank_path_compression_size_not_rank
+        A29-union-by-rank-path-compression
+        tests/fixtures/submissions/union_by_rank_path_compression_size_not_rank.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_union_by_rank_path_compression_no_compression
+        A29-union-by-rank-path-compression
+        tests/fixtures/submissions/union_by_rank_path_compression_no_compression.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_dsu_amortized_cost
+        A30-dsu-amortized-cost
+        tests/fixtures/submissions/dsu_amortized_cost_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_dsu_amortized_cost_no_compression
+        A30-dsu-amortized-cost
+        tests/fixtures/submissions/dsu_amortized_cost_no_compression.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_dsu_amortized_cost_counts_nodes
+        A30-dsu-amortized-cost
+        tests/fixtures/submissions/dsu_amortized_cost_counts_nodes.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_potential_weighted_dsu
+        A31-potential-weighted-dsu
+        tests/fixtures/submissions/potential_weighted_dsu_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_potential_weighted_dsu_no_weight_compression
+        A31-potential-weighted-dsu
+        tests/fixtures/submissions/potential_weighted_dsu_no_weight_compression.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_potential_weighted_dsu_merge_ignores_offset
+        A31-potential-weighted-dsu
+        tests/fixtures/submissions/potential_weighted_dsu_merge_ignores_offset.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_parity_dsu
+        A32-parity-dsu
+        tests/fixtures/submissions/parity_dsu_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_parity_dsu_no_path_xor
+        A32-parity-dsu
+        tests/fixtures/submissions/parity_dsu_no_path_xor.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_parity_dsu_ignores_parity
+        A32-parity-dsu
+        tests/fixtures/submissions/parity_dsu_ignores_parity.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_rollback_dsu
+        A33-rollback-dsu
+        tests/fixtures/submissions/rollback_dsu_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_rollback_dsu_uses_compression
+        A33-rollback-dsu
+        tests/fixtures/submissions/rollback_dsu_uses_compression.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_rollback_dsu_undoes_one
+        A33-rollback-dsu
+        tests/fixtures/submissions/rollback_dsu_undoes_one.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_persistent_dsu
+        A34-persistent-dsu
+        tests/fixtures/submissions/persistent_dsu_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_persistent_dsu_mutates_base
+        A34-persistent-dsu
+        tests/fixtures/submissions/persistent_dsu_mutates_base.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_persistent_dsu_forks_latest
+        A34-persistent-dsu
+        tests/fixtures/submissions/persistent_dsu_forks_latest.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_accepts_successor_dsu
+        A35-successor-dsu
+        tests/fixtures/submissions/successor_dsu_correct.cpp
+        0
+        "Verdict: AC"
+    )
+    add_cli_judge_test(
+        judge_rejects_successor_dsu_marks_x_not_successor
+        A35-successor-dsu
+        tests/fixtures/submissions/successor_dsu_marks_x_not_successor.cpp
+        1
+        "Verdict: WA"
+    )
+    add_cli_judge_test(
+        judge_rejects_successor_dsu_off_by_one_sentinel
+        A35-successor-dsu
+        tests/fixtures/submissions/successor_dsu_off_by_one_sentinel.cpp
         1
         "Verdict: WA"
     )
@@ -3151,6 +3306,174 @@ add_catalog_test(catalog_lists_a28 A28-bitset-set-representation)
         stress_rejects_bitset_set_representation_stale_total
         A28-bitset-set-representation
         tests/fixtures/submissions/bitset_set_representation_stale_total.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_union_by_rank_path_compression
+        A29-union-by-rank-path-compression
+        tests/fixtures/submissions/union_by_rank_path_compression_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_union_by_rank_path_compression_size_not_rank
+        A29-union-by-rank-path-compression
+        tests/fixtures/submissions/union_by_rank_path_compression_size_not_rank.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_union_by_rank_path_compression_no_compression
+        A29-union-by-rank-path-compression
+        tests/fixtures/submissions/union_by_rank_path_compression_no_compression.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_dsu_amortized_cost
+        A30-dsu-amortized-cost
+        tests/fixtures/submissions/dsu_amortized_cost_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_dsu_amortized_cost_no_compression
+        A30-dsu-amortized-cost
+        tests/fixtures/submissions/dsu_amortized_cost_no_compression.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_dsu_amortized_cost_counts_nodes
+        A30-dsu-amortized-cost
+        tests/fixtures/submissions/dsu_amortized_cost_counts_nodes.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_potential_weighted_dsu
+        A31-potential-weighted-dsu
+        tests/fixtures/submissions/potential_weighted_dsu_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_potential_weighted_dsu_no_weight_compression
+        A31-potential-weighted-dsu
+        tests/fixtures/submissions/potential_weighted_dsu_no_weight_compression.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_potential_weighted_dsu_merge_ignores_offset
+        A31-potential-weighted-dsu
+        tests/fixtures/submissions/potential_weighted_dsu_merge_ignores_offset.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_parity_dsu
+        A32-parity-dsu
+        tests/fixtures/submissions/parity_dsu_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_parity_dsu_no_path_xor
+        A32-parity-dsu
+        tests/fixtures/submissions/parity_dsu_no_path_xor.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_parity_dsu_ignores_parity
+        A32-parity-dsu
+        tests/fixtures/submissions/parity_dsu_ignores_parity.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_rollback_dsu
+        A33-rollback-dsu
+        tests/fixtures/submissions/rollback_dsu_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_rollback_dsu_uses_compression
+        A33-rollback-dsu
+        tests/fixtures/submissions/rollback_dsu_uses_compression.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_rollback_dsu_undoes_one
+        A33-rollback-dsu
+        tests/fixtures/submissions/rollback_dsu_undoes_one.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_persistent_dsu
+        A34-persistent-dsu
+        tests/fixtures/submissions/persistent_dsu_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_persistent_dsu_mutates_base
+        A34-persistent-dsu
+        tests/fixtures/submissions/persistent_dsu_mutates_base.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_persistent_dsu_forks_latest
+        A34-persistent-dsu
+        tests/fixtures/submissions/persistent_dsu_forks_latest.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_accepts_successor_dsu
+        A35-successor-dsu
+        tests/fixtures/submissions/successor_dsu_correct.cpp
+        0
+        "Verdict: AC"
+        FALSE
+    )
+    add_cli_stress_test(
+        stress_rejects_successor_dsu_marks_x_not_successor
+        A35-successor-dsu
+        tests/fixtures/submissions/successor_dsu_marks_x_not_successor.cpp
+        1
+        "Verdict: WA"
+        TRUE
+    )
+    add_cli_stress_test(
+        stress_rejects_successor_dsu_off_by_one_sentinel
+        A35-successor-dsu
+        tests/fixtures/submissions/successor_dsu_off_by_one_sentinel.cpp
         1
         "Verdict: WA"
         TRUE

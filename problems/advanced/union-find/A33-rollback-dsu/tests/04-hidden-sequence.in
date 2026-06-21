@@ -1,0 +1,15 @@
+7 14
+unite 0 1
+checkpoint
+unite 2 3
+unite 4 5
+checkpoint
+unite 2 4
+unite 0 6
+rollback
+snapshot
+rollback
+snapshot
+components
+connected 2 5
+component_size 4

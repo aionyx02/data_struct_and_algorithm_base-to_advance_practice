@@ -18,6 +18,7 @@ const CaseGeneratorRegistry& caseGenerators() {
         generators::registerAdvancedGenerators(assembled);
         generators::registerSegmentTreeGenerators(assembled);
         generators::registerStaticRangeGenerators(assembled);
+        generators::registerUnionFindGenerators(assembled);
         return assembled;
     }();
     return registry;

@@ -1,0 +1,13 @@
+6 12
+unite 0 1
+unite 2 3
+unite 0 2
+unite 0 4
+unite 0 5
+find 3
+find 3
+find 5
+snapshot
+parent 3
+find 4
+parent 4

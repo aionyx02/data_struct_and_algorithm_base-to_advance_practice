@@ -1,0 +1,13 @@
+6 12
+unite 1 2
+unite 3 4
+connected 1 4
+unite 1 3
+find 4
+rank 1
+unite 0 5
+unite 0 1
+rank 1
+snapshot
+parent 4
+components

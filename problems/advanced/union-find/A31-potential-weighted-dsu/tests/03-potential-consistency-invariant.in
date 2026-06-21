@@ -1,0 +1,14 @@
+5 13
+relate 0 1 2
+relate 0 2 5
+relate 3 0 4
+diff 3 1
+diff 3 2
+relate 3 1 6
+relate 3 1 7
+find 2
+diff 0 2
+snapshot
+relate 2 4 3
+diff 3 4
+components

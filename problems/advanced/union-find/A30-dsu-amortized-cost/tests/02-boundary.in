@@ -1,0 +1,7 @@
+1 6
+find 0
+parent 0
+unite 0 0
+connected 0 0
+find -1
+snapshot

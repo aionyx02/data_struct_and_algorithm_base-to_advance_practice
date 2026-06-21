@@ -1,0 +1,17 @@
+8 16
+unite 0 1
+unite 2 3
+unite 0 2
+rank 0
+unite 4 5
+unite 6 7
+unite 4 6
+unite 0 4
+rank 0
+snapshot
+find 7
+parent 7
+snapshot
+find 3
+parent 3
+components

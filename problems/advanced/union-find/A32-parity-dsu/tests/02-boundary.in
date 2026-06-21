@@ -1,0 +1,7 @@
+1 6
+query 0 0
+relate 0 0 same
+relate 0 0 diff
+find 0
+connected 0 0
+query 0 2

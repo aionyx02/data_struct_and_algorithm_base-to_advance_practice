@@ -1,0 +1,16 @@
+{
+  "id": "A29-union-by-rank-path-compression",
+  "title": "Union By Rank With Path Compression",
+  "stage": "A",
+  "difficulty": "D2",
+  "judge_mode": "stdio",
+  "time_limit_ms": 500,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(alpha(n)) amortized per find or union, O(n) per snapshot",
+  "expected_space": "O(n)",
+  "forbidden_symbols": ["std::map", "std::unordered_map", "std::set", "std::vector", "std::list"],
+  "random_tests": 100,
+  "operation_limit": 100,
+  "tests_directory": "tests"
+}
