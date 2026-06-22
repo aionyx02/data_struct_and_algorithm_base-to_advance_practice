@@ -23,6 +23,7 @@ const CaseGeneratorRegistry& caseGenerators() {
         generators::registerTreeQueryGenerators(assembled);
         generators::registerStringIndexGenerators(assembled);
         generators::registerSpecializedGenerators(assembled);
+        generators::registerNumberTheoryGenerators(assembled);
         return assembled;
     }();
     return registry;

@@ -1,0 +1,9 @@
+8
+binom 1000000 500000
+binom 52 5
+binom 100 50
+fact 20
+inv_fact 20
+binom 1000000 1
+inv 500000
+binom 1000000 999999

@@ -93,7 +93,7 @@ Future-phase documents must state the trigger that makes them relevant. Binary c
 | `docs/adr/0003-spaced-review-scheduling.md` | `adr` | `accepted` | `on_demand` | Spaced Review Scheduling |
 | `docs/adr/0004-local-read-only-web-adapter.md` | `adr` | `accepted` | `on_demand` | Local Read-Only Web Adapter |
 | `docs/adr/0005-loopback-compile-check.md` | `adr` | `accepted` | `on_demand` | Loopback Compile Check |
-| `docs/adr/0006-plan-curriculum-expansion-to-algorithms-and-mathematics.md` | `adr` | `proposed` | `on_demand` | Plan curriculum expansion to algorithms and mathematics |
+| `docs/adr/0006-plan-curriculum-expansion-to-algorithms-and-mathematics.md` | `adr` | `accepted` | `on_demand` | Plan curriculum expansion to algorithms and mathematics |
 | `docs/algorithm-roadmap.md` | `learning_roadmap` | `active` | `on_demand` | 演算法學習路線 |
 | `docs/architecture.md` | `architecture_spec` | `active` | `retrieve_only` | Architecture |
 | `docs/CLAUDE.md` | `agent_policy` | `active` | `on_demand` | AI Agent Governance And ADR Policy |

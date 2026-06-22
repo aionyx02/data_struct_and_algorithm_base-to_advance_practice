@@ -24,10 +24,16 @@ implementing, testing, and reviewing data structures.
 
 ## Non-Goals
 
-- General algorithm training is outside the current scope.
-- The current phase does not include dynamic programming, number theory, geometry, or a full ICPC curriculum.
 - The Web interface will not own judging rules.
 - The project is not intended to execute code submitted by untrusted remote users.
+- Non-deterministic-output problem families (floating-point geometry,
+  construction with multiple valid answers, interactive, heuristic/scored) are
+  out of scope until each gets its own follow-up implementation ADR.
+
+> Scope note: general algorithm and mathematics curriculum was admitted by
+> ADR-0006 (accepted 2026-06-22). Foundation→international algorithm and math
+> problems are now in scope for the local Judge, planned in
+> `docs/algorithm-roadmap.md` (G-series) and `docs/math-roadmap.md` (M-series).
 
 ## Reference Materials
 
@@ -64,5 +70,6 @@ implementing, testing, and reviewing data structures.
 
 - Finish context-engineering initialization before application code.
 - Implement one CLI Judge vertical slice before creating the full problem catalog.
-- Keep the curriculum limited to data structures until the user explicitly expands scope.
+- Curriculum scope expanded beyond data structures to algorithms and mathematics
+  (ADR-0006, accepted 2026-06-22); promote exact-match-friendly families first.
 - Evolve the read-only Web workspace without duplicating Judge behavior.

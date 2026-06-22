@@ -1,0 +1,8 @@
+7
+inv 1
+fact 0
+inv_fact 0
+binom 0 0
+binom 1000000 0
+binom 1000000 1000000
+fact 1000000

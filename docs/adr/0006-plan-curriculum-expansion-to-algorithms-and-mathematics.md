@@ -1,6 +1,6 @@
 ---
 type: adr
-status: proposed
+status: accepted
 priority: p1
 updated: 2026-06-22
 context_policy: on_demand
@@ -11,7 +11,11 @@ owner: project
 
 ## Status
 
-Proposed
+Accepted (2026-06-22, by developer shawn). The scope gate is lifted: algorithm
+and mathematics families may now be implemented as local Judge problems.
+Non-deterministic-output families (geometry float tolerance, construction
+special-judge, interactive runner, heuristic scorer) still require their own
+follow-up implementation ADR before implementation, per the Decision below.
 
 ## Context
 

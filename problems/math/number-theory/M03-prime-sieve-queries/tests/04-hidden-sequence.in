@@ -1,0 +1,10 @@
+9
+is_prime 561
+spf 561
+count 500 600
+nth 168
+is_prime 999979
+spf 1000000
+count 0 0
+nth 78499
+is_prime 7919

@@ -20,5 +20,6 @@ void registerBalancedTreeGenerators(CaseGeneratorRegistry& registry);
 void registerTreeQueryGenerators(CaseGeneratorRegistry& registry);
 void registerStringIndexGenerators(CaseGeneratorRegistry& registry);
 void registerSpecializedGenerators(CaseGeneratorRegistry& registry);
+void registerNumberTheoryGenerators(CaseGeneratorRegistry& registry);
 
 }  // namespace judge::generators

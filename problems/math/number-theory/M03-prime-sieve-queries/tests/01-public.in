@@ -1,0 +1,11 @@
+10
+is_prime 1
+is_prime 2
+is_prime 97
+is_prime 1000000
+count 2 10
+count 1 100
+nth 1
+nth 25
+spf 84
+spf 1000000

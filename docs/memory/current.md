@@ -11,8 +11,12 @@ owner: project
 
 ## Current Strategy
 
-- Keep the curriculum limited to data structures: 68 foundational and 64 advanced problems.
-- Build the CLI Judge before the Web interface; both must share one Judge core.
+- The 132-problem data-structure catalog (68 foundational + 64 advanced) is complete.
+- Scope expanded to algorithms (G-series) and mathematics (M-series) per ADR-0006
+  (accepted 2026-06-22); reuse the same Judge core and differential-stress pattern.
+- Promote exact-match-friendly families first (number theory, counting DP);
+  defer non-deterministic output (geometry float, construction, interactive) to
+  follow-up ADRs.
 - Expand the catalog in small prerequisite-ordered chapters.
 
 ## Current Focus
@@ -34,16 +38,22 @@ owner: project
 
 ## Next Step
 
-- Select the next product slice: assessment mode or shared Judge submission.
+- Stage M1 number-theory foundations (M01-M06) is complete. Continue the
+  math/algorithm curriculum with the next `math-roadmap.md` stage (M2 congruence
+  theory: CRT chains, BSGS discrete log, Tonelli-Shanks) or start the G-series
+  algorithm track; both fall under `TASK.CURRICULUM.020`.
 
 ## Last Validation Snapshot
 
-- Last C++ validation: 2026-06-21.
+- Last C++ validation: 2026-06-22.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and
   `ctest --preset dev`.
-- Result: all 743 CTest tests passed (~172 s with four workers), including
-  schema-1 migration, fixed-date 1/7/30 scheduling, and due-review CLI coverage.
-- Judge runtime self-check: `algo list` enumerates all 132 problems.
+- Result: all 785 CTest tests passed (~476 s single-worker), including the six
+  M-series number-theory problems (M01-M06) catalog/judge/stress coverage and
+  the statically linked progress repository round-trip.
+- Judge runtime self-check: `algo list` enumerates all 138 problems (132 DS +
+  M01-M06 number theory). Correct submissions verdict `AC`, known-wrong `WA`
+  on both fixed tests and differential stress.
   correct submissions verdict `AC`, known-wrong `WA`, broken sources `CE`, null
   dereference `RE`, infinite loop `TLE`, and out-of-root sources are refused by
   the project-root boundary. Stress differential testing returns `AC`/`WA`.

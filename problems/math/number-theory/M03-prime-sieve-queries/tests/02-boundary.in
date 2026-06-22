@@ -1,0 +1,9 @@
+8
+is_prime 0
+is_prime 999983
+count 0 1
+count 999000 1000000
+nth 78498
+nth 78499
+spf 1
+spf 2

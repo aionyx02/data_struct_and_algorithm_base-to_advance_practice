@@ -11,7 +11,9 @@ owner: project
 
 ## Active Queue
 
-No active tasks. Select the next task from the backlog.
+- TASK.CURRICULUM.020 — Implement M-series number-theory Judge family (stage M).
+  Owner: shawn. Status: in progress. Stage M1 complete (M01-M06, all green).
+  Next: math-roadmap M2 (congruence theory) or the G-series algorithm track.
 
 ## Strategy
 

@@ -1,0 +1,16 @@
+{
+  "id": "M03-prime-sieve-queries",
+  "title": "Prime Sieve Queries",
+  "stage": "M",
+  "difficulty": "D2",
+  "judge_mode": "stdio",
+  "time_limit_ms": 1500,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(LIMIT) sieve, O(1) per query",
+  "expected_space": "O(LIMIT)",
+  "forbidden_symbols": ["std::gcd", "std::__gcd", "<numeric>"],
+  "random_tests": 100,
+  "operation_limit": 40,
+  "tests_directory": "tests"
+}

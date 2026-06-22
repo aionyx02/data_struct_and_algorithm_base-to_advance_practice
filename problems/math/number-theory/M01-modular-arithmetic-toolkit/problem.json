@@ -1,0 +1,16 @@
+{
+  "id": "M01-modular-arithmetic-toolkit",
+  "title": "Modular Arithmetic Toolkit",
+  "stage": "M",
+  "difficulty": "D2",
+  "judge_mode": "stdio",
+  "time_limit_ms": 1000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(log) per pow or inv via fast exponentiation and extended Euclid",
+  "expected_space": "O(1)",
+  "forbidden_symbols": ["std::gcd", "std::lcm", "std::__gcd", "std::pow", "<numeric>"],
+  "random_tests": 100,
+  "operation_limit": 48,
+  "tests_directory": "tests"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "M05-big-factorization",
+  "title": "Big Number Primality and Factorization",
+  "stage": "M",
+  "difficulty": "D4",
+  "judge_mode": "stdio",
+  "time_limit_ms": 2000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(n^{1/4}) per factorization via Pollard's Rho",
+  "expected_space": "O(log n)",
+  "forbidden_symbols": ["std::gcd", "std::__gcd", "<numeric>"],
+  "random_tests": 100,
+  "operation_limit": 32,
+  "tests_directory": "tests"
+}

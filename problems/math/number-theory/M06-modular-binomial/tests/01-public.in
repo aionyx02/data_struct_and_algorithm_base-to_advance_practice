@@ -1,0 +1,9 @@
+8
+inv 2
+fact 5
+inv_fact 5
+binom 5 2
+binom 10 3
+binom 5 5
+binom 5 6
+inv 1

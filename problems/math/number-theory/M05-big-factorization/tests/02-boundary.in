@@ -1,0 +1,8 @@
+7
+is_prime 1
+is_prime 2
+is_prime 999999999999999989
+max_factor 999999999999999989
+num_factors 1
+factor_count 1
+max_factor 1

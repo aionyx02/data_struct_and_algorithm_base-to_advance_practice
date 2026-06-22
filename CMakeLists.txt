@@ -26,6 +26,7 @@ add_library(judge_core
     src/generators/tree_query_generators.cpp
     src/generators/string_index_generators.cpp
     src/generators/specialized_generators.cpp
+    src/generators/number_theory_generators.cpp
 )
 
 target_include_directories(judge_core PRIVATE src)
@@ -66,6 +67,13 @@ include(CTest)
 if(BUILD_TESTING)
     add_executable(progress_repository_test tests/progress_repository_test.cpp)
     target_link_libraries(progress_repository_test PRIVATE judge_core)
+    # Same self-contained static linking as algo: avoids the version-mismatch
+    # "找不到輸入點" (entry-point-not-found, 0xc0000139) DLL loader error when
+    # CTest launches the exe from the build directory.
+    if(MINGW)
+        target_link_options(progress_repository_test PRIVATE
+            -static -static-libgcc -static-libstdc++)
+    endif()
     add_test(NAME progress_repository_round_trip COMMAND progress_repository_test)
 endif()
 
@@ -265,6 +273,12 @@ add_catalog_test(catalog_lists_a61 A61-persistent-array)
 add_catalog_test(catalog_lists_a62 A62-persistent-trie)
 add_catalog_test(catalog_lists_a63 A63-li-chao-tree)
 add_catalog_test(catalog_lists_a64 A64-dynamic-interval-tree)
+add_catalog_test(catalog_lists_m01 M01-modular-arithmetic-toolkit)
+add_catalog_test(catalog_lists_m02 M02-linear-congruence-solver)
+add_catalog_test(catalog_lists_m03 M03-prime-sieve-queries)
+add_catalog_test(catalog_lists_m04 M04-divisor-functions)
+add_catalog_test(catalog_lists_m05 M05-big-factorization)
+add_catalog_test(catalog_lists_m06 M06-modular-binomial)
 
     add_cli_judge_test(
         judge_accepts_array_adt
@@ -4676,4 +4690,46 @@ add_catalog_test(catalog_lists_a64 A64-dynamic-interval-tree)
     add_cli_stress_test(stress_accepts_dynamic_interval_tree A64-dynamic-interval-tree tests/fixtures/submissions/dynamic_interval_tree_correct.cpp 0 "Verdict: AC" FALSE)
     add_cli_stress_test(stress_rejects_dynamic_interval_tree_bug_one A64-dynamic-interval-tree tests/fixtures/submissions/dynamic_interval_tree_bug_one.cpp 1 "Verdict: WA" TRUE)
     add_cli_stress_test(stress_rejects_dynamic_interval_tree_bug_two A64-dynamic-interval-tree tests/fixtures/submissions/dynamic_interval_tree_bug_two.cpp 1 "Verdict: WA" TRUE)
+
+    add_cli_judge_test(judge_accepts_modular_arithmetic_toolkit M01-modular-arithmetic-toolkit tests/fixtures/submissions/modular_arithmetic_toolkit_correct.cpp 0 "Verdict: AC")
+    add_cli_judge_test(judge_rejects_modular_arithmetic_toolkit_fermat M01-modular-arithmetic-toolkit tests/fixtures/submissions/modular_arithmetic_toolkit_fermat_inverse.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_rejects_modular_arithmetic_toolkit_premod M01-modular-arithmetic-toolkit tests/fixtures/submissions/modular_arithmetic_toolkit_lcm_premod.cpp 1 "Verdict: WA")
+    add_cli_stress_test(stress_accepts_modular_arithmetic_toolkit M01-modular-arithmetic-toolkit tests/fixtures/submissions/modular_arithmetic_toolkit_correct.cpp 0 "Verdict: AC" FALSE)
+    add_cli_stress_test(stress_rejects_modular_arithmetic_toolkit_fermat M01-modular-arithmetic-toolkit tests/fixtures/submissions/modular_arithmetic_toolkit_fermat_inverse.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_rejects_modular_arithmetic_toolkit_premod M01-modular-arithmetic-toolkit tests/fixtures/submissions/modular_arithmetic_toolkit_lcm_premod.cpp 1 "Verdict: WA" TRUE)
+
+    add_cli_judge_test(judge_accepts_linear_congruence_solver M02-linear-congruence-solver tests/fixtures/submissions/linear_congruence_solver_correct.cpp 0 "Verdict: AC")
+    add_cli_judge_test(judge_rejects_linear_congruence_count_one M02-linear-congruence-solver tests/fixtures/submissions/linear_congruence_solver_count_one.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_rejects_linear_congruence_coprime_crt M02-linear-congruence-solver tests/fixtures/submissions/linear_congruence_solver_coprime_crt.cpp 1 "Verdict: WA")
+    add_cli_stress_test(stress_accepts_linear_congruence_solver M02-linear-congruence-solver tests/fixtures/submissions/linear_congruence_solver_correct.cpp 0 "Verdict: AC" FALSE)
+    add_cli_stress_test(stress_rejects_linear_congruence_count_one M02-linear-congruence-solver tests/fixtures/submissions/linear_congruence_solver_count_one.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_rejects_linear_congruence_coprime_crt M02-linear-congruence-solver tests/fixtures/submissions/linear_congruence_solver_coprime_crt.cpp 1 "Verdict: WA" TRUE)
+
+    add_cli_judge_test(judge_accepts_prime_sieve_queries M03-prime-sieve-queries tests/fixtures/submissions/prime_sieve_queries_correct.cpp 0 "Verdict: AC")
+    add_cli_judge_test(judge_rejects_prime_sieve_one_is_prime M03-prime-sieve-queries tests/fixtures/submissions/prime_sieve_queries_one_is_prime.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_rejects_prime_sieve_count_exclusive M03-prime-sieve-queries tests/fixtures/submissions/prime_sieve_queries_count_exclusive.cpp 1 "Verdict: WA")
+    add_cli_stress_test(stress_accepts_prime_sieve_queries M03-prime-sieve-queries tests/fixtures/submissions/prime_sieve_queries_correct.cpp 0 "Verdict: AC" FALSE)
+    add_cli_stress_test(stress_rejects_prime_sieve_one_is_prime M03-prime-sieve-queries tests/fixtures/submissions/prime_sieve_queries_one_is_prime.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_rejects_prime_sieve_count_exclusive M03-prime-sieve-queries tests/fixtures/submissions/prime_sieve_queries_count_exclusive.cpp 1 "Verdict: WA" TRUE)
+
+    add_cli_judge_test(judge_accepts_divisor_functions M04-divisor-functions tests/fixtures/submissions/divisor_functions_correct.cpp 0 "Verdict: AC")
+    add_cli_judge_test(judge_rejects_divisor_functions_no_plus_one M04-divisor-functions tests/fixtures/submissions/divisor_functions_divisors_no_plus_one.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_rejects_divisor_functions_phi M04-divisor-functions tests/fixtures/submissions/divisor_functions_phi_no_prime_power.cpp 1 "Verdict: WA")
+    add_cli_stress_test(stress_accepts_divisor_functions M04-divisor-functions tests/fixtures/submissions/divisor_functions_correct.cpp 0 "Verdict: AC" FALSE)
+    add_cli_stress_test(stress_rejects_divisor_functions_no_plus_one M04-divisor-functions tests/fixtures/submissions/divisor_functions_divisors_no_plus_one.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_rejects_divisor_functions_phi M04-divisor-functions tests/fixtures/submissions/divisor_functions_phi_no_prime_power.cpp 1 "Verdict: WA" TRUE)
+
+    add_cli_judge_test(judge_accepts_big_factorization M05-big-factorization tests/fixtures/submissions/big_factorization_correct.cpp 0 "Verdict: AC")
+    add_cli_judge_test(judge_rejects_big_factorization_base2 M05-big-factorization tests/fixtures/submissions/big_factorization_base2_only.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_rejects_big_factorization_multiplicity M05-big-factorization tests/fixtures/submissions/big_factorization_multiplicity.cpp 1 "Verdict: WA")
+    add_cli_stress_test(stress_accepts_big_factorization M05-big-factorization tests/fixtures/submissions/big_factorization_correct.cpp 0 "Verdict: AC" FALSE)
+    add_cli_stress_test(stress_rejects_big_factorization_base2 M05-big-factorization tests/fixtures/submissions/big_factorization_base2_only.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_rejects_big_factorization_multiplicity M05-big-factorization tests/fixtures/submissions/big_factorization_multiplicity.cpp 1 "Verdict: WA" TRUE)
+
+    add_cli_judge_test(judge_accepts_modular_binomial M06-modular-binomial tests/fixtures/submissions/modular_binomial_correct.cpp 0 "Verdict: AC")
+    add_cli_judge_test(judge_rejects_modular_binomial_inv_sign M06-modular-binomial tests/fixtures/submissions/modular_binomial_inv_sign_error.cpp 1 "Verdict: WA")
+    add_cli_judge_test(judge_rejects_modular_binomial_zero_at_equal M06-modular-binomial tests/fixtures/submissions/modular_binomial_zero_at_equal.cpp 1 "Verdict: WA")
+    add_cli_stress_test(stress_accepts_modular_binomial M06-modular-binomial tests/fixtures/submissions/modular_binomial_correct.cpp 0 "Verdict: AC" FALSE)
+    add_cli_stress_test(stress_rejects_modular_binomial_inv_sign M06-modular-binomial tests/fixtures/submissions/modular_binomial_inv_sign_error.cpp 1 "Verdict: WA" TRUE)
+    add_cli_stress_test(stress_rejects_modular_binomial_zero_at_equal M06-modular-binomial tests/fixtures/submissions/modular_binomial_zero_at_equal.cpp 1 "Verdict: WA" TRUE)
 endif()
