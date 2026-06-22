@@ -12,11 +12,11 @@ owner: project
 ## System Overview
 
 The local Judge is the single source of truth for verdicts. The `algo` CLI owns
-submission flows; the first Web adapter is read-only and must not implement
-separate judging behavior.
+submission flows; the Web adapter may perform a bounded syntax-only compile
+check but must not implement separate judging behavior.
 
 ```text
-algo CLI (src/main.cpp)       Local Web read adapter (Node.js)
+algo CLI (src/main.cpp)       Local Web adapter (Node.js)
         \                                /
          v                              v
         Application services
@@ -75,7 +75,7 @@ scripts/                Repository tooling (practice CLI, docs/team guards)
 | Layer | Responsibility | Concrete code | Must not own |
 |---|---|---|---|
 | Interface | Parse args, dispatch `list`/`show`/`test`/`stress`, format output, set exit code | `src/main.cpp` | Judge rules |
-| Web read adapter | Serve allowlisted assets and map catalog/progress files to view models | `scripts/web-server.mjs`, `web/**` | Judge rules, repository mutation |
+| Web adapter | Serve allowlisted assets, map read models, and run bounded compile checks | `scripts/web-server.mjs`, `web/**` | Judge rules, submission verdicts, repository mutation |
 | Application | Orchestrate the test and stress use cases | `JudgeService`, `StressService` | OS-specific process details |
 | Progress | Persist local attempt summaries behind a reusable contract | `ProgressRepository` | Judge rules, source code, UI policy |
 | Domain | Verdicts, metadata contract, generator contract, discovery rules | `judge_service.hpp`, `problem.hpp`, `case_generator.hpp`, `catalog.cpp` | CLI, Web, raw OS APIs |
@@ -114,7 +114,9 @@ scripts/                Repository tooling (practice CLI, docs/team guards)
   `.judge/progress.json` after a completed `test` command.
 - **Local Web adapter** (`scripts/web-server.mjs`) binds to `127.0.0.1`, caches
   catalog metadata, rereads progress per request, and serves only the explicit
-  `index.html`, `styles.css`, and `app.js` asset allowlist.
+  `index.html`, `styles.css`, and `app.js` asset allowlist. ADR-0005 adds a
+  128-KiB compile route that spawns the configured compiler without a shell,
+  uses `-fsyntax-only`, times out after 20 seconds, and bounds diagnostics.
 
 ## Runtime Flows
 
@@ -130,8 +132,8 @@ scripts/                Repository tooling (practice CLI, docs/team guards)
   `--no-progress`; stress never records learner progress.
 - `algo review`: filter schema-2 progress records to reviews due on or before
   the current UTC day, ordered by due date and problem ID.
-- `npm run web`: serve read-only `/api/problems`, problem detail, and due-review
-  views plus the native split-pane workspace at `127.0.0.1:4173`.
+- `npm run web`: serve catalog, problem detail, due-review views, and bounded
+  `POST /api/compile` plus the resizable native workspace at `127.0.0.1:4173`.
 
 ## Verdict Vocabulary
 
@@ -150,8 +152,9 @@ internal errors.
 - Infrastructure (`ProcessRunner`, `ProblemCatalog`) implements domain-facing
   behavior; domain code does not depend on CLI, Web, CMake, or OS APIs.
 - Problem packages and generators depend only on the stable contracts below.
-- A future write-enabled Web adapter must invoke the same `JudgeService` /
-  `StressService`; the current adapter exposes no execution route.
+- A future submission adapter must invoke the same `JudgeService` /
+  `StressService`; the current adapter never executes learner binaries and its
+  compile result is not a verdict.
 
 ## Runtime Safety Boundary
 
@@ -170,7 +173,7 @@ internal errors.
 - Case generator contract (`GeneratedCase`, `CaseGenerator`).
 - Verdict and report shapes (`Verdict`, `TestResult`, `JudgeReport`, `StressReport`).
 - Progress schema version 2 and `ProgressRepository` record semantics.
-- Read-only Web endpoint and view-model shapes from ADR-0004.
+- Web view-model shapes from ADR-0004 and compile-check contract from ADR-0005.
 - CLI command surface and exit-code behavior.
 
 Breaking changes to these require tests, migration notes, and an ADR when the

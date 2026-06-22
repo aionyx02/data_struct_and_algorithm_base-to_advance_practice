@@ -71,6 +71,11 @@
       </div>
     </aside>
 
+    <div class="resize-handle" id="sidebar-resizer" role="separator"
+         aria-label="調整題庫欄寬度" aria-orientation="vertical"
+         aria-valuemin="220" aria-valuemax="480" aria-valuenow="300"
+         tabindex="0" title="拖曳調整寬度；雙擊重設"></div>
+
     <section class="problem-panel" aria-labelledby="problem-title">
       <div class="panel-toolbar statement-toolbar">
         <div class="breadcrumbs" id="breadcrumbs">題庫 / 載入中</div>
@@ -102,6 +107,11 @@
       </div>
     </section>
 
+    <div class="resize-handle" id="practice-resizer" role="separator"
+         aria-label="調整作答欄寬度" aria-orientation="vertical"
+         aria-valuemin="300" aria-valuemax="640" aria-valuenow="390"
+         tabindex="0" title="拖曳調整寬度；雙擊重設"></div>
+
     <aside class="practice-panel" id="practice-panel" aria-label="解題草稿與進度">
       <div class="panel-toolbar editor-toolbar">
         <div class="file-tab"><span class="cpp-icon">C++</span><strong>solution.cpp</strong><span class="unsaved-dot" aria-label="草稿儲存在瀏覽器"></span></div>
@@ -115,6 +125,14 @@
         <div class="line-number-rail" aria-hidden="true">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15</div>
         <textarea id="draft-editor" spellcheck="false" aria-label="本機解題草稿" autocomplete="off"></textarea>
       </div>
+
+      <section class="compile-panel" id="compile-panel" aria-labelledby="compile-title" aria-live="polite" hidden>
+        <div class="compile-heading">
+          <strong id="compile-title">編譯結果</strong>
+          <span class="compile-status" id="compile-status">等待中</span>
+        </div>
+        <pre id="compile-diagnostics" tabindex="0"></pre>
+      </section>
 
       <section class="progress-card" aria-labelledby="progress-title">
         <div class="card-heading">
@@ -140,7 +158,10 @@
           <span class="command-label">LOCAL JUDGE</span>
           <code id="judge-command">npm run judge -- …</code>
         </div>
-        <button class="run-button" id="copy-command" type="button"><span aria-hidden="true">▸</span> 複製指令</button>
+        <div class="command-actions">
+          <button class="secondary-button" id="copy-command" type="button">複製指令</button>
+          <button class="run-button" id="compile-button" type="button" title="編譯目前草稿（Ctrl+Enter）"><span aria-hidden="true">▶</span> 編譯</button>
+        </div>
       </div>
     </aside>
   </main>

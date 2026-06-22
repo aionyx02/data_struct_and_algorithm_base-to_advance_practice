@@ -43,11 +43,12 @@ When using a Visual Studio multi-config build directory instead of the preset, p
 | Stress tests | Randomized operation sequences with reproducible seeds |
 | Benchmark tests | Measure `n`, `2n`, and `4n` growth and operation counts |
 | End-to-end tests | Compile and judge known AC, WA, TLE, RE, API, and invariant-breaking submissions |
-| Web adapter tests | Verify loopback API data, progress mapping, static allowlist, CSP, and method rejection |
+| Web adapter tests | Verify loopback API data, progress mapping, compile bounds, static allowlist, CSP, and method rejection |
 
 `npm test` starts the local Web adapter on an ephemeral loopback port with an
 isolated fixture. Browser verification additionally covers search, navigation,
-review filtering, and desktop/mobile pane behavior against the real 132-problem catalog.
+review filtering, mouse/keyboard pane resizing, successful and failed real
+compiler feedback, and desktop/mobile behavior against the real 132-problem catalog.
 
 The first seventeen foundation problems support seeded differential stress tests:
 

@@ -1,11 +1,15 @@
 import fs from 'node:fs/promises';
 import http from 'node:http';
 import path from 'node:path';
+import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WEB_ROOT = path.join(ROOT, 'web');
 const HOST = '127.0.0.1';
+const MAX_SOURCE_BYTES = 128 * 1024;
+const MAX_REQUEST_BYTES = 140 * 1024;
+const MAX_DIAGNOSTIC_BYTES = 64 * 1024;
 
 const STATIC_FILES = new Map([
   ['/', ['index.html', 'text/html; charset=utf-8']],
@@ -30,6 +34,99 @@ function sendJson(response, status, value) {
     'Cache-Control': 'no-store'
   });
   response.end(`${JSON.stringify(value)}\n`);
+}
+
+function requestError(statusCode, message) {
+  const error = new Error(message);
+  error.statusCode = statusCode;
+  return error;
+}
+
+async function readJsonBody(request) {
+  if (!(request.headers['content-type'] ?? '').startsWith('application/json')) {
+    throw requestError(415, 'content_type_must_be_application_json');
+  }
+  const chunks = [];
+  let size = 0;
+  for await (const chunk of request) {
+    size += chunk.length;
+    if (size > MAX_REQUEST_BYTES) throw requestError(413, 'request_too_large');
+    chunks.push(chunk);
+  }
+  try {
+    return JSON.parse(Buffer.concat(chunks).toString('utf8'));
+  } catch {
+    throw requestError(400, 'invalid_json');
+  }
+}
+
+export function compileSource(source, {
+  compiler = process.env.CXX || 'g++',
+  cwd = ROOT,
+  timeoutMs = 20_000
+} = {}) {
+  return new Promise((resolve) => {
+    const diagnostics = [];
+    let diagnosticBytes = 0;
+    let truncated = false;
+    let timedOut = false;
+    let settled = false;
+
+    const child = spawn(
+      compiler,
+      ['-std=c++20', '-fsyntax-only', '-x', 'c++', '-'],
+      { cwd, shell: false, windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] }
+    );
+
+    const capture = (chunk) => {
+      const remaining = MAX_DIAGNOSTIC_BYTES - diagnosticBytes;
+      if (remaining <= 0) {
+        truncated = true;
+        return;
+      }
+      const accepted = chunk.subarray(0, remaining);
+      diagnostics.push(accepted);
+      diagnosticBytes += accepted.length;
+      if (accepted.length < chunk.length) truncated = true;
+    };
+    child.stdout.on('data', capture);
+    child.stderr.on('data', capture);
+
+    const finish = (result) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      let output = Buffer.concat(diagnostics).toString('utf8').trim();
+      if (!output && result.diagnostics) output = result.diagnostics;
+      if (truncated) output += `${output ? '\n' : ''}[diagnostics truncated]`;
+      resolve({ ...result, diagnostics: output, truncated });
+    };
+
+    const timer = setTimeout(() => {
+      timedOut = true;
+      child.kill();
+    }, timeoutMs);
+
+    child.once('error', (error) => {
+      finish({
+        status: 'compiler_unavailable',
+        success: false,
+        timedOut: false,
+        exitCode: null,
+        diagnostics: `Could not start ${compiler}: ${error.message}`
+      });
+    });
+    child.once('close', (exitCode) => {
+      finish({
+        status: timedOut ? 'timeout' : exitCode === 0 ? 'compiled' : 'compile_error',
+        success: !timedOut && exitCode === 0,
+        timedOut,
+        exitCode
+      });
+    });
+    child.stdin.on('error', () => {});
+    child.stdin.end(source);
+  });
 }
 
 async function findProblemFiles(directory, result = []) {
@@ -161,18 +258,56 @@ function summary(problem, progress) {
   return { ...metadata, progress: progress ?? null };
 }
 
-export async function createWebServer({ projectRoot = ROOT, webRoot = WEB_ROOT } = {}) {
+export async function createWebServer({
+  projectRoot = ROOT,
+  webRoot = WEB_ROOT,
+  compileHandler = null
+} = {}) {
   const catalog = await loadCatalog(projectRoot);
   const byId = new Map(catalog.map((problem) => [problem.id, problem]));
+  const compile = compileHandler ?? ((source) => compileSource(source, { cwd: projectRoot }));
+  let compileBusy = false;
 
   return http.createServer(async (request, response) => {
     try {
+      const requestUrl = new URL(request.url ?? '/', `http://${HOST}`);
+      if (requestUrl.pathname === '/api/compile') {
+        if (request.method !== 'POST') {
+          sendJson(response, 405, { error: 'method_not_allowed' });
+          return;
+        }
+        const body = await readJsonBody(request);
+        if (typeof body.problemId !== 'string' || !byId.has(body.problemId)) {
+          sendJson(response, 404, { error: 'problem_not_found' });
+          return;
+        }
+        if (typeof body.source !== 'string' || body.source.length === 0) {
+          sendJson(response, 400, { error: 'source_must_be_non_empty' });
+          return;
+        }
+        if (Buffer.byteLength(body.source, 'utf8') > MAX_SOURCE_BYTES) {
+          sendJson(response, 413, { error: 'source_too_large' });
+          return;
+        }
+        if (compileBusy) {
+          sendJson(response, 429, { error: 'compile_busy' });
+          return;
+        }
+        compileBusy = true;
+        try {
+          const result = await compile(body.source, { problemId: body.problemId });
+          sendJson(response, 200, { result });
+        } finally {
+          compileBusy = false;
+        }
+        return;
+      }
+
       if (request.method !== 'GET') {
         sendJson(response, 405, { error: 'method_not_allowed' });
         return;
       }
 
-      const requestUrl = new URL(request.url ?? '/', `http://${HOST}`);
       if (requestUrl.pathname === '/api/health') {
         sendJson(response, 200, { status: 'ok', problemCount: catalog.length });
         return;
@@ -229,8 +364,14 @@ export async function createWebServer({ projectRoot = ROOT, webRoot = WEB_ROOT }
       });
       response.end(content);
     } catch (error) {
-      console.error(error);
-      if (!response.headersSent) sendJson(response, 500, { error: 'internal_error' });
+      if (!error.statusCode) console.error(error);
+      if (!response.headersSent) {
+        sendJson(
+          response,
+          error.statusCode ?? 500,
+          { error: error.statusCode ? error.message : 'internal_error' }
+        );
+      }
       else response.end();
     }
   });

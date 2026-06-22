@@ -51,6 +51,8 @@ inspired by programming practice workspaces rather than a branded clone.
 | Form field | Persistent label, nearby validation, keyboard operable |
 | Navigation | Reflect curriculum stage and preserve current problem context |
 | Verdict badge | Include text and icon; never rely on color alone |
+| Pane separator | Mouse/touch drag plus arrow keys; bounded widths and visible focus |
+| Compile result | Text status plus bounded monospace diagnostics; never color alone |
 
 ## Change Policy
 

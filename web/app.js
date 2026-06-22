@@ -23,9 +23,112 @@ const elements = {
   reviewDate: document.querySelector('#review-date'),
   reviewRow: document.querySelector('.review-row'),
   command: document.querySelector('#judge-command'),
+  workspace: document.querySelector('.workspace'),
+  sidebarResizer: document.querySelector('#sidebar-resizer'),
+  practiceResizer: document.querySelector('#practice-resizer'),
+  compileButton: document.querySelector('#compile-button'),
+  compilePanel: document.querySelector('#compile-panel'),
+  compileStatus: document.querySelector('#compile-status'),
+  compileDiagnostics: document.querySelector('#compile-diagnostics'),
   toast: document.querySelector('#toast'),
   sidebarToggle: document.querySelector('#sidebar-toggle')
 };
+
+const paneWidths = {
+  sidebar: 300,
+  practice: 390
+};
+const paneDefaults = { ...paneWidths };
+const paneLimits = {
+  sidebar: { min: 220, max: 480 },
+  practice: { min: 300, max: 640 }
+};
+const minimumStatementWidth = 380;
+const splitterWidth = 12;
+
+function clamp(value, minimum, maximum) {
+  return Math.min(Math.max(value, minimum), Math.max(minimum, maximum));
+}
+
+function paneMaximum(type) {
+  const total = elements.workspace.getBoundingClientRect().width;
+  const other = type === 'sidebar' ? paneWidths.practice : paneWidths.sidebar;
+  return Math.min(paneLimits[type].max, total - other - minimumStatementWidth - splitterWidth);
+}
+
+function setPaneWidth(type, requestedWidth) {
+  if (window.innerWidth <= 920) return;
+  paneWidths[type] = Math.round(clamp(requestedWidth, paneLimits[type].min, paneMaximum(type)));
+  elements.workspace.style.setProperty(`--${type}-width`, `${paneWidths[type]}px`);
+  elements[`${type}Resizer`].setAttribute('aria-valuenow', String(paneWidths[type]));
+}
+
+function savePaneWidths() {
+  localStorage.setItem('structlab:pane-widths', JSON.stringify(paneWidths));
+}
+
+function restorePaneWidths() {
+  try {
+    const stored = JSON.parse(localStorage.getItem('structlab:pane-widths'));
+    if (Number.isFinite(stored?.sidebar)) paneWidths.sidebar = stored.sidebar;
+    if (Number.isFinite(stored?.practice)) paneWidths.practice = stored.practice;
+  } catch {
+    localStorage.removeItem('structlab:pane-widths');
+  }
+  setPaneWidth('sidebar', paneWidths.sidebar);
+  setPaneWidth('practice', paneWidths.practice);
+}
+
+function setupPaneResizer(type) {
+  const handle = elements[`${type}Resizer`];
+  let startX = 0;
+  let startWidth = 0;
+  let activePointerId = null;
+
+  handle.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0 || window.innerWidth <= 920) return;
+    event.preventDefault();
+    startX = event.clientX;
+    startWidth = paneWidths[type];
+    activePointerId = event.pointerId;
+    handle.setPointerCapture(event.pointerId);
+    handle.classList.add('is-active');
+    document.body.classList.add('is-resizing');
+  });
+  window.addEventListener('pointermove', (event) => {
+    if (event.pointerId !== activePointerId) return;
+    const delta = event.clientX - startX;
+    setPaneWidth(type, startWidth + (type === 'sidebar' ? delta : -delta));
+  });
+  const finishResize = (event) => {
+    if (event.pointerId !== activePointerId) return;
+    if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+    activePointerId = null;
+    handle.classList.remove('is-active');
+    document.body.classList.remove('is-resizing');
+    savePaneWidths();
+  };
+  window.addEventListener('pointerup', finishResize);
+  window.addEventListener('pointercancel', finishResize);
+  handle.addEventListener('keydown', (event) => {
+    const direction = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+    if (direction) {
+      event.preventDefault();
+      setPaneWidth(type, paneWidths[type] + direction * (type === 'sidebar' ? 16 : -16));
+      savePaneWidths();
+    } else if (event.key === 'Home' || event.key === 'End') {
+      event.preventDefault();
+      const useMaximum = event.key === (type === 'sidebar' ? 'End' : 'Home');
+      setPaneWidth(type, useMaximum ? paneMaximum(type) : paneLimits[type].min);
+      savePaneWidths();
+    }
+  });
+  handle.addEventListener('dblclick', () => {
+    setPaneWidth(type, paneDefaults[type]);
+    savePaneWidths();
+    showToast(`${type === 'sidebar' ? '題庫' : '作答'}欄寬度已重設`);
+  });
+}
 
 function topicLabel(topic) {
   return topic.split('-').map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
@@ -218,6 +321,49 @@ function renderProgress(progress) {
   }
 }
 
+function resetCompileResult() {
+  elements.compilePanel.hidden = true;
+  elements.compileStatus.className = 'compile-status';
+  elements.compileStatus.textContent = '等待中';
+  elements.compileDiagnostics.textContent = '';
+}
+
+async function compileDraft() {
+  if (!state.selectedId || elements.compileButton.disabled) return;
+  elements.compilePanel.hidden = false;
+  elements.compileStatus.className = 'compile-status pending';
+  elements.compileStatus.textContent = '編譯中';
+  elements.compileDiagnostics.textContent = '正在呼叫本機 C++20 compiler…';
+  elements.compileButton.disabled = true;
+
+  try {
+    const response = await fetch('/api/compile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ problemId: state.selectedId, source: elements.editor.value })
+    });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error ?? `HTTP ${response.status}`);
+    const result = payload.result;
+    elements.compileStatus.className = `compile-status ${result.success ? 'success' : 'error'}`;
+    elements.compileStatus.textContent = result.success
+      ? '✓ 編譯成功'
+      : result.timedOut
+        ? '逾時'
+        : result.status === 'compiler_unavailable'
+          ? '找不到 compiler'
+          : '編譯失敗';
+    elements.compileDiagnostics.textContent = result.diagnostics ||
+      (result.success ? 'C++20 syntax check passed. 沒有編譯錯誤。' : 'Compiler did not return diagnostics.');
+  } catch (error) {
+    elements.compileStatus.className = 'compile-status error';
+    elements.compileStatus.textContent = '無法編譯';
+    elements.compileDiagnostics.textContent = `Compile request failed: ${error.message}`;
+  } finally {
+    elements.compileButton.disabled = false;
+  }
+}
+
 function starterFor(problem) {
   return `#include <iostream>\n\n// ${problem.id}: ${problem.title}\n// Target: ${problem.expectedTime}, ${problem.expectedSpace}\n\nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    // Write your solution here.\n\n    return 0;\n}\n`;
 }
@@ -233,6 +379,7 @@ async function selectProblem(problemId) {
   renderProblemList();
   document.body.classList.remove('sidebar-open');
   elements.sidebarToggle.setAttribute('aria-expanded', 'false');
+  resetCompileResult();
   elements.title.textContent = '載入題目…';
   elements.statement.replaceChildren();
   const loading = document.createElement('div');
@@ -330,6 +477,11 @@ document.querySelectorAll('[data-difficulty]').forEach((button) => {
 
 elements.editor.addEventListener('input', saveCurrentDraft);
 elements.editor.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+    event.preventDefault();
+    compileDraft();
+    return;
+  }
   if (event.key === 'Tab') {
     event.preventDefault();
     const start = elements.editor.selectionStart;
@@ -339,6 +491,7 @@ elements.editor.addEventListener('keydown', (event) => {
 });
 
 document.querySelector('#copy-command').addEventListener('click', () => copyText(elements.command.textContent, 'Judge 指令已複製'));
+elements.compileButton.addEventListener('click', compileDraft);
 document.querySelector('#copy-link').addEventListener('click', () => copyText(location.href, '題目連結已複製'));
 document.querySelector('#editor-toggle').addEventListener('click', () => document.body.classList.add('editor-open'));
 document.querySelector('#close-editor').addEventListener('click', () => document.body.classList.remove('editor-open'));
@@ -359,6 +512,16 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') {
     document.body.classList.remove('editor-open', 'sidebar-open');
     elements.sidebarToggle.setAttribute('aria-expanded', 'false');
+  }
+});
+
+setupPaneResizer('sidebar');
+setupPaneResizer('practice');
+restorePaneWidths();
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 920) {
+    setPaneWidth('sidebar', paneWidths.sidebar);
+    setPaneWidth('practice', paneWidths.practice);
   }
 });
 

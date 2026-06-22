@@ -2,7 +2,7 @@
 type: security_policy
 status: active
 priority: p1
-updated: 2026-06-13
+updated: 2026-06-21
 context_policy: retrieve_only
 owner: project
 ---
@@ -31,7 +31,8 @@ It is not a secure multi-tenant sandbox and must not be exposed as a public code
 | Compiler runner | Source paths and compiler flags | Allowlisted flags and structured arguments |
 | Executable runner | Learner binary and test input | Timeout, output bound, working-directory isolation |
 | Progress storage | Local verdict and timing records | Atomic write and schema validation |
-| Future Web adapter | Local HTTP requests | Disabled until an ADR defines exposure and authorization |
+| Local Web reads | Loopback HTTP requests | Static allowlist, known problem IDs, no repository mutation |
+| Compile check | Browser C++ source | Loopback-only POST, one compile at a time, 128-KiB source cap, fixed no-shell flags, 20-second timeout, 64-KiB diagnostics cap, no binary execution |
 
 ## Approval-Gated Changes
 
@@ -49,9 +50,10 @@ It is not a secure multi-tenant sandbox and must not be exposed as a public code
 - Failed compile and crashed process cleanup.
 - Symlink or junction escape where supported.
 - Malformed metadata and unexpected file types.
+- Oversized/malformed compile requests, missing compiler, compile timeout, and diagnostic truncation.
 
 ## Automated Checks
 
 - `npm run security:scan`
 - `npm run docs:refresh`
-- Future runner-specific C++ integration tests
+- Runner-specific C++ and loopback Web integration tests

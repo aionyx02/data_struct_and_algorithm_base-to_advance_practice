@@ -20,8 +20,9 @@ owner: project
 - Active priority: build the product layer on the completed 132-problem catalog.
 - Current phase: the read-only Web workspace is complete. `npm run web` serves
   the 132-problem catalog, statements, progress, review state, and browser-local
-  drafts through a loopback-only native Web UI.
-- Current owner / handoff state: no active task. `TASK.WEB.001` completed with
+  drafts through a loopback-only native Web UI. Desktop panes are resizable,
+  and a bounded syntax-only compile check returns local compiler diagnostics.
+- Current owner / handoff state: no active task. `TASK.WEB.002` completed with
   `shawn` on 2026-06-21.
 
 ## Important Constraints
@@ -33,7 +34,7 @@ owner: project
 
 ## Next Step
 
-- Select the next product slice: assessment mode or browser-triggered submission.
+- Select the next product slice: assessment mode or shared Judge submission.
 
 ## Last Validation Snapshot
 
@@ -49,7 +50,7 @@ owner: project
 - Progress schema 2 reads schema 1, migrates on write, and rejects malformed
   JSON, unknown fields, duplicate IDs, invalid counts, and unsupported versions.
   Writes remain atomic; no source code or diagnostics are persisted.
-- Web validation: 15/15 Node tests passed; localhost browser checks covered the
-  real catalog, search, navigation, review filtering, desktop panes, mobile
-  drawers, accessible labels, and a clean console.
+- Web validation: 16/16 Node tests passed; localhost browser checks covered the
+  real catalog, mouse/keyboard resizing, persisted widths, successful and failed
+  real compiler feedback, mobile behavior, accessible labels, and a clean console.
 - Known failing checks: none.

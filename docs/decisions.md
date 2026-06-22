@@ -18,3 +18,4 @@ owner: project
 | `0002` | accepted | ADR-0002: Local Progress Persistence |
 | `0003` | accepted | ADR-0003: Spaced Review Scheduling |
 | `0004` | accepted | ADR-0004: Local Read-Only Web Adapter |
+| `0005` | accepted | ADR-0005: Loopback Compile Check |

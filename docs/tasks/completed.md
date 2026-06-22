@@ -40,3 +40,4 @@ owner: project
 | `TASK.PROGRESS.001` | Add Atomic Local Progress Persistence | `docs/memory/sessions/2026-06-21-shawn.md` |
 | `TASK.REVIEW.001` | Add Spaced Review Scheduling | `docs/memory/sessions/2026-06-21-shawn.md` |
 | `TASK.WEB.001` | Build The Local Read-Only Practice Workspace | `docs/memory/sessions/2026-06-21-shawn.md` |
+| `TASK.WEB.002` | Add Resizable Panes And Compile Checks | `docs/memory/sessions/2026-06-21-shawn.md` |

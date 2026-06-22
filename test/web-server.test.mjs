@@ -11,6 +11,7 @@ const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url))
 let fixtureRoot;
 let server;
 let baseUrl;
+const compileRequests = [];
 
 before(async () => {
   fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'structlab-web-test-'));
@@ -54,7 +55,19 @@ before(async () => {
 
   server = await createWebServer({
     projectRoot: fixtureRoot,
-    webRoot: path.join(repositoryRoot, 'web')
+    webRoot: path.join(repositoryRoot, 'web'),
+    compileHandler: async (source, context) => {
+      compileRequests.push({ source, context });
+      const success = !source.includes('missing_semicolon');
+      return {
+        status: success ? 'compiled' : 'compile_error',
+        success,
+        timedOut: false,
+        exitCode: success ? 0 : 1,
+        diagnostics: success ? '' : '<stdin>:1: error: expected semicolon',
+        truncated: false
+      };
+    }
   });
   await new Promise((resolve, reject) => {
     server.once('error', reject);
@@ -99,4 +112,47 @@ test('local Web adapter exposes only allowed routes and methods', async () => {
   assert.equal((await fetch(`${baseUrl}/package.json`)).status, 404);
   assert.equal((await fetch(`${baseUrl}/api/problems`, { method: 'POST' })).status, 405);
   assert.equal((await fetch(`${baseUrl}/api/problems/unknown`)).status, 404);
+});
+
+test('local Web adapter provides a bounded compile-only route', async () => {
+  const response = await fetch(`${baseUrl}/api/compile`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      problemId: 'F03-stack-array',
+      source: 'int main() { return 0; }'
+    })
+  });
+  assert.equal(response.status, 200);
+  const payload = await response.json();
+  assert.equal(payload.result.status, 'compiled');
+  assert.equal(payload.result.success, true);
+  assert.deepEqual(compileRequests.at(-1), {
+    source: 'int main() { return 0; }',
+    context: { problemId: 'F03-stack-array' }
+  });
+
+  const unknown = await fetch(`${baseUrl}/api/compile`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ problemId: 'unknown', source: 'int main() {}' })
+  });
+  assert.equal(unknown.status, 404);
+
+  const wrongType = await fetch(`${baseUrl}/api/compile`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: 'int main() {}'
+  });
+  assert.equal(wrongType.status, 415);
+
+  const oversized = await fetch(`${baseUrl}/api/compile`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      problemId: 'F03-stack-array',
+      source: 'x'.repeat(128 * 1024 + 1)
+    })
+  });
+  assert.equal(oversized.status, 413);
 });
