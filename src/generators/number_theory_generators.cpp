@@ -2,11 +2,13 @@
 #include "judge/case_generator.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <random>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace judge::generators {
@@ -638,6 +640,258 @@ GeneratedCase generateModularBinomial(
     return {in.str(), out.str()};
 }
 
+// ----- M07: discrete logarithm (BSGS) ----------------------------------------
+
+ll bsgsOracle(ll a, ll b, ll p) {
+    a %= p;
+    b %= p;
+    if (b == 1 % p) return 0;
+    if (a == 0) return b == 0 ? 1 : -1;
+    ll n = static_cast<ll>(std::ceil(std::sqrt(static_cast<double>(p))));
+    std::unordered_map<ll, ll> table;
+    ll cur = b;
+    for (ll j = 0; j < n; ++j) {
+        table[cur] = j;
+        cur = static_cast<ll>(static_cast<i128>(cur) * a % p);
+    }
+    ll an = powmod(a, n, p);
+    cur = 1;
+    for (ll i = 1; i <= n; ++i) {
+        cur = static_cast<ll>(static_cast<i128>(cur) * an % p);
+        auto it = table.find(cur);
+        if (it != table.end()) return i * n - it->second;
+    }
+    return -1;
+}
+
+GeneratedCase generateDiscreteLogarithm(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "M07-discrete-logarithm operation_limit is too small"
+        );
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+
+    auto emit = [&](ll a, ll b, ll p) {
+        in << "log " << a << ' ' << b << ' ' << p << '\n';
+        ll x = bsgsOracle(a, b, p);
+        if (x < 0) out << "NONE" << '\n';
+        else out << x << '\n';
+    };
+
+    // Pinned prefix: b=0 traps the "0 for zero" bug; b=1 traps the dropped
+    // x=0 fast path (which would return the order instead of 0).
+    emit(2, 0, 5);
+    emit(5, 1, 1'000'000'007);
+    emit(2, 3, 5);
+    emit(3, 4, 7);
+    int emitted = 4;
+
+    static const ll kPrimes[] = {5, 7, 11, 13, 17, 19, 23, 29, 31, 37,
+                                 998244353, 1'000'000'007};
+    const int primeCount = static_cast<int>(sizeof(kPrimes) / sizeof(kPrimes[0]));
+    while (emitted < operationCount) {
+        ll p = kPrimes[randomRange(random, 0, primeCount - 1)];
+        ll a = randomRange(random, 1, p - 1);
+        ll b = randomRange(random, 0, p - 1);
+        emit(a, b, p);
+        ++emitted;
+    }
+    return {in.str(), out.str()};
+}
+
+// ----- M08: multiplicative order and primitive root --------------------------
+
+std::vector<ll> primeFactorsOf(ll n) {
+    std::vector<ll> f;
+    for (ll p = 2; p * p <= n; ++p) {
+        if (n % p == 0) {
+            f.push_back(p);
+            while (n % p == 0) n /= p;
+        }
+    }
+    if (n > 1) f.push_back(n);
+    return f;
+}
+
+ll orderOf(ll a, ll p) {
+    ll d = p - 1;
+    for (ll q : primeFactorsOf(p - 1)) {
+        while (d % q == 0 && powmod(a, d / q, p) == 1) d /= q;
+    }
+    return d;
+}
+
+bool isPrimitiveRoot(ll a, ll p) {
+    if (p == 2) return a % p == 1;
+    for (ll q : primeFactorsOf(p - 1)) {
+        if (powmod(a, (p - 1) / q, p) == 1) return false;
+    }
+    return true;
+}
+
+ll smallestPrimitiveRoot(ll p) {
+    if (p == 2) return 1;
+    for (ll g = 2; g < p; ++g) {
+        if (isPrimitiveRoot(g, p)) return g;
+    }
+    return -1;
+}
+
+ll eulerPhi(ll n) {
+    ll r = n;
+    for (ll p = 2; p * p <= n; ++p) {
+        if (n % p == 0) {
+            r -= r / p;
+            while (n % p == 0) n /= p;
+        }
+    }
+    if (n > 1) r -= r / n;
+    return r;
+}
+
+GeneratedCase generatePrimitiveRoot(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "M08-primitive-root operation_limit is too small"
+        );
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+
+    auto emitOrder = [&](ll a, ll p) {
+        in << "order " << a << ' ' << p << '\n';
+        out << orderOf(a, p) << '\n';
+    };
+    auto emitRoot = [&](ll p) {
+        in << "primitive_root " << p << '\n';
+        out << smallestPrimitiveRoot(p) << '\n';
+    };
+    auto emitNum = [&](ll p) {
+        in << "num_primitive_roots " << p << '\n';
+        out << eulerPhi(p - 1) << '\n';
+    };
+    auto emitIsPrim = [&](ll a, ll p) {
+        in << "is_primitive " << a << ' ' << p << '\n';
+        out << (isPrimitiveRoot(a, p) ? "yes" : "no") << '\n';
+    };
+
+    // Pinned prefix: order 1 traps "assume primitive"; is_primitive of a
+    // non-generator traps the Fermat-only check.
+    emitOrder(1, 7);
+    emitIsPrim(2, 7);
+    emitRoot(7);
+    emitNum(7);
+    int emitted = 4;
+
+    static const ll kPrimes[] = {3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41,
+                                 998244353, 1'000'000'007};
+    const int primeCount = static_cast<int>(sizeof(kPrimes) / sizeof(kPrimes[0]));
+    while (emitted < operationCount) {
+        ll p = kPrimes[randomRange(random, 0, primeCount - 1)];
+        switch (static_cast<int>(randomRange(random, 0, 3))) {
+            case 0: emitOrder(randomRange(random, 1, p - 1), p); break;
+            case 1: emitRoot(p); break;
+            case 2: emitNum(p); break;
+            default: emitIsPrim(randomRange(random, 1, p - 1), p); break;
+        }
+        ++emitted;
+    }
+    return {in.str(), out.str()};
+}
+
+// ----- M09: quadratic residue and modular square root ------------------------
+
+ll tonelliOracle(ll n, ll p) {
+    n %= p;
+    if (n == 0) return 0;
+    if (powmod(n, (p - 1) / 2, p) != 1) return -1;
+    if (p % 4 == 3) return powmod(n, (p + 1) / 4, p);
+    ll q = p - 1, s = 0;
+    while (q % 2 == 0) { q /= 2; ++s; }
+    ll z = 2;
+    while (powmod(z, (p - 1) / 2, p) != p - 1) ++z;
+    ll m = s;
+    ll c = powmod(z, q, p);
+    ll t = powmod(n, q, p);
+    ll r = powmod(n, (q + 1) / 2, p);
+    while (t != 1) {
+        ll i = 0, t2 = t;
+        while (t2 != 1) { t2 = static_cast<ll>(static_cast<i128>(t2) * t2 % p); ++i; }
+        ll b = c;
+        for (ll j = 0; j < m - i - 1; ++j) b = static_cast<ll>(static_cast<i128>(b) * b % p);
+        m = i;
+        c = static_cast<ll>(static_cast<i128>(b) * b % p);
+        t = static_cast<ll>(static_cast<i128>(t) * c % p);
+        r = static_cast<ll>(static_cast<i128>(r) * b % p);
+    }
+    return r;
+}
+
+GeneratedCase generateQuadraticResidue(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "M09-quadratic-residue operation_limit is too small"
+        );
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+
+    auto emitLegendre = [&](ll a, ll p) {
+        in << "legendre " << a << ' ' << p << '\n';
+        ll v = ((a % p) + p) % p;
+        if (v == 0) out << 0 << '\n';
+        else out << (powmod(v, (p - 1) / 2, p) == 1 ? 1 : -1) << '\n';
+    };
+    auto emitIsQr = [&](ll a, ll p) {
+        in << "is_qr " << a << ' ' << p << '\n';
+        ll v = ((a % p) + p) % p;
+        out << ((v == 0 || powmod(v, (p - 1) / 2, p) == 1) ? "yes" : "no") << '\n';
+    };
+    auto emitSqrt = [&](ll a, ll p) {
+        in << "sqrt " << a << ' ' << p << '\n';
+        ll r = tonelliOracle(a, p);
+        if (r < 0) out << "NONE" << '\n';
+        else out << std::min(r, p - r) << '\n';
+    };
+
+    // Pinned prefix: legendre 0 traps the missing-zero bug; sqrt of a residue
+    // with two distinct roots traps returning the larger root.
+    emitLegendre(0, 7);
+    emitSqrt(2, 7);
+    emitSqrt(3, 7);
+    emitIsQr(2, 7);
+    int emitted = 4;
+
+    static const ll kPrimes[] = {3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41,
+                                 998244353, 1'000'000'007};
+    const int primeCount = static_cast<int>(sizeof(kPrimes) / sizeof(kPrimes[0]));
+    while (emitted < operationCount) {
+        ll p = kPrimes[randomRange(random, 0, primeCount - 1)];
+        ll a = randomRange(random, 0, p - 1);
+        switch (static_cast<int>(randomRange(random, 0, 2))) {
+            case 0: emitLegendre(a, p); break;
+            case 1: emitIsQr(a, p); break;
+            default: emitSqrt(a, p); break;
+        }
+        ++emitted;
+    }
+    return {in.str(), out.str()};
+}
+
 }  // namespace
 
 void registerNumberTheoryGenerators(CaseGeneratorRegistry& registry) {
@@ -664,6 +918,18 @@ void registerNumberTheoryGenerators(CaseGeneratorRegistry& registry) {
     registry.emplace(
         "M06-modular-binomial",
         generateModularBinomial
+    );
+    registry.emplace(
+        "M07-discrete-logarithm",
+        generateDiscreteLogarithm
+    );
+    registry.emplace(
+        "M08-primitive-root",
+        generatePrimitiveRoot
+    );
+    registry.emplace(
+        "M09-quadratic-residue",
+        generateQuadraticResidue
     );
 }
 

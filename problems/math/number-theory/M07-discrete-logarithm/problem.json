@@ -1,0 +1,16 @@
+{
+  "id": "M07-discrete-logarithm",
+  "title": "Discrete Logarithm",
+  "stage": "M",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 2000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(sqrt(p) log p) per query via baby-step giant-step",
+  "expected_space": "O(sqrt(p))",
+  "forbidden_symbols": ["std::gcd", "std::__gcd", "std::pow", "<numeric>"],
+  "random_tests": 100,
+  "operation_limit": 24,
+  "tests_directory": "tests"
+}

@@ -38,21 +38,24 @@ owner: project
 
 ## Next Step
 
-- Stage M1 number-theory foundations (M01-M06) is complete. Continue the
-  math/algorithm curriculum with the next `math-roadmap.md` stage (M2 congruence
-  theory: CRT chains, BSGS discrete log, Tonelli-Shanks) or start the G-series
-  algorithm track; both fall under `TASK.CURRICULUM.020`.
+- Stages M1 (M01-M06) and M2 (M07-M09: discrete log, primitive root, quadratic
+  residue) are complete. Continue the math/algorithm curriculum with the next
+  `math-roadmap.md` stage (M3 multiplicative-function sieves) or start the
+  G-series algorithm track; both fall under `TASK.CURRICULUM.020`.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-22.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and
   `ctest --preset dev`.
-- Result: all 785 CTest tests passed (~476 s single-worker), including the six
-  M-series number-theory problems (M01-M06) catalog/judge/stress coverage and
-  the statically linked progress repository round-trip.
-- Judge runtime self-check: `algo list` enumerates all 138 problems (132 DS +
-  M01-M06 number theory). Correct submissions verdict `AC`, known-wrong `WA`
+- Result: 806 CTest tests, including the nine M-series number-theory problems
+  (M01-M09) catalog/judge/stress coverage and the statically linked progress
+  repository round-trip. Two full runs each surfaced one different heavy DS test
+  (A54 link-cut-tree; rehashing-linear-probing stress) TLE-flaking under parallel
+  load; both pass in isolation. Pre-existing load sensitivity, untouched by
+  M-series; all M-series and targeted runs are deterministically green.
+- Judge runtime self-check: `algo list` enumerates all 141 problems (132 DS +
+  M01-M09 number theory). Correct submissions verdict `AC`, known-wrong `WA`
   on both fixed tests and differential stress.
   correct submissions verdict `AC`, known-wrong `WA`, broken sources `CE`, null
   dereference `RE`, infinite loop `TLE`, and out-of-root sources are refused by

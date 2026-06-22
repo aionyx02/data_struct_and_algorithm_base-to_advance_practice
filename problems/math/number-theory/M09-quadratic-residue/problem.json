@@ -1,0 +1,16 @@
+{
+  "id": "M09-quadratic-residue",
+  "title": "Quadratic Residue and Modular Square Root",
+  "stage": "M",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 2000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(log^2 p) per query via Tonelli-Shanks",
+  "expected_space": "O(1)",
+  "forbidden_symbols": ["std::gcd", "std::__gcd", "std::pow", "<numeric>"],
+  "random_tests": 100,
+  "operation_limit": 24,
+  "tests_directory": "tests"
+}

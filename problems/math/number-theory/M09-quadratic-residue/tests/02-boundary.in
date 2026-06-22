@@ -1,0 +1,7 @@
+6
+legendre 0 7
+sqrt 0 7
+sqrt 3 7
+legendre 1 1000000007
+sqrt 1 1000000007
+is_qr 1000000006 1000000007
