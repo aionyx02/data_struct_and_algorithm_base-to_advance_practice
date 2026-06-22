@@ -30,6 +30,21 @@ owner: project
 - [x] Build read-only problem and progress views first.
 - [ ] Add local editing and submission only after the Judge API boundary is stable.
 
+## Algorithm & Math Curriculum (gated by ADR-0006, proposed)
+
+Planned in `docs/algorithm-roadmap.md` (G1–G15) and `docs/math-roadmap.md`
+(M0–M12). Study starts now on external judges; the items below need ADR-0006
+moved to `accepted` before any local Judge implementation.
+
+- [ ] Accept ADR-0006 to open algorithm/math problem families in the local Judge.
+- [ ] Promote first exact-match-friendly families (G6/M1–M4 number theory,
+      G3/G10 DP counting) into Judge problems with differential oracles.
+- [ ] Follow-up ADR for non-deterministic outputs: geometry float tolerance
+      (G12/M11), special-judge for construction (G14), interactive runner (G14),
+      heuristic scorer (G13).
+
 ## Parking Lot
 
-- General algorithms and full ICPC training remain outside the current scope.
+- Full ICPC/IOI training is now planned (see above, gated by ADR-0006); until
+  that ADR is accepted, `docs/project.md` non-goals keep general algorithms out
+  of the local Judge.

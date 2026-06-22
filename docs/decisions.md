@@ -2,7 +2,7 @@
 type: decision_index
 status: active
 priority: p1
-updated: 2026-06-21
+updated: 2026-06-22
 context_policy: retrieve_only
 owner: project
 ---
@@ -19,3 +19,4 @@ owner: project
 | `0003` | accepted | ADR-0003: Spaced Review Scheduling |
 | `0004` | accepted | ADR-0004: Local Read-Only Web Adapter |
 | `0005` | accepted | ADR-0005: Loopback Compile Check |
+| `0006` | proposed | ADR-0006: Plan curriculum expansion to algorithms and mathematics |

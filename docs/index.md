@@ -63,7 +63,7 @@ Future-phase documents must state the trigger that makes them relevant. Binary c
 | Design decision | `docs/design-system.md`, `docs/adr/*`, `docs/decisions.md` |
 | Accessibility / keyboard UX | `docs/accessibility.md`, `docs/testing.md` |
 | Performance | `docs/engineering-principles.md`, `docs/architecture.md`, `docs/testing.md`, related benchmark notes |
-| Curriculum planning | `docs/learning-roadmap.md`, `docs/algorithm-roadmap.md`, `docs/project.md`, `docs/memory/current.md` |
+| Curriculum planning | `docs/learning-roadmap.md`, `docs/algorithm-roadmap.md`, `docs/math-roadmap.md`, `docs/project.md`, `docs/memory/current.md` |
 | Judge behavior / limits | `docs/judge-requirements.md`, `docs/architecture.md`, `docs/security.md`, `docs/testing.md` |
 | Release / deployment | `docs/release.md`, `docs/testing.md`, `docs/security.md` |
 | Historical question | `docs/tasks/completed.md`, `docs/memory/sessions/*`, `docs/memory/archive/*` |
@@ -93,6 +93,7 @@ Future-phase documents must state the trigger that makes them relevant. Binary c
 | `docs/adr/0003-spaced-review-scheduling.md` | `adr` | `accepted` | `on_demand` | Spaced Review Scheduling |
 | `docs/adr/0004-local-read-only-web-adapter.md` | `adr` | `accepted` | `on_demand` | Local Read-Only Web Adapter |
 | `docs/adr/0005-loopback-compile-check.md` | `adr` | `accepted` | `on_demand` | Loopback Compile Check |
+| `docs/adr/0006-plan-curriculum-expansion-to-algorithms-and-mathematics.md` | `adr` | `proposed` | `on_demand` | Plan curriculum expansion to algorithms and mathematics |
 | `docs/algorithm-roadmap.md` | `learning_roadmap` | `active` | `on_demand` | 演算法學習路線 |
 | `docs/architecture.md` | `architecture_spec` | `active` | `retrieve_only` | Architecture |
 | `docs/CLAUDE.md` | `agent_policy` | `active` | `on_demand` | AI Agent Governance And ADR Policy |
@@ -106,6 +107,7 @@ Future-phase documents must state the trigger that makes them relevant. Binary c
 | `docs/index.md` | `docs_index` | `active` | `on_demand` | Documentation Index |
 | `docs/judge-requirements.md` | `judge_requirements` | `active` | `retrieve_when_planning` | 本地 Judge 需求 |
 | `docs/learning-roadmap.md` | `learning_roadmap` | `active` | `on_demand` | 資料結構學習路線 |
+| `docs/math-roadmap.md` | `learning_roadmap` | `active` | `on_demand` | 數論與數學學習路線 |
 | `docs/memory/current.md` | `working_memory` | `active` | `always_retrievable` | Current Project Memory |
 | `docs/project.md` | `project_overview` | `active` | `always_retrievable` | Project Overview |
 | `docs/release.md` | `release_policy` | `active` | `retrieve_when_planning` | Release And Deployment |

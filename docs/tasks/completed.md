@@ -2,7 +2,7 @@
 type: task_archive_index
 status: archive
 priority: p3
-updated: 2026-06-21
+updated: 2026-06-22
 context_policy: on_demand
 owner: project
 ---
