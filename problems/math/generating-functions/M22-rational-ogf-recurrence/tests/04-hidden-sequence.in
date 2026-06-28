@@ -1,0 +1,9 @@
+8
+recurrence 2 100 2 3 4 5
+recurrence 3 1000 1 0 1 1 1 1
+recurrence 4 12345 1 2 4 8 1 2 4 8
+recurrence 5 99991 3 1 4 1 5 9 2 6 5 3
+recurrence 6 1000000 1 1 2 3 5 8 1 1 1 1 1 1
+recurrence 2 1 123 456 7 9
+recurrence 3 2 123 456 789 7 9 11
+recurrence 1 1000000000000000000 1 1000000006

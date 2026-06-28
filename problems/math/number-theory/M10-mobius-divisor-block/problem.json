@@ -1,0 +1,16 @@
+{
+  "id": "M10-mobius-divisor-block",
+  "title": "Mobius Function and Divisor-Block Sum",
+  "stage": "M",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 1500,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(LIMIT) linear sieve, O(sqrt n) per floor_sum via divisor blocking",
+  "expected_space": "O(LIMIT)",
+  "forbidden_symbols": ["std::gcd", "std::__gcd", "<numeric>"],
+  "random_tests": 100,
+  "operation_limit": 40,
+  "tests_directory": "tests"
+}

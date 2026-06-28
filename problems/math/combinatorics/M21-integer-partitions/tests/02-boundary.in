@@ -1,0 +1,9 @@
+8
+partition 2
+partition 3
+partition 4
+partition 20
+distinct 1
+distinct 3
+distinct 4
+distinct 20

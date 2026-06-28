@@ -1,0 +1,16 @@
+{
+  "id": "M15-powerful-number-sieve",
+  "title": "Powerful Number Sieve",
+  "stage": "M",
+  "difficulty": "D4",
+  "judge_mode": "stdio",
+  "time_limit_ms": 3000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(cuberoot(n)) per query after a square-free sieve",
+  "expected_space": "O(cuberoot(max n))",
+  "forbidden_symbols": [],
+  "random_tests": 100,
+  "operation_limit": 16,
+  "tests_directory": "tests"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "M12-mobius-inversion-gcd",
+  "title": "Mobius Inversion: Coprime and GCD Sum",
+  "stage": "M",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 2000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(LIMIT) sieve, O(sqrt(n)+sqrt(m)) per query via 2D divisor blocking",
+  "expected_space": "O(LIMIT)",
+  "forbidden_symbols": ["std::gcd", "std::__gcd", "<numeric>"],
+  "random_tests": 100,
+  "operation_limit": 30,
+  "tests_directory": "tests"
+}

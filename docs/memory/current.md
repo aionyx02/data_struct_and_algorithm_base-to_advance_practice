@@ -2,7 +2,7 @@
 type: working_memory
 status: active
 priority: p0
-updated: 2026-06-21
+updated: 2026-06-28
 context_policy: always_retrievable
 owner: project
 ---
@@ -21,49 +21,56 @@ owner: project
 
 ## Current Focus
 
-- Active priority: build the product layer on the completed 132-problem catalog.
+- Active priority: extend the algorithm and mathematics curriculum on the stable
+  Judge and product layers.
 - Current phase: the read-only Web workspace is complete. `npm run web` serves
-  the 132-problem catalog, statements, progress, review state, and browser-local
+  the 162-problem catalog, statements, progress, review state, and browser-local
   drafts through a loopback-only native Web UI. Desktop panes are resizable,
   and a bounded syntax-only compile check returns local compiler diagnostics.
-- Current owner / handoff state: no active task. `TASK.WEB.002` completed with
-  `shawn` on 2026-06-21.
+- Current owner / handoff state: `TASK.CURRICULUM.020` is active with `shawn`.
 
 ## Important Constraints
 
 - C++20, CMake, CLion, and MinGW g++ are the primary local toolchain.
 - ADT implementation problems restrict STL containers that directly solve the exercise.
 - The Judge is local-only and must not be treated as a secure untrusted-code service.
-- General algorithms remain outside the current curriculum.
+- The G-series algorithm track is admitted by ADR-0006 but has not been
+  implemented yet.
 
 ## Next Step
 
-- Stages M1 (M01-M06) and M2 (M07-M09: discrete log, primitive root, quadratic
-  residue) are complete. Continue the math/algorithm curriculum with the next
-  `math-roadmap.md` stage (M3 multiplicative-function sieves) or start the
-  G-series algorithm track; both fall under `TASK.CURRICULUM.020`.
+- Stages M1 (M01-M06), M2 (M07-M09), M3 (M10-M15), the M4 core
+  (M16-M21: Lucas / exLucas, inclusion-exclusion, Catalan / Narayana / ballot,
+  Stirling / Bell, and integer partitions), and the M5 core (M22-M27: rational
+  OGF recurrence coefficients, Lagrange inversion, Newton identities, restricted
+  cycle EGFs, formal composition, and FPS exp / log), plus the M6 linear-algebra
+  seed (M28-M30: modular Gaussian elimination, matrix power vector application,
+  and Berlekamp-Massey sequence prediction) are complete. Continue M6 with
+  determinant / inverse / linear basis coverage, or start the G-series algorithm
+  track; both fall under `TASK.CURRICULUM.020`.
 
 ## Last Validation Snapshot
 
-- Last C++ validation: 2026-06-22.
+- Last C++ validation: 2026-06-28.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and
-  `ctest --preset dev`.
-- Result: 806 CTest tests, including the nine M-series number-theory problems
-  (M01-M09) catalog/judge/stress coverage and the statically linked progress
-  repository round-trip. Two full runs each surfaced one different heavy DS test
-  (A54 link-cut-tree; rehashing-linear-probing stress) TLE-flaking under parallel
-  load; both pass in isolation. Pre-existing load sensitivity, untouched by
-  M-series; all M-series and targeted runs are deterministically green.
-- Judge runtime self-check: `algo list` enumerates all 141 problems (132 DS +
-  M01-M09 number theory). Correct submissions verdict `AC`, known-wrong `WA`
-  on both fixed tests and differential stress.
-  correct submissions verdict `AC`, known-wrong `WA`, broken sources `CE`, null
+  `ctest --preset dev -j 3 --output-on-failure`.
+- Result: 953 CTest tests, including thirty M-series mathematics problems
+  (M01-M30) with catalog/judge/stress coverage and the statically linked progress
+  repository round-trip. The latest full run was 953/953 at parallelism 3; a
+  pre-existing parallel-load TLE flake on A54 link-cut-tree and the
+  rehashing-linear-probing / dynamic-sparse-segment-tree stress remains possible
+  at higher parallelism and is untouched by M-series.
+- Judge runtime self-check: catalog tests enumerate all 162 problems (132 DS +
+  M01-M30 mathematics). Correct submissions verdict `AC`, known-wrong `WA`
+  on both fixed tests and differential stress. M28-M30 stress oracles cover
+  modular row reduction, matrix exponentiation, and linear recurrence prediction
+  independently of the optimized reference fixtures.
+  Broken sources verdict `CE`, null
   dereference `RE`, infinite loop `TLE`, and out-of-root sources are refused by
   the project-root boundary. Stress differential testing returns `AC`/`WA`.
 - Progress schema 2 reads schema 1, migrates on write, and rejects malformed
   JSON, unknown fields, duplicate IDs, invalid counts, and unsupported versions.
   Writes remain atomic; no source code or diagnostics are persisted.
-- Web validation: 16/16 Node tests passed; localhost browser checks covered the
-  real catalog, mouse/keyboard resizing, persisted widths, successful and failed
-  real compiler feedback, mobile behavior, accessible labels, and a clean console.
+- Web validation: 17/17 Node tests passed; localhost browser checks covered the
+  domain-aware catalog and mathematics / number-theory filtering.
 - Known failing checks: none.

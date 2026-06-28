@@ -1,0 +1,9 @@
+8
+compose 2 0 1 2 3 0 4 5
+compose 2 1 1 2 3 0 4 5
+compose 2 2 1 2 3 0 4 5
+compose 3 1 5 0 0 1 0 1 1 1
+compose 3 2 5 0 0 1 0 1 1 1
+compose 3 3 5 0 0 1 0 1 1 1
+compose 4 4 0 0 1 0 1 0 1 1 0 1
+compose 5 5 1 1 1 1 1 1 0 1 1 1 1 1

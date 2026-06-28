@@ -5,7 +5,7 @@ import path from 'node:path';
 import { after, before, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { createWebServer } from '../scripts/web-server.mjs';
+import { createWebServer, domainFor } from '../scripts/web-server.mjs';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let fixtureRoot;
@@ -81,6 +81,13 @@ after(async () => {
   await fs.rm(fixtureRoot, { recursive: true, force: true });
 });
 
+test('problem stages map to their curriculum domains', () => {
+  assert.equal(domainFor('F', 'foundation'), 'data-structures');
+  assert.equal(domainFor('A', 'advanced'), 'data-structures');
+  assert.equal(domainFor('G', 'algorithms'), 'algorithms');
+  assert.equal(domainFor('M', 'math'), 'mathematics');
+});
+
 test('local Web adapter serves the catalog with progress', async () => {
   const response = await fetch(`${baseUrl}/api/problems`);
   assert.equal(response.status, 200);
@@ -88,6 +95,7 @@ test('local Web adapter serves the catalog with progress', async () => {
   const payload = await response.json();
   assert.equal(payload.problems.length, 1);
   assert.equal(payload.problems[0].id, 'F03-stack-array');
+  assert.equal(payload.problems[0].domain, 'data-structures');
   assert.equal(payload.problems[0].progress.acceptedAttempts, 1);
   assert.equal(payload.problems[0].progress.due, true);
 });

@@ -1,0 +1,16 @@
+{
+  "id": "M18-inclusion-exclusion-counting",
+  "title": "Inclusion-Exclusion Counting",
+  "stage": "M",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 2500,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(LIMIT) precomputation, O(k log n) for onto and O(n) for derangement",
+  "expected_space": "O(LIMIT)",
+  "forbidden_symbols": ["std::pow"],
+  "random_tests": 100,
+  "operation_limit": 16,
+  "tests_directory": "tests"
+}

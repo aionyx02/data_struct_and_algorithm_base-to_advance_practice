@@ -1,0 +1,16 @@
+{
+  "id": "M21-integer-partitions",
+  "title": "Integer Partitions and Distinct Parts",
+  "stage": "M",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 2500,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(N sqrt(N) + N^2) precomputation, O(1) per query",
+  "expected_space": "O(N)",
+  "forbidden_symbols": [],
+  "random_tests": 100,
+  "operation_limit": 16,
+  "tests_directory": "tests"
+}

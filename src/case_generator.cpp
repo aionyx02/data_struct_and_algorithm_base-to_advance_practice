@@ -24,6 +24,9 @@ const CaseGeneratorRegistry& caseGenerators() {
         generators::registerStringIndexGenerators(assembled);
         generators::registerSpecializedGenerators(assembled);
         generators::registerNumberTheoryGenerators(assembled);
+        generators::registerCombinatoricsGenerators(assembled);
+        generators::registerGeneratingFunctionGenerators(assembled);
+        generators::registerLinearAlgebraGenerators(assembled);
         return assembled;
     }();
     return registry;

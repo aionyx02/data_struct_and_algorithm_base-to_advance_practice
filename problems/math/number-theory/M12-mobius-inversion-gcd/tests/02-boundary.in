@@ -1,0 +1,7 @@
+6
+coprime 1 1
+gcd_sum 1 1
+coprime 1 1000000
+gcd_sum 1 1000000
+coprime 1000000 1000000
+gcd_sum 1000000 1000000

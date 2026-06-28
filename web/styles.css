@@ -343,7 +343,9 @@ kbd { border: 1px solid var(--border-strong); border-radius: 4px; padding: 0 5px
 @media (max-width: 1120px) {
   .workspace { --sidebar-width: 245px; --practice-width: 330px; }
   .statement-scroll { padding-inline: 30px; }
-  .primary-nav .nav-item:nth-child(2), .primary-nav .nav-item:nth-child(3) { display: none; }
+  .primary-nav .nav-item[data-domain="data-structures"],
+  .primary-nav .nav-item[data-domain="algorithms"],
+  .primary-nav .nav-item[data-domain="mathematics"] { display: none; }
 }
 
 @media (max-width: 920px) {

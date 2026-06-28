@@ -1,0 +1,7 @@
+6
+partition 5000
+partition 4999
+partition 4096
+distinct 5000
+distinct 4999
+distinct 4096

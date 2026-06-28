@@ -1,0 +1,16 @@
+{
+  "id": "M16-lucas-binomial",
+  "title": "Lucas Theorem for Huge Binomials",
+  "stage": "M",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 2000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(p) per distinct prime, O(log_p(n)) per query",
+  "expected_space": "O(p) per distinct prime",
+  "forbidden_symbols": ["std::gcd", "std::__gcd", "std::pow", "<numeric>"],
+  "random_tests": 100,
+  "operation_limit": 20,
+  "tests_directory": "tests"
+}

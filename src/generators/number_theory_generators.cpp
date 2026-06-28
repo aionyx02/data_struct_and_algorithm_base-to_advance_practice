@@ -892,6 +892,440 @@ GeneratedCase generateQuadraticResidue(
     return {in.str(), out.str()};
 }
 
+// ----- M10-M12: shared multiplicative sieve (mu, phi, d, sigma) ---------------
+
+struct MultiSieve {
+    static constexpr int kLimit = 1'000'000;
+    std::vector<int> spf;
+    std::vector<int> mu;
+    std::vector<int> phi;
+    std::vector<int> numDiv;     // d(n): number of divisors
+    std::vector<int> expSmall;   // exponent of the smallest prime factor
+    std::vector<ll> sigma;       // sum of divisors
+    std::vector<ll> gSmall;      // 1 + p + ... + p^expSmall, for the smallest p
+    std::vector<ll> muPrefix;
+    std::vector<ll> phiPrefix;     // raw prefix sum of phi (fits in 64 bits)
+    std::vector<ll> phiPrefixMod;
+    static constexpr ll kMod = 1'000'000'007;
+
+    MultiSieve()
+        : spf(kLimit + 1, 0),
+          mu(kLimit + 1, 0),
+          phi(kLimit + 1, 0),
+          numDiv(kLimit + 1, 0),
+          expSmall(kLimit + 1, 0),
+          sigma(kLimit + 1, 0),
+          gSmall(kLimit + 1, 0),
+          muPrefix(kLimit + 1, 0),
+          phiPrefix(kLimit + 1, 0),
+          phiPrefixMod(kLimit + 1, 0) {
+        std::vector<int> primes;
+        mu[1] = 1;
+        phi[1] = 1;
+        numDiv[1] = 1;
+        sigma[1] = 1;
+        expSmall[1] = 0;
+        gSmall[1] = 1;
+        for (int i = 2; i <= kLimit; ++i) {
+            if (spf[i] == 0) {
+                spf[i] = i;
+                primes.push_back(i);
+                mu[i] = -1;
+                phi[i] = i - 1;
+                numDiv[i] = 2;
+                expSmall[i] = 1;
+                sigma[i] = static_cast<ll>(i) + 1;
+                gSmall[i] = static_cast<ll>(i) + 1;
+            }
+            for (int p : primes) {
+                long long v = static_cast<long long>(i) * p;
+                if (v > kLimit) break;
+                int vv = static_cast<int>(v);
+                spf[vv] = p;
+                if (i % p == 0) {
+                    mu[vv] = 0;
+                    phi[vv] = phi[i] * p;
+                    expSmall[vv] = expSmall[i] + 1;
+                    numDiv[vv] = numDiv[i] / (expSmall[i] + 1) * (expSmall[i] + 2);
+                    gSmall[vv] = gSmall[i] * p + 1;
+                    sigma[vv] = sigma[i] / gSmall[i] * gSmall[vv];
+                    break;
+                }
+                mu[vv] = -mu[i];
+                phi[vv] = phi[i] * (p - 1);
+                expSmall[vv] = 1;
+                numDiv[vv] = numDiv[i] * 2;
+                gSmall[vv] = static_cast<ll>(p) + 1;
+                sigma[vv] = sigma[i] * (static_cast<ll>(p) + 1);
+            }
+        }
+        for (int i = 1; i <= kLimit; ++i) {
+            muPrefix[i] = muPrefix[i - 1] + mu[i];
+            phiPrefix[i] = phiPrefix[i - 1] + phi[i];
+            phiPrefixMod[i] = (phiPrefixMod[i - 1] + phi[i]) % kMod;
+        }
+    }
+};
+
+const MultiSieve& sharedMultiSieve() {
+    static const MultiSieve sieve;
+    return sieve;
+}
+
+ll divisorBlockSum(ll n) {
+    ll sum = 0;
+    for (ll l = 1; l <= n;) {
+        ll q = n / l;
+        ll r = n / q;
+        sum += q * (r - l + 1);
+        l = r + 1;
+    }
+    return sum;
+}
+
+GeneratedCase generateMobiusDivisorBlock(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "M10-mobius-divisor-block operation_limit is too small"
+        );
+    }
+    const MultiSieve& s = sharedMultiSieve();
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+
+    auto emitMu = [&](ll x) {
+        in << "mu " << x << '\n';
+        out << s.mu[x] << '\n';
+    };
+    auto emitMuPrefix = [&](ll n) {
+        in << "mu_prefix " << n << '\n';
+        out << s.muPrefix[n] << '\n';
+    };
+    auto emitFloorSum = [&](ll n) {
+        in << "floor_sum " << n << '\n';
+        out << divisorBlockSum(n) << '\n';
+    };
+
+    // Pinned prefix: floor_sum 1 traps the dropped-+1 block bug; mu 4 traps the
+    // "still squarefree" bug; the rest exercise both families on small inputs.
+    emitFloorSum(1);
+    emitMu(4);
+    emitMuPrefix(10);
+    emitFloorSum(6);
+    int emitted = 4;
+
+    while (emitted < operationCount) {
+        switch (static_cast<int>(randomRange(random, 0, 2))) {
+            case 0:
+                emitMu(randomRange(random, 1, MultiSieve::kLimit));
+                break;
+            case 1:
+                emitMuPrefix(randomRange(random, 1, MultiSieve::kLimit));
+                break;
+            default:
+                emitFloorSum(randomRange(random, 1, 1'000'000'000LL));
+                break;
+        }
+        ++emitted;
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateMultiplicativeSieve(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "M11-multiplicative-sieve operation_limit is too small"
+        );
+    }
+    const MultiSieve& s = sharedMultiSieve();
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+
+    auto emit = [&](const std::string& op, ll x) {
+        in << op << ' ' << x << '\n';
+        if (op == "phi") {
+            out << s.phi[x] << '\n';
+        } else if (op == "mu") {
+            out << s.mu[x] << '\n';
+        } else if (op == "d") {
+            out << s.numDiv[x] << '\n';
+        } else {
+            out << s.sigma[x] << '\n';
+        }
+    };
+
+    // Pinned prefix: d 4 traps the "double divisors on prime powers" bug; phi 4
+    // traps multiplying by (p-1) instead of p when p | i.
+    emit("d", 4);
+    emit("phi", 4);
+    emit("sigma", 12);
+    emit("mu", 30);
+    int emitted = 4;
+
+    static const char* kOps[] = {"phi", "mu", "d", "sigma"};
+    while (emitted < operationCount) {
+        emit(kOps[randomRange(random, 0, 3)],
+             randomRange(random, 1, MultiSieve::kLimit));
+        ++emitted;
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateMobiusInversionGcd(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error(
+            "M12-mobius-inversion-gcd operation_limit is too small"
+        );
+    }
+    const MultiSieve& s = sharedMultiSieve();
+    const ll MOD = MultiSieve::kMod;
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+
+    auto solve = [&](ll n, ll m, bool useMu) -> ll {
+        ll k = n < m ? n : m;
+        ll res = 0;
+        for (ll l = 1; l <= k;) {
+            ll qn = n / l;
+            ll qm = m / l;
+            ll rn = n / qn;
+            ll rm = m / qm;
+            ll r = rn < rm ? rn : rm;
+            if (r > k) r = k;
+            ll block = useMu
+                ? ((s.muPrefix[r] - s.muPrefix[l - 1]) % MOD + MOD) % MOD
+                : ((s.phiPrefixMod[r] - s.phiPrefixMod[l - 1]) % MOD + MOD) % MOD;
+            ll t = block * (qn % MOD) % MOD * (qm % MOD) % MOD;
+            res = (res + t) % MOD;
+            l = r + 1;
+        }
+        return res;
+    };
+    auto emit = [&](const std::string& op, ll n, ll m) {
+        in << op << ' ' << n << ' ' << m << '\n';
+        out << solve(n, m, op == "coprime") << '\n';
+    };
+
+    // Pinned prefix: coprime on the largest n=m traps the missing-mod overflow;
+    // an asymmetric gcd_sum traps the single-quotient block step.
+    emit("coprime", 1'000'000, 1'000'000);
+    emit("gcd_sum", 1000, 999);
+    emit("coprime", 3, 3);
+    emit("gcd_sum", 2, 2);
+    int emitted = 4;
+
+    while (emitted < operationCount) {
+        ll n = randomRange(random, 1, MultiSieve::kLimit);
+        ll m = randomRange(random, 1, MultiSieve::kLimit);
+        emit(randomRange(random, 0, 1) == 0 ? "coprime" : "gcd_sum", n, m);
+        ++emitted;
+    }
+    return {in.str(), out.str()};
+}
+
+// ----- M13: Du-sieve oracle for phi/mu prefix sums ----------------------------
+
+std::unordered_map<ll, ll>& duPhiMemo() {
+    static std::unordered_map<ll, ll> memo;
+    return memo;
+}
+std::unordered_map<ll, ll>& duMuMemo() {
+    static std::unordered_map<ll, ll> memo;
+    return memo;
+}
+
+ll duPhi(ll n) {
+    const MultiSieve& s = sharedMultiSieve();
+    if (n <= MultiSieve::kLimit) return s.phiPrefix[n];
+    auto& memo = duPhiMemo();
+    auto it = memo.find(n);
+    if (it != memo.end()) return it->second;
+    ll res = n * (n + 1) / 2;
+    for (ll l = 2; l <= n;) {
+        ll q = n / l;
+        ll r = n / q;
+        res -= (r - l + 1) * duPhi(q);
+        l = r + 1;
+    }
+    memo[n] = res;
+    return res;
+}
+
+ll duMu(ll n) {
+    const MultiSieve& s = sharedMultiSieve();
+    if (n <= MultiSieve::kLimit) return s.muPrefix[n];
+    auto& memo = duMuMemo();
+    auto it = memo.find(n);
+    if (it != memo.end()) return it->second;
+    ll res = 1;
+    for (ll l = 2; l <= n;) {
+        ll q = n / l;
+        ll r = n / q;
+        res -= (r - l + 1) * duMu(q);
+        l = r + 1;
+    }
+    memo[n] = res;
+    return res;
+}
+
+GeneratedCase generateDuSieve(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error("M13-du-sieve operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+
+    auto emit = [&](const std::string& op, ll n) {
+        in << op << ' ' << n << '\n';
+        out << (op == "phi_prefix" ? duPhi(n) : duMu(n)) << '\n';
+    };
+
+    // Pinned prefix: the two largest n exercise the recurrence (n above the
+    // sieve threshold) and trap the wrong harmonic base and the dropped block
+    // term; the small n confirm the precomputed-prefix fast path.
+    emit("phi_prefix", 1'000'000'000);
+    emit("mu_prefix", 1'000'000'000);
+    emit("phi_prefix", 2'000'000);
+    emit("mu_prefix", 7);
+    int emitted = 4;
+
+    while (emitted < operationCount) {
+        // Bias toward values above the sieve threshold so the recurrence runs.
+        ll n = randomRange(random, MultiSieve::kLimit + 1, 1'000'000'000LL);
+        emit(randomRange(random, 0, 1) == 0 ? "phi_prefix" : "mu_prefix", n);
+        ++emitted;
+    }
+    return {in.str(), out.str()};
+}
+
+// ----- M14: Min_25 prime-count / prime-sum stress oracle ---------------------
+
+struct SmallPrimePrefix {
+    static constexpr int kLimit = 1'000'000;
+    std::vector<int> count;
+    std::vector<ll> sumMod;
+
+    SmallPrimePrefix() : count(kLimit + 1, 0), sumMod(kLimit + 1, 0) {
+        const MultiSieve& s = sharedMultiSieve();
+        for (int i = 1; i <= kLimit; ++i) {
+            bool prime = i >= 2 && s.spf[i] == i;
+            count[i] = count[i - 1] + (prime ? 1 : 0);
+            sumMod[i] = (sumMod[i - 1] + (prime ? i : 0)) % MultiSieve::kMod;
+        }
+    }
+};
+
+const SmallPrimePrefix& smallPrimePrefix() {
+    static const SmallPrimePrefix prefix;
+    return prefix;
+}
+
+GeneratedCase generateMin25PrimeSums(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error("M14-min25-prime-sums operation_limit is too small");
+    }
+    const SmallPrimePrefix& prefix = smallPrimePrefix();
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+
+    auto emit = [&](const std::string& op, int n) {
+        in << op << ' ' << n << '\n';
+        out << (op == "pi" ? prefix.count[n] : prefix.sumMod[n]) << '\n';
+    };
+
+    // 1 traps an unremoved identity; prime squares trap a strict > p*p update.
+    emit("pi", 1);
+    emit("prime_sum", 1);
+    emit("pi", 49);
+    emit("prime_sum", 25);
+    int emitted = 4;
+    while (emitted < operationCount) {
+        emit(randomRange(random, 0, 1) == 0 ? "pi" : "prime_sum",
+             static_cast<int>(randomRange(random, 1, SmallPrimePrefix::kLimit)));
+        ++emitted;
+    }
+    return {in.str(), out.str()};
+}
+
+// ----- M15: powerful-number representation oracle ---------------------------
+
+ll floorSqrt(ll n) {
+    ll root = static_cast<ll>(std::sqrt(static_cast<long double>(n)));
+    while (static_cast<i128>(root + 1) * (root + 1) <= n) ++root;
+    while (static_cast<i128>(root) * root > n) --root;
+    return root;
+}
+
+std::pair<ll, ll> powerfulSummary(ll n) {
+    const MultiSieve& s = sharedMultiSieve();
+    const ll mod = MultiSieve::kMod;
+    const ll inv6 = 166'666'668;
+    ll count = 0;
+    ll sum = 0;
+    for (ll b = 1; static_cast<i128>(b) * b * b <= n; ++b) {
+        if (s.mu[b] == 0) continue;
+        ll cube = b * b * b;
+        ll a = floorSqrt(n / cube);
+        count += a;
+        ll squareSum = (a % mod) * ((a + 1) % mod) % mod;
+        squareSum = squareSum * ((2 * (a % mod) + 1) % mod) % mod * inv6 % mod;
+        sum = (sum + (cube % mod) * squareSum) % mod;
+    }
+    return {count, sum};
+}
+
+GeneratedCase generatePowerfulNumberSieve(
+    std::mt19937_64& random,
+    int operationCount
+) {
+    if (operationCount < 4) {
+        throw std::runtime_error("M15-powerful-number-sieve operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+
+    auto emit = [&](const std::string& op, ll n) {
+        auto [count, sum] = powerfulSummary(n);
+        in << op << ' ' << n << '\n';
+        out << (op == "count" ? count : sum) << '\n';
+    };
+
+    // 1 traps dropping the identity; 64 traps duplicate b=4 if square-free is
+    // not enforced; 72 checks a mixed 2^3*3^2 powerful number.
+    emit("count", 1);
+    emit("sum", 64);
+    emit("count", 64);
+    emit("sum", 72);
+    int emitted = 4;
+    while (emitted < operationCount) {
+        emit(randomRange(random, 0, 1) == 0 ? "count" : "sum",
+             randomRange(random, 1, 1'000'000'000LL));
+        ++emitted;
+    }
+    return {in.str(), out.str()};
+}
+
 }  // namespace
 
 void registerNumberTheoryGenerators(CaseGeneratorRegistry& registry) {
@@ -930,6 +1364,30 @@ void registerNumberTheoryGenerators(CaseGeneratorRegistry& registry) {
     registry.emplace(
         "M09-quadratic-residue",
         generateQuadraticResidue
+    );
+    registry.emplace(
+        "M10-mobius-divisor-block",
+        generateMobiusDivisorBlock
+    );
+    registry.emplace(
+        "M11-multiplicative-sieve",
+        generateMultiplicativeSieve
+    );
+    registry.emplace(
+        "M12-mobius-inversion-gcd",
+        generateMobiusInversionGcd
+    );
+    registry.emplace(
+        "M13-du-sieve",
+        generateDuSieve
+    );
+    registry.emplace(
+        "M14-min25-prime-sums",
+        generateMin25PrimeSums
+    );
+    registry.emplace(
+        "M15-powerful-number-sieve",
+        generatePowerfulNumberSieve
     );
 }
 

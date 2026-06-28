@@ -1,0 +1,16 @@
+{
+  "id": "M27-formal-exp-log",
+  "title": "Formal Power Series Exponential and Logarithm",
+  "stage": "M",
+  "difficulty": "D4",
+  "judge_mode": "stdio",
+  "time_limit_ms": 3000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 131072,
+  "expected_time": "O(n^2) per query",
+  "expected_space": "O(n)",
+  "forbidden_symbols": ["std::exp", "std::log", "std::pow"],
+  "random_tests": 100,
+  "operation_limit": 10,
+  "tests_directory": "tests"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "M24-newton-identities",
+  "title": "Newton Identities from Power Sums",
+  "stage": "M",
+  "difficulty": "D4",
+  "judge_mode": "stdio",
+  "time_limit_ms": 3000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(k^2) per query",
+  "expected_space": "O(k)",
+  "forbidden_symbols": [],
+  "random_tests": 100,
+  "operation_limit": 12,
+  "tests_directory": "tests"
+}

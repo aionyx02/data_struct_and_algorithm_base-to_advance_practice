@@ -2,7 +2,7 @@
 type: task_index
 status: active
 priority: p0
-updated: 2026-06-21
+updated: 2026-06-28
 context_policy: always_retrievable
 owner: project
 ---
@@ -11,9 +11,12 @@ owner: project
 
 ## Active Queue
 
-- TASK.CURRICULUM.020 — Implement M-series number-theory Judge family (stage M).
-  Owner: shawn. Status: in progress. Stages M1 (M01-M06) and M2 (M07-M09) complete,
-  all green. Next: math-roadmap M3 (multiplicative-function sieves) or G-series.
+- TASK.CURRICULUM.020 — Implement M-series mathematics Judge family (stage M).
+  Owner: shawn. Status: in progress. Stages M1 (M01-M06), M2 (M07-M09), M3
+  (M10-M15), the M4 core (M16-M21), and the M5 generating-function core
+  (M22-M27), plus the M6 linear-algebra seed (M28-M30), complete, all green
+  (953/953). Next: continue M6 determinant / inverse / linear basis coverage or
+  start the G-series algorithm track.
 
 ## Strategy
 

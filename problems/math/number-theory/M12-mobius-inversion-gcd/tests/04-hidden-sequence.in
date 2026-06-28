@@ -1,0 +1,8 @@
+7
+gcd_sum 1000000 999999
+coprime 999983 999979
+gcd_sum 524288 524288
+coprime 720720 360360
+gcd_sum 100 100
+coprime 50 50
+gcd_sum 2 1000000

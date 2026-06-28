@@ -2,7 +2,7 @@
 type: task_archive_index
 status: archive
 priority: p3
-updated: 2026-06-22
+updated: 2026-06-23
 context_policy: on_demand
 owner: project
 ---
@@ -41,3 +41,4 @@ owner: project
 | `TASK.REVIEW.001` | Add Spaced Review Scheduling | `docs/memory/sessions/2026-06-21-shawn.md` |
 | `TASK.WEB.001` | Build The Local Read-Only Practice Workspace | `docs/memory/sessions/2026-06-21-shawn.md` |
 | `TASK.WEB.002` | Add Resizable Panes And Compile Checks | `docs/memory/sessions/2026-06-21-shawn.md` |
+| `TASK.CURRICULUM.020` | M3 first batch (M10-M13) | `docs/memory/sessions/2026-06-23-shawn.md` |

@@ -1,0 +1,16 @@
+{
+  "id": "M13-du-sieve",
+  "title": "Du Sieve for Totient and Mobius Prefix Sums",
+  "stage": "M",
+  "difficulty": "D4",
+  "judge_mode": "stdio",
+  "time_limit_ms": 3000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(n^(2/3)) per query via sublinear (Du) sieve with a linear-sieve precompute",
+  "expected_space": "O(SIEVE_MAX) sieve plus O(sqrt n) memo",
+  "forbidden_symbols": ["std::gcd", "std::__gcd", "<numeric>"],
+  "random_tests": 100,
+  "operation_limit": 20,
+  "tests_directory": "tests"
+}

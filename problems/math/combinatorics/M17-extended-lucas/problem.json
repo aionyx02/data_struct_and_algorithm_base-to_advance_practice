@@ -1,0 +1,16 @@
+{
+  "id": "M17-extended-lucas",
+  "title": "Extended Lucas for Composite Moduli",
+  "stage": "M",
+  "difficulty": "D5",
+  "judge_mode": "stdio",
+  "time_limit_ms": 4000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(sum(p^q) + log(n) log(m)) per query after factoring m",
+  "expected_space": "O(max prime power dividing m)",
+  "forbidden_symbols": ["std::gcd", "std::__gcd", "std::pow", "<numeric>"],
+  "random_tests": 100,
+  "operation_limit": 12,
+  "tests_directory": "tests"
+}

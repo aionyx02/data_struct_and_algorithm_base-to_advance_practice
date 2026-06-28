@@ -1,7 +1,7 @@
 const state = {
   problems: [],
   selectedId: null,
-  track: 'all',
+  domain: 'all',
   difficulty: 'all',
   query: ''
 };
@@ -9,6 +9,7 @@ const state = {
 const elements = {
   list: document.querySelector('#problem-list'),
   total: document.querySelector('#problem-total'),
+  catalogTitle: document.querySelector('#catalog-title'),
   search: document.querySelector('#problem-search'),
   breadcrumbs: document.querySelector('#breadcrumbs'),
   index: document.querySelector('#problem-index'),
@@ -131,7 +132,26 @@ function setupPaneResizer(type) {
 }
 
 function topicLabel(topic) {
+  const labels = {
+    'number-theory': '數論',
+    combinatorics: '組合數學',
+    'generating-functions': '生成函數'
+  };
+  if (labels[topic]) return labels[topic];
   return topic.split('-').map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+}
+
+function domainLabel(domain) {
+  return {
+    'data-structures': '資料結構',
+    algorithms: '演算法',
+    mathematics: '數學',
+    other: '其他'
+  }[domain] ?? '其他';
+}
+
+function trackLabel(track) {
+  return { foundation: '基礎', advanced: '進階' }[track] ?? '';
 }
 
 function statusFor(problem) {
@@ -144,13 +164,19 @@ function statusFor(problem) {
 function filteredProblems() {
   const query = state.query.trim().toLocaleLowerCase();
   return state.problems.filter((problem) => {
-    const trackMatches = state.track === 'all' ||
-      (state.track === 'review' ? problem.progress?.due : problem.track === state.track);
+    const domainMatches = state.domain === 'all' ||
+      (state.domain === 'review' ? problem.progress?.due : problem.domain === state.domain);
     const difficultyMatches = state.difficulty === 'all' ||
       (state.difficulty === 'D4' ? Number(problem.difficulty.slice(1)) >= 4 : problem.difficulty === state.difficulty);
-    const queryMatches = !query || [problem.id, problem.title, problem.topic]
+    const queryMatches = !query || [
+      problem.id,
+      problem.title,
+      problem.topic,
+      topicLabel(problem.topic),
+      domainLabel(problem.domain)
+    ]
       .some((value) => value.toLocaleLowerCase().includes(query));
-    return trackMatches && difficultyMatches && queryMatches;
+    return domainMatches && difficultyMatches && queryMatches;
   });
 }
 
@@ -161,7 +187,7 @@ function renderProblemList() {
   if (problems.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'empty-state';
-    empty.textContent = state.track === 'review' ? '今天沒有到期的複習題目。' : '找不到符合條件的題目。';
+    empty.textContent = state.domain === 'review' ? '今天沒有到期的複習題目。' : '找不到符合條件的題目。';
     elements.list.append(empty);
     return;
   }
@@ -171,7 +197,7 @@ function renderProblemList() {
     button.type = 'button';
     button.className = `problem-row${problem.id === state.selectedId ? ' is-active' : ''}`;
     button.dataset.problemId = problem.id;
-    button.setAttribute('aria-label', `${problem.id} ${problem.title}, ${problem.difficulty}`);
+    button.setAttribute('aria-label', `${problem.id} ${problem.title}, ${domainLabel(problem.domain)}, ${problem.difficulty}`);
     button.setAttribute('aria-current', problem.id === state.selectedId ? 'true' : 'false');
 
     const status = statusFor(problem);
@@ -185,7 +211,9 @@ function renderProblemList() {
     const title = document.createElement('strong');
     title.textContent = problem.title;
     const id = document.createElement('span');
-    id.textContent = `${problem.id} · ${topicLabel(problem.topic)}`;
+    const showDomain = state.domain === 'all' || state.domain === 'review';
+    const domain = showDomain ? `${domainLabel(problem.domain)} / ` : '';
+    id.textContent = `${problem.id} · ${domain}${topicLabel(problem.topic)}`;
     copy.append(title, id);
 
     const difficulty = document.createElement('span');
@@ -390,7 +418,11 @@ async function selectProblem(problemId) {
     const response = await fetch(`/api/problems/${encodeURIComponent(problemId)}`);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const { problem } = await response.json();
-    elements.breadcrumbs.textContent = `題庫 / ${problem.track === 'advanced' ? '進階' : '基礎'} / ${topicLabel(problem.topic)}`;
+    const breadcrumbParts = ['題庫', domainLabel(problem.domain)];
+    const level = trackLabel(problem.track);
+    if (level) breadcrumbParts.push(level);
+    breadcrumbParts.push(topicLabel(problem.topic));
+    elements.breadcrumbs.textContent = breadcrumbParts.join(' / ');
     elements.index.textContent = problem.id.split('-')[0];
     elements.title.textContent = problem.title;
     elements.metadata.replaceChildren();
@@ -428,12 +460,27 @@ async function copyText(text, successMessage) {
   }
 }
 
-function setTrack(track) {
-  state.track = track;
-  document.querySelectorAll('[data-track]').forEach((button) => {
-    button.classList.toggle('is-active', button.dataset.track === track);
+function setDomain(domain) {
+  state.domain = domain;
+  document.querySelectorAll('[data-domain]').forEach((button) => {
+    button.classList.toggle('is-active', button.dataset.domain === domain);
   });
+  elements.catalogTitle.textContent = {
+    all: '所有題目',
+    'data-structures': '資料結構',
+    algorithms: '演算法',
+    mathematics: '數學與數論',
+    review: '今日複習'
+  }[domain] ?? '所有題目';
   renderProblemList();
+}
+
+function updateDomainNavigation() {
+  const available = new Set(state.problems.map((problem) => problem.domain));
+  document.querySelectorAll('[data-domain]').forEach((button) => {
+    const domain = button.dataset.domain;
+    button.hidden = !['all', 'review'].includes(domain) && !available.has(domain);
+  });
 }
 
 async function initialize() {
@@ -442,6 +489,7 @@ async function initialize() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     state.problems = data.problems;
+    updateDomainNavigation();
     renderProblemList();
     const requested = new URL(location.href).searchParams.get('problem');
     const initial = state.problems.find((problem) => problem.id === requested) ??
@@ -463,8 +511,8 @@ elements.search.addEventListener('input', () => {
   renderProblemList();
 });
 
-document.querySelectorAll('[data-track]').forEach((button) => {
-  button.addEventListener('click', () => setTrack(button.dataset.track));
+document.querySelectorAll('[data-domain]').forEach((button) => {
+  button.addEventListener('click', () => setDomain(button.dataset.domain));
 });
 
 document.querySelectorAll('[data-difficulty]').forEach((button) => {

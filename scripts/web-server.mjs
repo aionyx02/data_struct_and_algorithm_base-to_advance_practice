@@ -156,6 +156,15 @@ function requireNumber(value, field, file) {
   return value;
 }
 
+export function domainFor(stage, track) {
+  if (stage === 'M' || track === 'math') return 'mathematics';
+  if (stage === 'G' || track === 'algorithm' || track === 'algorithms') return 'algorithms';
+  if (stage === 'F' || stage === 'A' || track === 'foundation' || track === 'advanced') {
+    return 'data-structures';
+  }
+  return 'other';
+}
+
 export async function loadCatalog(projectRoot) {
   const problemsRoot = path.join(projectRoot, 'problems');
   const files = await findProblemFiles(problemsRoot);
@@ -167,12 +176,15 @@ export async function loadCatalog(projectRoot) {
     if (id !== path.basename(directory)) {
       throw new Error(`${file}: id must match its directory name`);
     }
+    const stage = requireString(metadata.stage, 'stage', file);
+    const track = relative[0] ?? '';
     return {
       id,
       title: requireString(metadata.title, 'title', file),
-      stage: requireString(metadata.stage, 'stage', file),
+      stage,
       difficulty: requireString(metadata.difficulty, 'difficulty', file),
-      track: relative[0] ?? '',
+      domain: domainFor(stage, track),
+      track,
       topic: relative[1] ?? '',
       judgeMode: requireString(metadata.judge_mode, 'judge_mode', file),
       timeLimitMs: requireNumber(metadata.time_limit_ms, 'time_limit_ms', file),

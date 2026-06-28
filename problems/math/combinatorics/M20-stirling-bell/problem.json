@@ -1,0 +1,16 @@
+{
+  "id": "M20-stirling-bell",
+  "title": "Stirling Numbers and Bell Numbers",
+  "stage": "M",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 3000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(N^2) precomputation, O(N) for Bell and O(1) otherwise",
+  "expected_space": "O(N^2)",
+  "forbidden_symbols": [],
+  "random_tests": 100,
+  "operation_limit": 16,
+  "tests_directory": "tests"
+}

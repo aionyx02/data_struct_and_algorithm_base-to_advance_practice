@@ -21,5 +21,8 @@ void registerTreeQueryGenerators(CaseGeneratorRegistry& registry);
 void registerStringIndexGenerators(CaseGeneratorRegistry& registry);
 void registerSpecializedGenerators(CaseGeneratorRegistry& registry);
 void registerNumberTheoryGenerators(CaseGeneratorRegistry& registry);
+void registerCombinatoricsGenerators(CaseGeneratorRegistry& registry);
+void registerGeneratingFunctionGenerators(CaseGeneratorRegistry& registry);
+void registerLinearAlgebraGenerators(CaseGeneratorRegistry& registry);
 
 }  // namespace judge::generators

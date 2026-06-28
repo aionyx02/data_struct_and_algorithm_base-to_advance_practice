@@ -1,0 +1,9 @@
+8
+onto 10 5
+onto 20 7
+onto 100 13
+onto 123456789 17
+derangement 20
+derangement 100
+derangement 1000
+derangement 12345

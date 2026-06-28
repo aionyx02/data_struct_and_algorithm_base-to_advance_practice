@@ -1,0 +1,16 @@
+{
+  "id": "M25-egf-cycle-restrictions",
+  "title": "EGF Permutations with Restricted Cycles",
+  "stage": "M",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 2500,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(nm) per query after factorial precomputation",
+  "expected_space": "O(n)",
+  "forbidden_symbols": [],
+  "random_tests": 100,
+  "operation_limit": 16,
+  "tests_directory": "tests"
+}

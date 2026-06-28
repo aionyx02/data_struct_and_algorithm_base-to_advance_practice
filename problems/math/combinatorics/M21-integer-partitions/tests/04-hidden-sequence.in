@@ -1,0 +1,9 @@
+8
+partition 50
+partition 100
+partition 500
+partition 1000
+distinct 50
+distinct 100
+distinct 500
+distinct 1000

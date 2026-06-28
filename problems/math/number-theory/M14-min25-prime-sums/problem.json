@@ -1,0 +1,16 @@
+{
+  "id": "M14-min25-prime-sums",
+  "title": "Min_25 Prime Counting and Prime Sums",
+  "stage": "M",
+  "difficulty": "D5",
+  "judge_mode": "stdio",
+  "time_limit_ms": 5000,
+  "memory_limit_mb": 128,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(n^(3/4) / log n) per distinct n using Min_25 quotient states",
+  "expected_space": "O(sqrt n)",
+  "forbidden_symbols": [],
+  "random_tests": 100,
+  "operation_limit": 12,
+  "tests_directory": "tests"
+}
