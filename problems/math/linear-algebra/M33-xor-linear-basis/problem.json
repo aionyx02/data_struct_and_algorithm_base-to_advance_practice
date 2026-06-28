@@ -1,0 +1,16 @@
+{
+  "id": "M33-xor-linear-basis",
+  "title": "XOR Linear Basis Queries",
+  "stage": "M",
+  "difficulty": "D3",
+  "judge_mode": "stdio",
+  "time_limit_ms": 3000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(n log A) per query",
+  "expected_space": "O(log A)",
+  "forbidden_symbols": ["std::pow"],
+  "random_tests": 100,
+  "operation_limit": 12,
+  "tests_directory": "tests"
+}

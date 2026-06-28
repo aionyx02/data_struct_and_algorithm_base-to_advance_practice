@@ -209,6 +209,87 @@ Matrix randomInvertibleMatrix(std::mt19937_64& random, int size) {
     return matrix;
 }
 
+ll determinantMod(Matrix matrix) {
+    const int size = static_cast<int>(matrix.size());
+    ll answer = 1;
+    for (int column = 0; column < size; ++column) {
+        int selected = -1;
+        for (int row = column; row < size; ++row) {
+            if (matrix[row][column] != 0) {
+                selected = row;
+                break;
+            }
+        }
+        if (selected == -1) return 0;
+        if (selected != column) {
+            std::swap(matrix[column], matrix[selected]);
+            answer = normalize(-answer);
+        }
+        answer = multiplyMod(answer, matrix[column][column]);
+        const ll inverse = inverseMod(matrix[column][column]);
+        for (int row = column + 1; row < size; ++row) {
+            if (matrix[row][column] == 0) continue;
+            const ll factor = multiplyMod(matrix[row][column], inverse);
+            for (int current = column; current < size; ++current) {
+                matrix[row][current] = normalize(
+                    matrix[row][current] - multiplyMod(factor, matrix[column][current])
+                );
+            }
+        }
+    }
+    return answer;
+}
+
+bool invertMatrix(Matrix matrix, Matrix& inverse) {
+    const int size = static_cast<int>(matrix.size());
+    Matrix augmented(size, std::vector<ll>(2 * size, 0));
+    for (int row = 0; row < size; ++row) {
+        for (int column = 0; column < size; ++column) {
+            augmented[row][column] = normalize(matrix[row][column]);
+        }
+        augmented[row][size + row] = 1;
+    }
+
+    int rank = 0;
+    for (int column = 0; column < size; ++column) {
+        int selected = -1;
+        for (int row = rank; row < size; ++row) {
+            if (augmented[row][column] != 0) {
+                selected = row;
+                break;
+            }
+        }
+        if (selected == -1) return false;
+        std::swap(augmented[rank], augmented[selected]);
+        const ll inversePivot = inverseMod(augmented[rank][column]);
+        for (int current = column; current < 2 * size; ++current) {
+            augmented[rank][current] = multiplyMod(augmented[rank][current], inversePivot);
+        }
+        for (int row = 0; row < size; ++row) {
+            if (row == rank || augmented[row][column] == 0) continue;
+            const ll factor = augmented[row][column];
+            for (int current = column; current < 2 * size; ++current) {
+                augmented[row][current] = normalize(
+                    augmented[row][current] - multiplyMod(factor, augmented[rank][current])
+                );
+            }
+        }
+        ++rank;
+    }
+
+    inverse.assign(size, std::vector<ll>(size, 0));
+    for (int row = 0; row < size; ++row) {
+        for (int column = 0; column < size; ++column) {
+            inverse[row][column] = augmented[row][size + column];
+        }
+    }
+    return true;
+}
+
+void appendMatrix(std::ostringstream& out, const Matrix& matrix) {
+    for (const auto& row : matrix) appendVector(out, row);
+}
+
 GeneratedCase generateGaussianElimination(std::mt19937_64& random, int operationCount) {
     if (operationCount < 3) {
         throw std::runtime_error("M28-gaussian-elimination-mod operation_limit is too small");
@@ -280,6 +361,138 @@ GeneratedCase generateMatrixPowerVector(std::mt19937_64& random, int operationCo
         for (const auto& row : matrix) appendVector(in, row);
         appendVector(in, vector);
         appendVector(out, matrixPowerVector(matrix, exponent, vector));
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateModularDeterminant(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M31-modular-determinant operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        const int size = randomInt(random, 1, 6);
+        Matrix matrix = randomInvertibleMatrix(random, size);
+        if (query % 3 == 1 && size > 1) {
+            matrix[size - 1] = matrix[0];
+        } else if (query % 3 == 2 && size > 1) {
+            matrix[0][0] = 0;
+            matrix[1][0] = randomInt(random, 1, 10);
+        }
+        in << "det " << size << '\n';
+        appendMatrix(in, matrix);
+        out << determinantMod(matrix) << '\n';
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateMatrixInverse(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M32-matrix-inverse-mod operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        const int size = randomInt(random, 1, 5);
+        Matrix matrix = randomInvertibleMatrix(random, size);
+        if (query % 3 == 1 && size > 1) {
+            matrix[size - 1] = matrix[0];
+        } else if (query % 3 == 2 && size > 1) {
+            matrix[0][0] = 0;
+            matrix[1][0] = randomInt(random, 1, 10);
+        }
+        in << "inverse " << size << '\n';
+        appendMatrix(in, matrix);
+        Matrix inverse;
+        if (!invertMatrix(matrix, inverse)) {
+            out << "SINGULAR\n";
+        } else {
+            appendMatrix(out, inverse);
+        }
+    }
+    return {in.str(), out.str()};
+}
+
+struct XorBasisAnswer {
+    int rank = 0;
+    ll maximum = 0;
+    bool representable = false;
+};
+
+XorBasisAnswer solveXorBasis(const std::vector<ll>& values, ll target) {
+    std::vector<ll> basis(61, 0);
+    for (ll value : values) {
+        ll current = value;
+        for (int bit = 60; bit >= 0; --bit) {
+            if (((current >> bit) & 1LL) == 0) continue;
+            if (basis[bit] == 0) {
+                basis[bit] = current;
+                break;
+            }
+            current ^= basis[bit];
+        }
+    }
+    int rank = 0;
+    for (ll value : basis) {
+        if (value != 0) ++rank;
+    }
+    ll maximum = 0;
+    for (int bit = 60; bit >= 0; --bit) {
+        maximum = std::max(maximum, maximum ^ basis[bit]);
+    }
+    ll reducedTarget = target;
+    for (int bit = 60; bit >= 0; --bit) {
+        if (((reducedTarget >> bit) & 1LL) != 0) reducedTarget ^= basis[bit];
+    }
+    return {rank, maximum, reducedTarget == 0};
+}
+
+void appendRawXorVector(std::ostringstream& out, const std::vector<ll>& values) {
+    for (std::size_t index = 0; index < values.size(); ++index) {
+        if (index != 0) out << ' ';
+        out << values[index];
+    }
+    out << '\n';
+}
+
+GeneratedCase generateXorLinearBasis(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 4) {
+        throw std::runtime_error("M33-xor-linear-basis operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        const int count = randomInt(random, 1, 16);
+        std::vector<ll> values;
+        values.reserve(count);
+        for (int index = 0; index < count; ++index) {
+            const ll high = static_cast<ll>(randomInt(random, 0, 1 << 20));
+            const ll low = static_cast<ll>(randomInt(random, 0, 1 << 20));
+            values.push_back((high << 30) ^ low);
+        }
+        if (query % 3 == 0 && count >= 3) {
+            values[2] = values[0] ^ values[1];
+        }
+        ll target = 0;
+        if (query % 4 == 0) {
+            target = 0;
+        } else if (query % 2 == 0) {
+            for (ll value : values) {
+                if (randomInt(random, 0, 1) == 1) target ^= value;
+            }
+        } else {
+            target = (static_cast<ll>(randomInt(random, 0, 1 << 20)) << 30)
+                ^ static_cast<ll>(randomInt(random, 0, 1 << 20));
+        }
+        in << "basis " << values.size() << ' ' << target << '\n';
+        appendRawXorVector(in, values);
+        const XorBasisAnswer answer = solveXorBasis(values, target);
+        out << answer.rank << ' ' << answer.maximum << ' '
+            << (answer.representable ? "YES" : "NO") << '\n';
     }
     return {in.str(), out.str()};
 }
@@ -385,6 +598,9 @@ void registerLinearAlgebraGenerators(CaseGeneratorRegistry& registry) {
     registry.emplace("M28-gaussian-elimination-mod", generateGaussianElimination);
     registry.emplace("M29-matrix-power-vector", generateMatrixPowerVector);
     registry.emplace("M30-berlekamp-massey", generateBerlekampMassey);
+    registry.emplace("M31-modular-determinant", generateModularDeterminant);
+    registry.emplace("M32-matrix-inverse-mod", generateMatrixInverse);
+    registry.emplace("M33-xor-linear-basis", generateXorLinearBasis);
 }
 
 }  // namespace judge::generators

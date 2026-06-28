@@ -14,9 +14,9 @@ owner: project
 - TASK.CURRICULUM.020 — Implement M-series mathematics Judge family (stage M).
   Owner: shawn. Status: in progress. Stages M1 (M01-M06), M2 (M07-M09), M3
   (M10-M15), the M4 core (M16-M21), and the M5 generating-function core
-  (M22-M27), plus the M6 linear-algebra seed (M28-M30), complete, all green
-  (953/953). Next: continue M6 determinant / inverse / linear basis coverage or
-  start the G-series algorithm track.
+  (M22-M27), plus the M6 linear-algebra core (M28-M33), complete, all green
+  (974/974). Next: continue M6 Matrix-Tree / BEST-style coverage or start the
+  G-series algorithm track.
 
 ## Strategy
 

@@ -24,7 +24,7 @@ owner: project
 - Active priority: extend the algorithm and mathematics curriculum on the stable
   Judge and product layers.
 - Current phase: the read-only Web workspace is complete. `npm run web` serves
-  the 162-problem catalog, statements, progress, review state, and browser-local
+  the 165-problem catalog, statements, progress, review state, and browser-local
   drafts through a loopback-only native Web UI. Desktop panes are resizable,
   and a bounded syntax-only compile check returns local compiler diagnostics.
 - Current owner / handoff state: `TASK.CURRICULUM.020` is active with `shawn`.
@@ -44,27 +44,28 @@ owner: project
   Stirling / Bell, and integer partitions), and the M5 core (M22-M27: rational
   OGF recurrence coefficients, Lagrange inversion, Newton identities, restricted
   cycle EGFs, formal composition, and FPS exp / log), plus the M6 linear-algebra
-  seed (M28-M30: modular Gaussian elimination, matrix power vector application,
-  and Berlekamp-Massey sequence prediction) are complete. Continue M6 with
-  determinant / inverse / linear basis coverage, or start the G-series algorithm
-  track; both fall under `TASK.CURRICULUM.020`.
+  core (M28-M33: modular Gaussian elimination, matrix power vector application,
+  Berlekamp-Massey sequence prediction, determinant, matrix inverse, and XOR
+  linear basis) are complete. Continue M6 with Matrix-Tree / BEST-style coverage
+  or start the G-series algorithm track; both fall under `TASK.CURRICULUM.020`.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-28.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and
-  `ctest --preset dev -j 3 --output-on-failure`.
-- Result: 953 CTest tests, including thirty M-series mathematics problems
-  (M01-M30) with catalog/judge/stress coverage and the statically linked progress
-  repository round-trip. The latest full run was 953/953 at parallelism 3; a
+  `ctest --preset dev -j 2 --output-on-failure`.
+- Result: 974 CTest tests, including thirty-three M-series mathematics problems
+  (M01-M33) with catalog/judge/stress coverage and the statically linked progress
+  repository round-trip. The latest full run was 974/974 at parallelism 2; a
   pre-existing parallel-load TLE flake on A54 link-cut-tree and the
   rehashing-linear-probing / dynamic-sparse-segment-tree stress remains possible
   at higher parallelism and is untouched by M-series.
-- Judge runtime self-check: catalog tests enumerate all 162 problems (132 DS +
-  M01-M30 mathematics). Correct submissions verdict `AC`, known-wrong `WA`
-  on both fixed tests and differential stress. M28-M30 stress oracles cover
-  modular row reduction, matrix exponentiation, and linear recurrence prediction
-  independently of the optimized reference fixtures.
+- Judge runtime self-check: catalog tests enumerate all 165 problems (132 DS +
+  M01-M33 mathematics). Correct submissions verdict `AC`, known-wrong `WA`
+  on both fixed tests and differential stress. M28-M33 stress oracles cover
+  modular row reduction, matrix exponentiation, linear recurrence prediction,
+  determinants, inverses, and XOR linear basis behavior independently of the
+  optimized reference fixtures.
   Broken sources verdict `CE`, null
   dereference `RE`, infinite loop `TLE`, and out-of-root sources are refused by
   the project-root boundary. Stress differential testing returns `AC`/`WA`.
