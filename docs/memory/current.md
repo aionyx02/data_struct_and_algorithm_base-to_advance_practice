@@ -24,7 +24,7 @@ owner: project
 - Active priority: extend the algorithm and mathematics curriculum on the stable
   Judge and product layers.
 - Current phase: the read-only Web workspace is complete. `npm run web` serves
-  the 168-problem catalog, statements, progress, review state, and browser-local
+  the 171-problem catalog, statements, progress, review state, and browser-local
   drafts through a loopback-only native Web UI. Desktop panes are resizable,
   and a bounded syntax-only compile check returns local compiler diagnostics.
 - Current owner / handoff state: `TASK.CURRICULUM.020` is active with `shawn`.
@@ -44,30 +44,32 @@ owner: project
   Stirling / Bell, and integer partitions), and the M5 core (M22-M27: rational
   OGF recurrence coefficients, Lagrange inversion, Newton identities, restricted
   cycle EGFs, formal composition, and FPS exp / log), plus the M6 linear-algebra
-  core (M28-M36: modular Gaussian elimination, matrix power vector application,
+  core (M28-M39: modular Gaussian elimination, matrix power vector application,
   Berlekamp-Massey sequence prediction, determinant, matrix inverse, XOR linear
-  basis, undirected Matrix-Tree, directed arborescences, and BEST theorem counts)
-  are complete. Continue M6 with further algebraic graph counting if useful, or
+  basis, undirected Matrix-Tree, directed arborescences, BEST theorem counts,
+  characteristic polynomials, trace powers, and determinant-lemma queries) are
+  complete. Continue M6 with further linear-algebra applications if useful, or
   start the G-series algorithm track; both fall under `TASK.CURRICULUM.020`.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-28.
 - Last test commands: `cmake --preset dev`, `cmake --build --preset dev`,
-  targeted M34-M36 CTest, full CTest attempts, isolated reruns of transient DS
-  failures, and `npm test`.
-- Result: targeted M34-M36 CTest passed, including Matrix-Tree, directed
-  arborescence, and BEST theorem fixed/judge/stress coverage. Full CTest now
-  enumerates 995 tests; two full-suite attempts reached 994/995 because existing
-  DS tests (`judge_rejects_id_neighbor_threads`, then
-  `judge_accepts_row_major_tensor`) failed once and passed in isolation.
-- Judge runtime self-check: catalog tests enumerate all 168 problems (132 DS +
-  M01-M36 mathematics). Correct submissions verdict `AC`, known-wrong `WA`
-  on both fixed tests and differential stress. M28-M36 stress oracles cover
+  targeted M37-M39 CTest, full CTest, isolated reruns of transient DS failures,
+  and `npm test`.
+- Result: targeted M37-M39 CTest passed 21/21, including characteristic
+  polynomial, Cayley-Hamilton trace power, and determinant-lemma fixed/judge/
+  stress coverage. Full CTest now enumerates 1016 tests and reached 1011/1016
+  because existing DS tests failed once under full-suite load; all five passed
+  when rerun in isolation.
+- Judge runtime self-check: catalog tests enumerate all 171 problems (132 DS +
+  M01-M39 mathematics). Correct submissions verdict `AC`, known-wrong `WA`
+  on both fixed tests and differential stress. M28-M39 stress oracles cover
   modular row reduction, matrix exponentiation, linear recurrence prediction,
   determinants, inverses, XOR linear basis behavior, Matrix-Tree cofactors,
-  directed Laplacian orientation, and BEST theorem factorial factors
-  independently of the optimized reference fixtures.
+  directed Laplacian orientation, BEST theorem factorial factors, characteristic
+  polynomial coefficient order/sign, trace-power edge cases, and independent
+  rank-one determinant updates independently of the optimized reference fixtures.
   Broken sources verdict `CE`, null
   dereference `RE`, infinite loop `TLE`, and out-of-root sources are refused by
   the project-root boundary. Stress differential testing returns `AC`/`WA`.

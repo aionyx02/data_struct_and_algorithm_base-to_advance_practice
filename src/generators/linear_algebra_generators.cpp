@@ -16,6 +16,8 @@ using ll = long long;
 using Matrix = std::vector<std::vector<ll>>;
 constexpr ll kMod = 1'000'000'007;
 
+Matrix identityMatrix(int size);
+
 ll normalize(ll value) {
     value %= kMod;
     if (value < 0) value += kMod;
@@ -69,16 +71,19 @@ Matrix multiplyMatrices(const Matrix& left, const Matrix& right) {
     return result;
 }
 
-std::vector<ll> matrixPowerVector(Matrix base, std::uint64_t exponent, std::vector<ll> vector) {
+Matrix matrixPower(Matrix base, std::uint64_t exponent) {
     const int size = static_cast<int>(base.size());
-    Matrix result(size, std::vector<ll>(size, 0));
-    for (int index = 0; index < size; ++index) result[index][index] = 1;
+    Matrix result = identityMatrix(size);
     while (exponent > 0) {
         if (exponent & 1) result = multiplyMatrices(result, base);
         base = multiplyMatrices(base, base);
         exponent >>= 1;
     }
-    return multiplyMatrixVector(result, vector);
+    return result;
+}
+
+std::vector<ll> matrixPowerVector(Matrix base, std::uint64_t exponent, std::vector<ll> vector) {
+    return multiplyMatrixVector(matrixPower(base, exponent), vector);
 }
 
 void appendVector(std::ostringstream& out, const std::vector<ll>& values) {
@@ -685,6 +690,171 @@ GeneratedCase generateBestTheoremCount(std::mt19937_64& random, int operationCou
     return {in.str(), out.str()};
 }
 
+std::vector<ll> multiplyPolynomialsByLinear(
+    const std::vector<ll>& polynomial,
+    ll constant,
+    ll linear
+) {
+    std::vector<ll> result(polynomial.size() + 1, 0);
+    for (std::size_t degree = 0; degree < polynomial.size(); ++degree) {
+        result[degree] = (result[degree]
+            + multiplyMod(polynomial[degree], constant)) % kMod;
+        result[degree + 1] = (result[degree + 1]
+            + multiplyMod(polynomial[degree], linear)) % kMod;
+    }
+    return result;
+}
+
+std::vector<ll> interpolateAtConsecutivePoints(const std::vector<ll>& values) {
+    const int count = static_cast<int>(values.size());
+    std::vector<ll> coefficients(count, 0);
+    for (int point = 0; point < count; ++point) {
+        std::vector<ll> basis{1};
+        ll denominator = 1;
+        for (int other = 0; other < count; ++other) {
+            if (other == point) continue;
+            basis = multiplyPolynomialsByLinear(basis, normalize(-other), 1);
+            denominator = multiplyMod(denominator, normalize(point - other));
+        }
+        const ll scale = multiplyMod(values[point], inverseMod(denominator));
+        for (int degree = 0; degree < count; ++degree) {
+            coefficients[degree] = (coefficients[degree]
+                + multiplyMod(scale, basis[degree])) % kMod;
+        }
+    }
+    return coefficients;
+}
+
+std::vector<ll> characteristicPolynomial(const Matrix& matrix) {
+    const int size = static_cast<int>(matrix.size());
+    std::vector<ll> values(size + 1, 0);
+    for (int point = 0; point <= size; ++point) {
+        Matrix shifted(size, std::vector<ll>(size, 0));
+        for (int row = 0; row < size; ++row) {
+            for (int column = 0; column < size; ++column) {
+                shifted[row][column] = normalize(-matrix[row][column]);
+            }
+            shifted[row][row] = normalize(shifted[row][row] + point);
+        }
+        values[point] = determinantMod(shifted);
+    }
+    return interpolateAtConsecutivePoints(values);
+}
+
+ll traceMatrix(const Matrix& matrix) {
+    ll answer = 0;
+    for (int index = 0; index < static_cast<int>(matrix.size()); ++index) {
+        answer = (answer + matrix[index][index]) % kMod;
+    }
+    return answer;
+}
+
+ll determinantRankOneUpdate(
+    const Matrix& matrix,
+    const std::vector<ll>& left,
+    const std::vector<ll>& right
+) {
+    Matrix inverse;
+    if (!invertMatrix(matrix, inverse)) return determinantMod(matrix);
+    const std::vector<ll> transformed = multiplyMatrixVector(inverse, left);
+    ll dot = 0;
+    for (int index = 0; index < static_cast<int>(right.size()); ++index) {
+        dot = (dot + multiplyMod(right[index], transformed[index])) % kMod;
+    }
+    return multiplyMod(determinantMod(matrix), normalize(1 + dot));
+}
+
+GeneratedCase generateCharacteristicPolynomial(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M37-characteristic-polynomial operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        const int size = randomInt(random, 1, 6);
+        Matrix matrix(size, std::vector<ll>(size, 0));
+        for (auto& row : matrix) {
+            for (ll& value : row) value = randomInt(random, 0, 9);
+        }
+        if (query % 5 == 1) {
+            matrix.assign(size, std::vector<ll>(size, 0));
+            for (int index = 0; index < size; ++index) matrix[index][index] = index + 1;
+        } else if (query % 5 == 2 && size > 1) {
+            matrix.assign(size, std::vector<ll>(size, 0));
+            for (int index = 0; index + 1 < size; ++index) matrix[index][index + 1] = 1;
+        }
+        in << "char " << size << '\n';
+        appendMatrix(in, matrix);
+        const std::vector<ll> coefficients = characteristicPolynomial(matrix);
+        for (int degree = size; degree >= 0; --degree) {
+            if (degree != size) out << ' ';
+            out << coefficients[degree];
+        }
+        out << '\n';
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateCayleyHamiltonTrace(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M38-cayley-hamilton-trace operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        const int size = randomInt(random, 1, 5);
+        std::uint64_t exponent = static_cast<std::uint64_t>(randomInt(random, 0, 80));
+        if (query % 5 == 0) exponent = 0;
+        if (query % 7 == 0) exponent = 1'000'000'000'000ULL + static_cast<std::uint64_t>(query);
+        Matrix matrix(size, std::vector<ll>(size, 0));
+        for (auto& row : matrix) {
+            for (ll& value : row) value = randomInt(random, 0, 8);
+        }
+        if (query % 4 == 1 && size > 1) {
+            matrix[0][1] = (matrix[0][1] + 3) % kMod;
+            matrix[1][0] = (matrix[1][0] + 5) % kMod;
+        }
+        in << "trace " << size << ' ' << exponent << '\n';
+        appendMatrix(in, matrix);
+        out << traceMatrix(matrixPower(matrix, exponent)) << '\n';
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateDeterminantLemma(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M39-determinant-lemma operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        const int size = randomInt(random, 1, 5);
+        const int updateCount = randomInt(random, 1, 4);
+        Matrix matrix = randomInvertibleMatrix(random, size);
+        in << "lemma " << size << ' ' << updateCount << '\n';
+        appendMatrix(in, matrix);
+        for (int update = 0; update < updateCount; ++update) {
+            std::vector<ll> left(size, 0);
+            std::vector<ll> right(size, 0);
+            for (ll& value : left) value = randomInt(random, 0, 9);
+            for (ll& value : right) value = randomInt(random, 0, 9);
+            if (query % 4 == 1 && update == 0 && size > 1) {
+                left[0] = 1;
+                left[1] = 2;
+                right[0] = 3;
+                right[1] = 4;
+            }
+            appendVector(in, left);
+            appendVector(in, right);
+            out << determinantRankOneUpdate(matrix, left, right) << '\n';
+        }
+    }
+    return {in.str(), out.str()};
+}
+
 std::vector<ll> combineRecurrencePolynomials(
     const std::vector<ll>& left,
     const std::vector<ll>& right,
@@ -792,6 +962,9 @@ void registerLinearAlgebraGenerators(CaseGeneratorRegistry& registry) {
     registry.emplace("M34-undirected-matrix-tree", generateUndirectedMatrixTree);
     registry.emplace("M35-directed-arborescence", generateDirectedArborescence);
     registry.emplace("M36-best-theorem-count", generateBestTheoremCount);
+    registry.emplace("M37-characteristic-polynomial", generateCharacteristicPolynomial);
+    registry.emplace("M38-cayley-hamilton-trace", generateCayleyHamiltonTrace);
+    registry.emplace("M39-determinant-lemma", generateDeterminantLemma);
 }
 
 }  // namespace judge::generators
