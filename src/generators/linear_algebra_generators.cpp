@@ -497,6 +497,194 @@ GeneratedCase generateXorLinearBasis(std::mt19937_64& random, int operationCount
     return {in.str(), out.str()};
 }
 
+struct WeightedEdge {
+    int from = 0;
+    int to = 0;
+    ll weight = 0;
+};
+
+Matrix cofactorWithoutRoot(const Matrix& laplacian, int root) {
+    const int size = static_cast<int>(laplacian.size());
+    Matrix cofactor;
+    cofactor.reserve(std::max(0, size - 1));
+    for (int row = 0; row < size; ++row) {
+        if (row == root) continue;
+        std::vector<ll> current;
+        current.reserve(std::max(0, size - 1));
+        for (int column = 0; column < size; ++column) {
+            if (column == root) continue;
+            current.push_back(laplacian[row][column]);
+        }
+        cofactor.push_back(current);
+    }
+    return cofactor;
+}
+
+ll undirectedSpanningTreeCount(int vertexCount, const std::vector<WeightedEdge>& edges) {
+    if (vertexCount == 1) return 1;
+    Matrix laplacian(vertexCount, std::vector<ll>(vertexCount, 0));
+    for (const WeightedEdge& edge : edges) {
+        const int from = edge.from;
+        const int to = edge.to;
+        const ll weight = normalize(edge.weight);
+        laplacian[from][from] = (laplacian[from][from] + weight) % kMod;
+        laplacian[to][to] = (laplacian[to][to] + weight) % kMod;
+        laplacian[from][to] = normalize(laplacian[from][to] - weight);
+        laplacian[to][from] = normalize(laplacian[to][from] - weight);
+    }
+    return determinantMod(cofactorWithoutRoot(laplacian, vertexCount - 1));
+}
+
+ll directedArborescenceCount(
+    int vertexCount,
+    int root,
+    const std::vector<WeightedEdge>& edges
+) {
+    if (vertexCount == 1) return 1;
+    Matrix laplacian(vertexCount, std::vector<ll>(vertexCount, 0));
+    for (const WeightedEdge& edge : edges) {
+        const int from = edge.from;
+        const int to = edge.to;
+        const ll weight = normalize(edge.weight);
+        laplacian[from][from] = (laplacian[from][from] + weight) % kMod;
+        laplacian[from][to] = normalize(laplacian[from][to] - weight);
+    }
+    return determinantMod(cofactorWithoutRoot(laplacian, root));
+}
+
+GeneratedCase generateUndirectedMatrixTree(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M34-undirected-matrix-tree operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        const int vertexCount = randomInt(random, 1, 7);
+        std::vector<WeightedEdge> edges;
+        if (vertexCount > 1 && query % 4 != 1) {
+            for (int vertex = 1; vertex < vertexCount; ++vertex) {
+                edges.push_back({vertex - 1, vertex, randomInt(random, 1, 9)});
+            }
+        }
+        const int extraEdges = randomInt(random, 0, vertexCount + 2);
+        for (int edge = 0; edge < extraEdges && vertexCount > 1; ++edge) {
+            int from = randomInt(random, 0, vertexCount - 1);
+            int to = randomInt(random, 0, vertexCount - 1);
+            while (to == from) to = randomInt(random, 0, vertexCount - 1);
+            edges.push_back({from, to, randomInt(random, 1, 9)});
+        }
+        in << "tree " << vertexCount << ' ' << edges.size() << '\n';
+        for (const WeightedEdge& edge : edges) {
+            in << edge.from + 1 << ' ' << edge.to + 1 << ' ' << edge.weight << '\n';
+        }
+        out << undirectedSpanningTreeCount(vertexCount, edges) << '\n';
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateDirectedArborescence(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M35-directed-arborescence operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        const int vertexCount = randomInt(random, 1, 7);
+        const int root = randomInt(random, 0, vertexCount - 1);
+        std::vector<WeightedEdge> edges;
+        for (int vertex = 0; vertex < vertexCount; ++vertex) {
+            if (vertex == root) continue;
+            edges.push_back({vertex, root, randomInt(random, 1, 7)});
+            if (vertexCount > 2 && randomInt(random, 0, 1) == 1) {
+                int via = randomInt(random, 0, vertexCount - 1);
+                while (via == vertex) via = randomInt(random, 0, vertexCount - 1);
+                edges.push_back({vertex, via, randomInt(random, 1, 7)});
+            }
+        }
+        if (query % 4 == 1 && vertexCount > 1) {
+            edges.clear();
+            for (int vertex = 0; vertex < vertexCount; ++vertex) {
+                if (vertex != root) edges.push_back({root, vertex, 1});
+            }
+        }
+        in << "arborescence " << vertexCount << ' ' << edges.size()
+           << ' ' << root + 1 << '\n';
+        for (const WeightedEdge& edge : edges) {
+            in << edge.from + 1 << ' ' << edge.to + 1 << ' ' << edge.weight << '\n';
+        }
+        out << directedArborescenceCount(vertexCount, root, edges) << '\n';
+    }
+    return {in.str(), out.str()};
+}
+
+ll bestTheoremCount(int vertexCount, int root, const std::vector<WeightedEdge>& edges) {
+    std::vector<int> inDegree(vertexCount, 0);
+    std::vector<int> outDegree(vertexCount, 0);
+    for (const WeightedEdge& edge : edges) {
+        ++outDegree[edge.from];
+        ++inDegree[edge.to];
+    }
+    if (inDegree != outDegree) return 0;
+    const ll treeCount = directedArborescenceCount(vertexCount, root, edges);
+    if (treeCount == 0) return 0;
+    int maximumDegree = 0;
+    for (int degree : outDegree) maximumDegree = std::max(maximumDegree, degree);
+    std::vector<ll> factorial(maximumDegree + 1, 1);
+    for (int value = 1; value <= maximumDegree; ++value) {
+        factorial[value] = multiplyMod(factorial[value - 1], value);
+    }
+    ll answer = treeCount;
+    for (int degree : outDegree) {
+        answer = multiplyMod(answer, factorial[std::max(0, degree - 1)]);
+    }
+    return answer;
+}
+
+GeneratedCase generateBestTheoremCount(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M36-best-theorem-count operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        const int vertexCount = randomInt(random, 1, 7);
+        const int root = randomInt(random, 0, vertexCount - 1);
+        std::vector<WeightedEdge> edges;
+        if (vertexCount > 1) {
+            for (int vertex = 0; vertex < vertexCount; ++vertex) {
+                edges.push_back({vertex, (vertex + 1) % vertexCount, 1});
+            }
+            const int extraCycles = randomInt(random, 0, 3);
+            for (int cycle = 0; cycle < extraCycles; ++cycle) {
+                int a = randomInt(random, 0, vertexCount - 1);
+                int b = randomInt(random, 0, vertexCount - 1);
+                while (b == a) b = randomInt(random, 0, vertexCount - 1);
+                edges.push_back({a, b, 1});
+                edges.push_back({b, a, 1});
+            }
+        }
+        if (query % 5 == 1 && vertexCount > 1) {
+            edges.push_back({root, (root + 1) % vertexCount, 1});
+        }
+        if (query % 5 == 2 && vertexCount > 3) {
+            edges.clear();
+            edges.push_back({0, 1, 1});
+            edges.push_back({1, 0, 1});
+            edges.push_back({2, 3, 1});
+            edges.push_back({3, 2, 1});
+        }
+        in << "best " << vertexCount << ' ' << edges.size() << ' ' << root + 1 << '\n';
+        for (const WeightedEdge& edge : edges) {
+            in << edge.from + 1 << ' ' << edge.to + 1 << '\n';
+        }
+        out << bestTheoremCount(vertexCount, root, edges) << '\n';
+    }
+    return {in.str(), out.str()};
+}
+
 std::vector<ll> combineRecurrencePolynomials(
     const std::vector<ll>& left,
     const std::vector<ll>& right,
@@ -601,6 +789,9 @@ void registerLinearAlgebraGenerators(CaseGeneratorRegistry& registry) {
     registry.emplace("M31-modular-determinant", generateModularDeterminant);
     registry.emplace("M32-matrix-inverse-mod", generateMatrixInverse);
     registry.emplace("M33-xor-linear-basis", generateXorLinearBasis);
+    registry.emplace("M34-undirected-matrix-tree", generateUndirectedMatrixTree);
+    registry.emplace("M35-directed-arborescence", generateDirectedArborescence);
+    registry.emplace("M36-best-theorem-count", generateBestTheoremCount);
 }
 
 }  // namespace judge::generators

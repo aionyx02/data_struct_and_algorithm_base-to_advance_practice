@@ -1,0 +1,16 @@
+{
+  "id": "M36-best-theorem-count",
+  "title": "BEST Theorem Euler Circuit Count",
+  "stage": "M",
+  "difficulty": "D5",
+  "judge_mode": "stdio",
+  "time_limit_ms": 3000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(n^3 + m) per graph",
+  "expected_space": "O(n^2)",
+  "forbidden_symbols": ["std::pow"],
+  "random_tests": 100,
+  "operation_limit": 10,
+  "tests_directory": "tests"
+}

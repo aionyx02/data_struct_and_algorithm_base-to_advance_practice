@@ -24,7 +24,7 @@ owner: project
 - Active priority: extend the algorithm and mathematics curriculum on the stable
   Judge and product layers.
 - Current phase: the read-only Web workspace is complete. `npm run web` serves
-  the 165-problem catalog, statements, progress, review state, and browser-local
+  the 168-problem catalog, statements, progress, review state, and browser-local
   drafts through a loopback-only native Web UI. Desktop panes are resizable,
   and a bounded syntax-only compile check returns local compiler diagnostics.
 - Current owner / handoff state: `TASK.CURRICULUM.020` is active with `shawn`.
@@ -44,28 +44,30 @@ owner: project
   Stirling / Bell, and integer partitions), and the M5 core (M22-M27: rational
   OGF recurrence coefficients, Lagrange inversion, Newton identities, restricted
   cycle EGFs, formal composition, and FPS exp / log), plus the M6 linear-algebra
-  core (M28-M33: modular Gaussian elimination, matrix power vector application,
-  Berlekamp-Massey sequence prediction, determinant, matrix inverse, and XOR
-  linear basis) are complete. Continue M6 with Matrix-Tree / BEST-style coverage
-  or start the G-series algorithm track; both fall under `TASK.CURRICULUM.020`.
+  core (M28-M36: modular Gaussian elimination, matrix power vector application,
+  Berlekamp-Massey sequence prediction, determinant, matrix inverse, XOR linear
+  basis, undirected Matrix-Tree, directed arborescences, and BEST theorem counts)
+  are complete. Continue M6 with further algebraic graph counting if useful, or
+  start the G-series algorithm track; both fall under `TASK.CURRICULUM.020`.
 
 ## Last Validation Snapshot
 
 - Last C++ validation: 2026-06-28.
-- Last test commands: `cmake --preset dev`, `cmake --build --preset dev`, and
-  `ctest --preset dev -j 2 --output-on-failure`.
-- Result: 974 CTest tests, including thirty-three M-series mathematics problems
-  (M01-M33) with catalog/judge/stress coverage and the statically linked progress
-  repository round-trip. The latest full run was 974/974 at parallelism 2; a
-  pre-existing parallel-load TLE flake on A54 link-cut-tree and the
-  rehashing-linear-probing / dynamic-sparse-segment-tree stress remains possible
-  at higher parallelism and is untouched by M-series.
-- Judge runtime self-check: catalog tests enumerate all 165 problems (132 DS +
-  M01-M33 mathematics). Correct submissions verdict `AC`, known-wrong `WA`
-  on both fixed tests and differential stress. M28-M33 stress oracles cover
+- Last test commands: `cmake --preset dev`, `cmake --build --preset dev`,
+  targeted M34-M36 CTest, full CTest attempts, isolated reruns of transient DS
+  failures, and `npm test`.
+- Result: targeted M34-M36 CTest passed, including Matrix-Tree, directed
+  arborescence, and BEST theorem fixed/judge/stress coverage. Full CTest now
+  enumerates 995 tests; two full-suite attempts reached 994/995 because existing
+  DS tests (`judge_rejects_id_neighbor_threads`, then
+  `judge_accepts_row_major_tensor`) failed once and passed in isolation.
+- Judge runtime self-check: catalog tests enumerate all 168 problems (132 DS +
+  M01-M36 mathematics). Correct submissions verdict `AC`, known-wrong `WA`
+  on both fixed tests and differential stress. M28-M36 stress oracles cover
   modular row reduction, matrix exponentiation, linear recurrence prediction,
-  determinants, inverses, and XOR linear basis behavior independently of the
-  optimized reference fixtures.
+  determinants, inverses, XOR linear basis behavior, Matrix-Tree cofactors,
+  directed Laplacian orientation, and BEST theorem factorial factors
+  independently of the optimized reference fixtures.
   Broken sources verdict `CE`, null
   dereference `RE`, infinite loop `TLE`, and out-of-root sources are refused by
   the project-root boundary. Stress differential testing returns `AC`/`WA`.
@@ -74,4 +76,5 @@ owner: project
   Writes remain atomic; no source code or diagnostics are persisted.
 - Web validation: 17/17 Node tests passed; localhost browser checks covered the
   domain-aware catalog and mathematics / number-theory filtering.
-- Known failing checks: none.
+- Known deterministic failing checks: none. Existing full-suite DS transients
+  remain possible and are tracked separately from the M-series work.

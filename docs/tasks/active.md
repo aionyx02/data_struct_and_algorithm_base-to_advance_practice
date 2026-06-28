@@ -14,9 +14,11 @@ owner: project
 - TASK.CURRICULUM.020 — Implement M-series mathematics Judge family (stage M).
   Owner: shawn. Status: in progress. Stages M1 (M01-M06), M2 (M07-M09), M3
   (M10-M15), the M4 core (M16-M21), and the M5 generating-function core
-  (M22-M27), plus the M6 linear-algebra core (M28-M33), complete, all green
-  (974/974). Next: continue M6 Matrix-Tree / BEST-style coverage or start the
-  G-series algorithm track.
+  (M22-M27), plus the M6 linear-algebra core through Matrix-Tree / BEST theorem
+  coverage (M28-M36), complete. Targeted M34-M36 CTest and Node tests are green;
+  full CTest attempts reached 994/995 only because existing DS transients failed
+  once and passed in isolation. Next: continue M6 with further algebraic graph
+  counting if useful, or start the G-series algorithm track.
 
 ## Strategy
 
