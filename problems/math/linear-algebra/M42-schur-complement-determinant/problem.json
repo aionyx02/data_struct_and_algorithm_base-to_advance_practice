@@ -1,0 +1,16 @@
+{
+  "id": "M42-schur-complement-determinant",
+  "title": "Schur Complement Determinant",
+  "stage": "M",
+  "difficulty": "D4",
+  "judge_mode": "stdio",
+  "time_limit_ms": 3000,
+  "memory_limit_mb": 64,
+  "output_limit_bytes": 65536,
+  "expected_time": "O(n^3 + q(n^2k + k^3)) per batch",
+  "expected_space": "O(n^2 + k^2)",
+  "forbidden_symbols": ["std::pow"],
+  "random_tests": 100,
+  "operation_limit": 10,
+  "tests_directory": "tests"
+}

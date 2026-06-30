@@ -56,6 +56,19 @@ std::vector<ll> multiplyMatrixVector(const Matrix& matrix, const std::vector<ll>
     return result;
 }
 
+std::vector<ll> multiplyRectVector(const Matrix& matrix, const std::vector<ll>& vector) {
+    const int rowCount = static_cast<int>(matrix.size());
+    const int columnCount = static_cast<int>(matrix.front().size());
+    std::vector<ll> result(rowCount, 0);
+    for (int row = 0; row < rowCount; ++row) {
+        for (int column = 0; column < columnCount; ++column) {
+            result[row] = (result[row]
+                + multiplyMod(matrix[row][column], vector[column])) % kMod;
+        }
+    }
+    return result;
+}
+
 Matrix multiplyMatrices(const Matrix& left, const Matrix& right) {
     const int size = static_cast<int>(left.size());
     Matrix result(size, std::vector<ll>(size, 0));
@@ -63,6 +76,22 @@ Matrix multiplyMatrices(const Matrix& left, const Matrix& right) {
         for (int middle = 0; middle < size; ++middle) {
             if (left[row][middle] == 0) continue;
             for (int column = 0; column < size; ++column) {
+                result[row][column] = (result[row][column]
+                    + multiplyMod(left[row][middle], right[middle][column])) % kMod;
+            }
+        }
+    }
+    return result;
+}
+
+Matrix multiplySquareByRect(const Matrix& left, const Matrix& right) {
+    const int rowCount = static_cast<int>(left.size());
+    const int columnCount = static_cast<int>(right.front().size());
+    Matrix result(rowCount, std::vector<ll>(columnCount, 0));
+    for (int row = 0; row < rowCount; ++row) {
+        for (int middle = 0; middle < rowCount; ++middle) {
+            if (left[row][middle] == 0) continue;
+            for (int column = 0; column < columnCount; ++column) {
                 result[row][column] = (result[row][column]
                     + multiplyMod(left[row][middle], right[middle][column])) % kMod;
             }
@@ -243,6 +272,42 @@ ll determinantMod(Matrix matrix) {
         }
     }
     return answer;
+}
+
+int matrixRank(Matrix matrix) {
+    if (matrix.empty()) return 0;
+    const int rowCount = static_cast<int>(matrix.size());
+    const int columnCount = static_cast<int>(matrix.front().size());
+    for (auto& row : matrix) {
+        for (ll& value : row) value = normalize(value);
+    }
+    int rank = 0;
+    for (int column = 0; column < columnCount && rank < rowCount; ++column) {
+        int selected = -1;
+        for (int row = rank; row < rowCount; ++row) {
+            if (matrix[row][column] != 0) {
+                selected = row;
+                break;
+            }
+        }
+        if (selected == -1) continue;
+        std::swap(matrix[rank], matrix[selected]);
+        const ll inversePivot = inverseMod(matrix[rank][column]);
+        for (int current = column; current < columnCount; ++current) {
+            matrix[rank][current] = multiplyMod(matrix[rank][current], inversePivot);
+        }
+        for (int row = 0; row < rowCount; ++row) {
+            if (row == rank || matrix[row][column] == 0) continue;
+            const ll factor = matrix[row][column];
+            for (int current = column; current < columnCount; ++current) {
+                matrix[row][current] = normalize(
+                    matrix[row][current] - multiplyMod(factor, matrix[rank][current])
+                );
+            }
+        }
+        ++rank;
+    }
+    return rank;
 }
 
 bool invertMatrix(Matrix matrix, Matrix& inverse) {
@@ -749,6 +814,14 @@ ll traceMatrix(const Matrix& matrix) {
     return answer;
 }
 
+ll dotVectors(const std::vector<ll>& left, const std::vector<ll>& right) {
+    ll answer = 0;
+    for (int index = 0; index < static_cast<int>(left.size()); ++index) {
+        answer = (answer + multiplyMod(left[index], right[index])) % kMod;
+    }
+    return answer;
+}
+
 ll determinantRankOneUpdate(
     const Matrix& matrix,
     const std::vector<ll>& left,
@@ -757,11 +830,236 @@ ll determinantRankOneUpdate(
     Matrix inverse;
     if (!invertMatrix(matrix, inverse)) return determinantMod(matrix);
     const std::vector<ll> transformed = multiplyMatrixVector(inverse, left);
-    ll dot = 0;
-    for (int index = 0; index < static_cast<int>(right.size()); ++index) {
-        dot = (dot + multiplyMod(right[index], transformed[index])) % kMod;
-    }
+    const ll dot = dotVectors(right, transformed);
     return multiplyMod(determinantMod(matrix), normalize(1 + dot));
+}
+
+std::vector<ll> solveShermanMorrison(
+    const Matrix& matrix,
+    const std::vector<ll>& left,
+    const std::vector<ll>& right,
+    const std::vector<ll>& rhs
+) {
+    Matrix inverse;
+    invertMatrix(matrix, inverse);
+    const std::vector<ll> base = multiplyMatrixVector(inverse, rhs);
+    const std::vector<ll> direction = multiplyMatrixVector(inverse, left);
+    const ll denominator = normalize(1 + dotVectors(right, direction));
+    const ll scale = multiplyMod(dotVectors(right, base), inverseMod(denominator));
+    std::vector<ll> answer = base;
+    for (int index = 0; index < static_cast<int>(answer.size()); ++index) {
+        answer[index] = normalize(answer[index] - multiplyMod(direction[index], scale));
+    }
+    return answer;
+}
+
+std::vector<ll> multiplyTransposedRectVector(
+    const Matrix& matrix,
+    const std::vector<ll>& vector
+) {
+    const int rowCount = static_cast<int>(matrix.size());
+    const int columnCount = static_cast<int>(matrix.front().size());
+    std::vector<ll> result(columnCount, 0);
+    for (int row = 0; row < rowCount; ++row) {
+        for (int column = 0; column < columnCount; ++column) {
+            result[column] = (result[column]
+                + multiplyMod(matrix[row][column], vector[row])) % kMod;
+        }
+    }
+    return result;
+}
+
+Matrix woodburyCore(const Matrix& inverse, const Matrix& left, const Matrix& right) {
+    const Matrix directions = multiplySquareByRect(inverse, left);
+    const int size = static_cast<int>(inverse.size());
+    const int rank = static_cast<int>(left.front().size());
+    Matrix core(rank, std::vector<ll>(rank, 0));
+    for (int row = 0; row < rank; ++row) {
+        for (int column = 0; column < rank; ++column) {
+            ll value = row == column ? 1 : 0;
+            for (int index = 0; index < size; ++index) {
+                value = (value
+                    + multiplyMod(right[index][row], directions[index][column])) % kMod;
+            }
+            core[row][column] = value;
+        }
+    }
+    return core;
+}
+
+std::vector<ll> solveWoodburyLowRank(
+    const Matrix& matrix,
+    const Matrix& left,
+    const Matrix& right,
+    const std::vector<ll>& rhs
+) {
+    Matrix inverse;
+    invertMatrix(matrix, inverse);
+    const Matrix directions = multiplySquareByRect(inverse, left);
+    const Matrix core = woodburyCore(inverse, left, right);
+    Matrix coreInverse;
+    invertMatrix(core, coreInverse);
+    const std::vector<ll> base = multiplyMatrixVector(inverse, rhs);
+    const std::vector<ll> projected = multiplyTransposedRectVector(right, base);
+    const std::vector<ll> weights = multiplyMatrixVector(coreInverse, projected);
+    std::vector<ll> answer = base;
+    const int size = static_cast<int>(matrix.size());
+    const int rank = static_cast<int>(left.front().size());
+    for (int row = 0; row < size; ++row) {
+        ll correction = 0;
+        for (int column = 0; column < rank; ++column) {
+            correction = (correction
+                + multiplyMod(directions[row][column], weights[column])) % kMod;
+        }
+        answer[row] = normalize(answer[row] - correction);
+    }
+    return answer;
+}
+
+ll determinantWoodbury(const Matrix& matrix, const Matrix& left, const Matrix& right) {
+    Matrix inverse;
+    invertMatrix(matrix, inverse);
+    const Matrix transformed = multiplySquareByRect(inverse, left);
+    const int size = static_cast<int>(matrix.size());
+    const int rank = static_cast<int>(left.front().size());
+    Matrix core(rank, std::vector<ll>(rank, 0));
+    for (int row = 0; row < rank; ++row) {
+        for (int column = 0; column < rank; ++column) {
+            ll value = row == column ? 1 : 0;
+            for (int index = 0; index < size; ++index) {
+                value = (value
+                    + multiplyMod(right[index][row], transformed[index][column])) % kMod;
+            }
+            core[row][column] = value;
+        }
+    }
+    return multiplyMod(determinantMod(matrix), determinantMod(core));
+}
+
+ll determinantSchurComplement(
+    const Matrix& matrix,
+    const Matrix& upperRight,
+    const Matrix& lowerLeft,
+    const Matrix& lowerRight
+) {
+    Matrix inverse;
+    invertMatrix(matrix, inverse);
+    const Matrix transformed = multiplySquareByRect(inverse, upperRight);
+    const int size = static_cast<int>(matrix.size());
+    const int blockSize = static_cast<int>(lowerRight.size());
+    Matrix complement = lowerRight;
+    for (int row = 0; row < blockSize; ++row) {
+        for (int column = 0; column < blockSize; ++column) {
+            ll correction = 0;
+            for (int index = 0; index < size; ++index) {
+                correction = (correction
+                    + multiplyMod(lowerLeft[row][index], transformed[index][column])) % kMod;
+            }
+            complement[row][column] = normalize(complement[row][column] - correction);
+        }
+    }
+    return multiplyMod(determinantMod(matrix), determinantMod(complement));
+}
+
+int rankSchurComplement(
+    const Matrix& matrix,
+    const Matrix& upperRight,
+    const Matrix& lowerLeft,
+    const Matrix& lowerRight
+) {
+    Matrix inverse;
+    invertMatrix(matrix, inverse);
+    const Matrix transformed = multiplySquareByRect(inverse, upperRight);
+    const int size = static_cast<int>(matrix.size());
+    const int blockSize = static_cast<int>(lowerRight.size());
+    Matrix complement = lowerRight;
+    for (int row = 0; row < blockSize; ++row) {
+        for (int column = 0; column < blockSize; ++column) {
+            ll correction = 0;
+            for (int index = 0; index < size; ++index) {
+                correction = (correction
+                    + multiplyMod(lowerLeft[row][index], transformed[index][column])) % kMod;
+            }
+            complement[row][column] = normalize(complement[row][column] - correction);
+        }
+    }
+    return size + matrixRank(complement);
+}
+
+std::vector<ll> solveSchurComplement(
+    const Matrix& matrix,
+    const Matrix& upperRight,
+    const Matrix& lowerLeft,
+    const Matrix& lowerRight,
+    const std::vector<ll>& upperRhs,
+    const std::vector<ll>& lowerRhs
+) {
+    Matrix inverse;
+    invertMatrix(matrix, inverse);
+    const Matrix transformed = multiplySquareByRect(inverse, upperRight);
+    const int size = static_cast<int>(matrix.size());
+    const int blockSize = static_cast<int>(lowerRight.size());
+    Matrix complement = lowerRight;
+    for (int row = 0; row < blockSize; ++row) {
+        for (int column = 0; column < blockSize; ++column) {
+            ll correction = 0;
+            for (int index = 0; index < size; ++index) {
+                correction = (correction
+                    + multiplyMod(lowerLeft[row][index], transformed[index][column])) % kMod;
+            }
+            complement[row][column] = normalize(complement[row][column] - correction);
+        }
+    }
+    Matrix complementInverse;
+    invertMatrix(complement, complementInverse);
+    const std::vector<ll> baseUpper = multiplyMatrixVector(inverse, upperRhs);
+    const std::vector<ll> projection = multiplyRectVector(lowerLeft, baseUpper);
+    std::vector<ll> reducedRhs(blockSize, 0);
+    for (int row = 0; row < blockSize; ++row) {
+        reducedRhs[row] = normalize(lowerRhs[row] - projection[row]);
+    }
+    const std::vector<ll> lowerSolution = multiplyMatrixVector(complementInverse, reducedRhs);
+    const std::vector<ll> upperCorrection =
+        multiplyMatrixVector(inverse, multiplyRectVector(upperRight, lowerSolution));
+    std::vector<ll> answer = baseUpper;
+    for (int index = 0; index < size; ++index) {
+        answer[index] = normalize(answer[index] - upperCorrection[index]);
+    }
+    answer.insert(answer.end(), lowerSolution.begin(), lowerSolution.end());
+    return answer;
+}
+
+Matrix inverseSchurComplement(
+    const Matrix& matrix,
+    const Matrix& upperRight,
+    const Matrix& lowerLeft,
+    const Matrix& lowerRight
+) {
+    const int size = static_cast<int>(matrix.size());
+    const int blockSize = static_cast<int>(lowerRight.size());
+    const int totalSize = size + blockSize;
+    Matrix inverse(totalSize, std::vector<ll>(totalSize, 0));
+    for (int column = 0; column < totalSize; ++column) {
+        std::vector<ll> upperRhs(size, 0);
+        std::vector<ll> lowerRhs(blockSize, 0);
+        if (column < size) {
+            upperRhs[column] = 1;
+        } else {
+            lowerRhs[column - size] = 1;
+        }
+        const std::vector<ll> solution = solveSchurComplement(
+            matrix,
+            upperRight,
+            lowerLeft,
+            lowerRight,
+            upperRhs,
+            lowerRhs
+        );
+        for (int row = 0; row < totalSize; ++row) {
+            inverse[row][column] = solution[row];
+        }
+    }
+    return inverse;
 }
 
 GeneratedCase generateCharacteristicPolynomial(std::mt19937_64& random, int operationCount) {
@@ -850,6 +1148,483 @@ GeneratedCase generateDeterminantLemma(std::mt19937_64& random, int operationCou
             appendVector(in, left);
             appendVector(in, right);
             out << determinantRankOneUpdate(matrix, left, right) << '\n';
+        }
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateShermanMorrisonSolve(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M40-sherman-morrison-solve operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        int size = randomInt(random, 1, 5);
+        if (query % 4 <= 1) size = std::max(size, 2);
+        const int updateCount = randomInt(random, 1, 4);
+        Matrix matrix = randomInvertibleMatrix(random, size);
+        if (query % 4 == 0) {
+            matrix = identityMatrix(size);
+            matrix[0][1] = 2;
+        } else if (query % 4 == 1) {
+            matrix = identityMatrix(size);
+        }
+        Matrix inverse;
+        invertMatrix(matrix, inverse);
+        in << "solve " << size << ' ' << updateCount << '\n';
+        appendMatrix(in, matrix);
+        for (int update = 0; update < updateCount; ++update) {
+            std::vector<ll> left(size, 0);
+            std::vector<ll> right(size, 0);
+            std::vector<ll> rhs(size, 0);
+            ll denominator = 0;
+            for (int attempt = 0; attempt < 100 && denominator == 0; ++attempt) {
+                for (ll& value : left) value = randomInt(random, 0, 9);
+                for (ll& value : right) value = randomInt(random, 0, 9);
+                for (ll& value : rhs) value = randomInt(random, 0, 12);
+                if (query % 4 == 0 && update == 0) {
+                    left[0] = 1;
+                    left[1] = 3;
+                    right[0] = 4;
+                    right[1] = 5;
+                    rhs[0] = 7;
+                    rhs[1] = 11;
+                } else if (query % 4 == 1 && update == 0) {
+                    left[0] = 1;
+                    left[1] = 1;
+                    right[0] = 1;
+                    right[1] = 0;
+                    rhs[0] = 4;
+                    rhs[1] = 6;
+                }
+                denominator = normalize(
+                    1 + dotVectors(right, multiplyMatrixVector(inverse, left))
+                );
+            }
+            if (denominator == 0) {
+                left.assign(size, 0);
+                right.assign(size, 0);
+                rhs.assign(size, 1);
+            }
+            appendVector(in, left);
+            appendVector(in, right);
+            appendVector(in, rhs);
+            appendVector(out, solveShermanMorrison(matrix, left, right, rhs));
+        }
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateWoodburyDeterminant(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M41-woodbury-determinant operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        int size = randomInt(random, 2, 5);
+        int rank = randomInt(random, 1, std::min(3, size));
+        const int updateCount = randomInt(random, 1, 4);
+        Matrix matrix = randomInvertibleMatrix(random, size);
+        if (query % 4 == 0) {
+            size = 2;
+            rank = 2;
+            matrix = {{2, 1}, {0, 3}};
+        } else if (query % 4 == 1) {
+            size = 2;
+            rank = 1;
+            matrix = {{1, 2}, {0, 1}};
+        }
+        in << "woodbury " << size << ' ' << rank << ' ' << updateCount << '\n';
+        appendMatrix(in, matrix);
+        for (int update = 0; update < updateCount; ++update) {
+            Matrix left(size, std::vector<ll>(rank, 0));
+            Matrix right(size, std::vector<ll>(rank, 0));
+            for (auto& row : left) {
+                for (ll& value : row) value = randomInt(random, 0, 9);
+            }
+            for (auto& row : right) {
+                for (ll& value : row) value = randomInt(random, 0, 9);
+            }
+            if (query % 4 == 0 && update == 0) {
+                left = {{1, 0}, {0, 1}};
+                right = {{1, 2}, {3, 4}};
+            } else if (query % 4 == 1 && update == 0) {
+                left = {{1}, {3}};
+                right = {{4}, {5}};
+            }
+            appendMatrix(in, left);
+            appendMatrix(in, right);
+            out << determinantWoodbury(matrix, left, right) << '\n';
+        }
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateSchurComplementDeterminant(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M42-schur-complement-determinant operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        int size = randomInt(random, 1, 5);
+        int blockSize = randomInt(random, 1, std::min(3, size));
+        const int updateCount = randomInt(random, 1, 4);
+        Matrix matrix = randomInvertibleMatrix(random, size);
+        if (query % 4 == 0) {
+            size = 2;
+            blockSize = 2;
+            matrix = {{2, 1}, {0, 3}};
+        } else if (query % 4 == 1) {
+            size = 2;
+            blockSize = 1;
+            matrix = {{1, 2}, {0, 1}};
+        }
+        in << "schur " << size << ' ' << blockSize << ' ' << updateCount << '\n';
+        appendMatrix(in, matrix);
+        for (int update = 0; update < updateCount; ++update) {
+            Matrix upperRight(size, std::vector<ll>(blockSize, 0));
+            Matrix lowerLeft(blockSize, std::vector<ll>(size, 0));
+            Matrix lowerRight(blockSize, std::vector<ll>(blockSize, 0));
+            for (auto& row : upperRight) {
+                for (ll& value : row) value = randomInt(random, 0, 9);
+            }
+            for (auto& row : lowerLeft) {
+                for (ll& value : row) value = randomInt(random, 0, 9);
+            }
+            for (auto& row : lowerRight) {
+                for (ll& value : row) value = randomInt(random, 0, 9);
+            }
+            if (query % 4 == 0 && update == 0) {
+                upperRight = {{1, 0}, {0, 1}};
+                lowerLeft = {{1, 2}, {3, 4}};
+                lowerRight = {{7, 1}, {2, 6}};
+            } else if (query % 4 == 1 && update == 0) {
+                upperRight = {{1}, {3}};
+                lowerLeft = {{4, 5}};
+                lowerRight = {{6}};
+            }
+            appendMatrix(in, upperRight);
+            appendMatrix(in, lowerLeft);
+            appendMatrix(in, lowerRight);
+            out << determinantSchurComplement(
+                matrix,
+                upperRight,
+                lowerLeft,
+                lowerRight
+            ) << '\n';
+        }
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateWoodburySolve(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M43-woodbury-solve operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        int size = randomInt(random, 2, 5);
+        int rank = randomInt(random, 1, std::min(3, size));
+        const int updateCount = randomInt(random, 1, 4);
+        Matrix matrix = randomInvertibleMatrix(random, size);
+        if (query % 4 == 0) {
+            size = 2;
+            rank = 2;
+            matrix = {{2, 1}, {0, 3}};
+        } else if (query % 4 == 1) {
+            size = 2;
+            rank = 1;
+            matrix = {{1, 2}, {0, 1}};
+        }
+        Matrix inverse;
+        invertMatrix(matrix, inverse);
+        in << "woodsolve " << size << ' ' << rank << ' ' << updateCount << '\n';
+        appendMatrix(in, matrix);
+        for (int update = 0; update < updateCount; ++update) {
+            Matrix left(size, std::vector<ll>(rank, 0));
+            Matrix right(size, std::vector<ll>(rank, 0));
+            std::vector<ll> rhs(size, 0);
+            bool invertibleCore = false;
+            for (int attempt = 0; attempt < 100 && !invertibleCore; ++attempt) {
+                for (auto& row : left) {
+                    for (ll& value : row) value = randomInt(random, 0, 9);
+                }
+                for (auto& row : right) {
+                    for (ll& value : row) value = randomInt(random, 0, 9);
+                }
+                for (ll& value : rhs) value = randomInt(random, 0, 12);
+                if (query % 4 == 0 && update == 0) {
+                    left = {{1, 0}, {0, 1}};
+                    right = {{1, 2}, {3, 4}};
+                    rhs = {7, 11};
+                } else if (query % 4 == 1 && update == 0) {
+                    left = {{1}, {3}};
+                    right = {{4}, {5}};
+                    rhs = {6, 7};
+                }
+                Matrix coreInverse;
+                invertibleCore = invertMatrix(woodburyCore(inverse, left, right), coreInverse);
+            }
+            if (!invertibleCore) {
+                left.assign(size, std::vector<ll>(rank, 0));
+                right.assign(size, std::vector<ll>(rank, 0));
+                rhs.assign(size, 1);
+            }
+            appendMatrix(in, left);
+            appendMatrix(in, right);
+            appendVector(in, rhs);
+            appendVector(out, solveWoodburyLowRank(matrix, left, right, rhs));
+        }
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateSchurComplementSolve(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M44-schur-complement-solve operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        int size = randomInt(random, 1, 5);
+        int blockSize = randomInt(random, 1, std::min(3, size));
+        const int updateCount = randomInt(random, 1, 4);
+        Matrix matrix = randomInvertibleMatrix(random, size);
+        if (query % 4 == 0) {
+            size = 2;
+            blockSize = 2;
+            matrix = {{2, 1}, {0, 3}};
+        } else if (query % 4 == 1) {
+            size = 2;
+            blockSize = 1;
+            matrix = {{1, 2}, {0, 1}};
+        }
+        Matrix inverse;
+        invertMatrix(matrix, inverse);
+        in << "blocksolve " << size << ' ' << blockSize << ' ' << updateCount << '\n';
+        appendMatrix(in, matrix);
+        for (int update = 0; update < updateCount; ++update) {
+            Matrix upperRight(size, std::vector<ll>(blockSize, 0));
+            Matrix lowerLeft(blockSize, std::vector<ll>(size, 0));
+            Matrix lowerRight(blockSize, std::vector<ll>(blockSize, 0));
+            std::vector<ll> upperRhs(size, 0);
+            std::vector<ll> lowerRhs(blockSize, 0);
+            bool invertibleComplement = false;
+            for (int attempt = 0; attempt < 100 && !invertibleComplement; ++attempt) {
+                for (auto& row : upperRight) {
+                    for (ll& value : row) value = randomInt(random, 0, 9);
+                }
+                for (auto& row : lowerLeft) {
+                    for (ll& value : row) value = randomInt(random, 0, 9);
+                }
+                for (auto& row : lowerRight) {
+                    for (ll& value : row) value = randomInt(random, 0, 9);
+                }
+                for (ll& value : upperRhs) value = randomInt(random, 0, 12);
+                for (ll& value : lowerRhs) value = randomInt(random, 0, 12);
+                if (query % 4 == 0 && update == 0) {
+                    upperRight = {{1, 0}, {0, 1}};
+                    lowerLeft = {{1, 2}, {3, 4}};
+                    lowerRight = {{7, 1}, {2, 6}};
+                    upperRhs = {7, 11};
+                    lowerRhs = {5, 8};
+                } else if (query % 4 == 1 && update == 0) {
+                    upperRight = {{1}, {3}};
+                    lowerLeft = {{4, 5}};
+                    lowerRight = {{6}};
+                    upperRhs = {6, 7};
+                    lowerRhs = {8};
+                }
+                Matrix transformed = multiplySquareByRect(inverse, upperRight);
+                Matrix complement = lowerRight;
+                for (int row = 0; row < blockSize; ++row) {
+                    for (int column = 0; column < blockSize; ++column) {
+                        ll correction = 0;
+                        for (int index = 0; index < size; ++index) {
+                            correction = (correction + multiplyMod(
+                                lowerLeft[row][index],
+                                transformed[index][column]
+                            )) % kMod;
+                        }
+                        complement[row][column] = normalize(complement[row][column] - correction);
+                    }
+                }
+                Matrix complementInverse;
+                invertibleComplement = invertMatrix(complement, complementInverse);
+            }
+            if (!invertibleComplement) {
+                upperRight.assign(size, std::vector<ll>(blockSize, 0));
+                lowerLeft.assign(blockSize, std::vector<ll>(size, 0));
+                lowerRight.assign(blockSize, std::vector<ll>(blockSize, 0));
+                for (int index = 0; index < blockSize; ++index) lowerRight[index][index] = 1;
+                upperRhs.assign(size, 1);
+                lowerRhs.assign(blockSize, 1);
+            }
+            appendMatrix(in, upperRight);
+            appendMatrix(in, lowerLeft);
+            appendMatrix(in, lowerRight);
+            appendVector(in, upperRhs);
+            appendVector(in, lowerRhs);
+            appendVector(out, solveSchurComplement(
+                matrix,
+                upperRight,
+                lowerLeft,
+                lowerRight,
+                upperRhs,
+                lowerRhs
+            ));
+        }
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateSchurComplementInverse(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M45-schur-complement-inverse operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        int size = randomInt(random, 1, 5);
+        int blockSize = randomInt(random, 1, std::min(3, size));
+        const int updateCount = randomInt(random, 1, 4);
+        Matrix matrix = randomInvertibleMatrix(random, size);
+        if (query % 4 == 0) {
+            size = 2;
+            blockSize = 2;
+            matrix = {{2, 1}, {0, 3}};
+        } else if (query % 4 == 1) {
+            size = 2;
+            blockSize = 1;
+            matrix = {{1, 2}, {0, 1}};
+        }
+        Matrix inverse;
+        invertMatrix(matrix, inverse);
+        in << "blockinverse " << size << ' ' << blockSize << ' ' << updateCount << '\n';
+        appendMatrix(in, matrix);
+        for (int update = 0; update < updateCount; ++update) {
+            Matrix upperRight(size, std::vector<ll>(blockSize, 0));
+            Matrix lowerLeft(blockSize, std::vector<ll>(size, 0));
+            Matrix lowerRight(blockSize, std::vector<ll>(blockSize, 0));
+            bool invertibleComplement = false;
+            for (int attempt = 0; attempt < 100 && !invertibleComplement; ++attempt) {
+                for (auto& row : upperRight) {
+                    for (ll& value : row) value = randomInt(random, 0, 9);
+                }
+                for (auto& row : lowerLeft) {
+                    for (ll& value : row) value = randomInt(random, 0, 9);
+                }
+                for (auto& row : lowerRight) {
+                    for (ll& value : row) value = randomInt(random, 0, 9);
+                }
+                if (query % 4 == 0 && update == 0) {
+                    upperRight = {{1, 0}, {0, 1}};
+                    lowerLeft = {{1, 2}, {3, 4}};
+                    lowerRight = {{7, 1}, {2, 6}};
+                } else if (query % 4 == 1 && update == 0) {
+                    upperRight = {{1}, {3}};
+                    lowerLeft = {{4, 5}};
+                    lowerRight = {{6}};
+                }
+                Matrix transformed = multiplySquareByRect(inverse, upperRight);
+                Matrix complement = lowerRight;
+                for (int row = 0; row < blockSize; ++row) {
+                    for (int column = 0; column < blockSize; ++column) {
+                        ll correction = 0;
+                        for (int index = 0; index < size; ++index) {
+                            correction = (correction + multiplyMod(
+                                lowerLeft[row][index],
+                                transformed[index][column]
+                            )) % kMod;
+                        }
+                        complement[row][column] = normalize(complement[row][column] - correction);
+                    }
+                }
+                Matrix complementInverse;
+                invertibleComplement = invertMatrix(complement, complementInverse);
+            }
+            if (!invertibleComplement) {
+                upperRight.assign(size, std::vector<ll>(blockSize, 0));
+                lowerLeft.assign(blockSize, std::vector<ll>(size, 0));
+                lowerRight.assign(blockSize, std::vector<ll>(blockSize, 0));
+                for (int index = 0; index < blockSize; ++index) lowerRight[index][index] = 1;
+            }
+            appendMatrix(in, upperRight);
+            appendMatrix(in, lowerLeft);
+            appendMatrix(in, lowerRight);
+            appendMatrix(out, inverseSchurComplement(matrix, upperRight, lowerLeft, lowerRight));
+        }
+    }
+    return {in.str(), out.str()};
+}
+
+GeneratedCase generateSchurComplementRank(std::mt19937_64& random, int operationCount) {
+    if (operationCount < 3) {
+        throw std::runtime_error("M46-schur-complement-rank operation_limit is too small");
+    }
+    std::ostringstream in;
+    std::ostringstream out;
+    in << operationCount << '\n';
+    for (int query = 0; query < operationCount; ++query) {
+        int size = randomInt(random, 1, 5);
+        int blockSize = randomInt(random, 1, 4);
+        const int updateCount = randomInt(random, 1, 4);
+        Matrix matrix = randomInvertibleMatrix(random, size);
+        if (query % 4 == 0) {
+            size = 1;
+            blockSize = 1;
+            matrix = {{1}};
+        } else if (query % 4 == 1) {
+            size = 2;
+            blockSize = 1;
+            matrix = {{1, 2}, {0, 1}};
+        } else if (query % 4 == 2) {
+            size = 1;
+            blockSize = 2;
+            matrix = {{1}};
+        }
+        in << "blockrank " << size << ' ' << blockSize << ' ' << updateCount << '\n';
+        appendMatrix(in, matrix);
+        for (int update = 0; update < updateCount; ++update) {
+            Matrix upperRight(size, std::vector<ll>(blockSize, 0));
+            Matrix lowerLeft(blockSize, std::vector<ll>(size, 0));
+            Matrix lowerRight(blockSize, std::vector<ll>(blockSize, 0));
+            for (auto& row : upperRight) {
+                for (ll& value : row) value = randomInt(random, 0, 9);
+            }
+            for (auto& row : lowerLeft) {
+                for (ll& value : row) value = randomInt(random, 0, 9);
+            }
+            for (auto& row : lowerRight) {
+                for (ll& value : row) value = randomInt(random, 0, 9);
+            }
+            if (query % 4 == 0 && update == 0) {
+                upperRight = {{2}};
+                lowerLeft = {{3}};
+                lowerRight = {{6}};
+            } else if (query % 4 == 1 && update == 0) {
+                upperRight = {{1}, {3}};
+                lowerLeft = {{4, 5}};
+                lowerRight = {{1'000'000'002}};
+            } else if (query % 4 == 2 && update == 0) {
+                upperRight = {{1, 2}};
+                lowerLeft = {{3}, {4}};
+                lowerRight = {{3, 6}, {4, 8}};
+            }
+            appendMatrix(in, upperRight);
+            appendMatrix(in, lowerLeft);
+            appendMatrix(in, lowerRight);
+            out << rankSchurComplement(matrix, upperRight, lowerLeft, lowerRight) << '\n';
         }
     }
     return {in.str(), out.str()};
@@ -965,6 +1740,13 @@ void registerLinearAlgebraGenerators(CaseGeneratorRegistry& registry) {
     registry.emplace("M37-characteristic-polynomial", generateCharacteristicPolynomial);
     registry.emplace("M38-cayley-hamilton-trace", generateCayleyHamiltonTrace);
     registry.emplace("M39-determinant-lemma", generateDeterminantLemma);
+    registry.emplace("M40-sherman-morrison-solve", generateShermanMorrisonSolve);
+    registry.emplace("M41-woodbury-determinant", generateWoodburyDeterminant);
+    registry.emplace("M42-schur-complement-determinant", generateSchurComplementDeterminant);
+    registry.emplace("M43-woodbury-solve", generateWoodburySolve);
+    registry.emplace("M44-schur-complement-solve", generateSchurComplementSolve);
+    registry.emplace("M45-schur-complement-inverse", generateSchurComplementInverse);
+    registry.emplace("M46-schur-complement-rank", generateSchurComplementRank);
 }
 
 }  // namespace judge::generators

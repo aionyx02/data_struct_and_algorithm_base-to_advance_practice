@@ -52,6 +52,22 @@ MpMatrix multiplyMatricesMp(const MpMatrix& left, const MpMatrix& right) {
     return result;
 }
 
+MpMatrix multiplySquareByRectMp(const MpMatrix& left, const MpMatrix& right) {
+    const int rowCount = static_cast<int>(left.size());
+    const int columnCount = static_cast<int>(right.front().size());
+    MpMatrix result(rowCount, std::vector<mp64>(columnCount, 0));
+    for (int row = 0; row < rowCount; ++row) {
+        for (int middle = 0; middle < rowCount; ++middle) {
+            if (left[row][middle] == 0) continue;
+            for (int column = 0; column < columnCount; ++column) {
+                result[row][column] = (result[row][column]
+                    + multiplyMp(left[row][middle], right[middle][column])) % MP_MOD;
+            }
+        }
+    }
+    return result;
+}
+
 MpMatrix matrixPowerMp(MpMatrix base, std::uint64_t exponent) {
     MpMatrix result = identityMp(static_cast<int>(base.size()));
     while (exponent > 0) {
@@ -70,6 +86,22 @@ std::vector<mp64> multiplyMatrixVectorMp(
     std::vector<mp64> result(size, 0);
     for (int row = 0; row < size; ++row) {
         for (int column = 0; column < size; ++column) {
+            result[row] = (result[row]
+                + multiplyMp(matrix[row][column], vector[column])) % MP_MOD;
+        }
+    }
+    return result;
+}
+
+std::vector<mp64> multiplyRectVectorMp(
+    const MpMatrix& matrix,
+    const std::vector<mp64>& vector
+) {
+    const int rowCount = static_cast<int>(matrix.size());
+    const int columnCount = static_cast<int>(matrix.front().size());
+    std::vector<mp64> result(rowCount, 0);
+    for (int row = 0; row < rowCount; ++row) {
+        for (int column = 0; column < columnCount; ++column) {
             result[row] = (result[row]
                 + multiplyMp(matrix[row][column], vector[column])) % MP_MOD;
         }
@@ -106,6 +138,42 @@ mp64 determinantMp(MpMatrix matrix) {
         }
     }
     return answer;
+}
+
+int rankMatrixMp(MpMatrix matrix) {
+    if (matrix.empty()) return 0;
+    const int rowCount = static_cast<int>(matrix.size());
+    const int columnCount = static_cast<int>(matrix.front().size());
+    for (auto& row : matrix) {
+        for (mp64& value : row) value = normalizeMp(value);
+    }
+    int rank = 0;
+    for (int column = 0; column < columnCount && rank < rowCount; ++column) {
+        int selected = -1;
+        for (int row = rank; row < rowCount; ++row) {
+            if (matrix[row][column] != 0) {
+                selected = row;
+                break;
+            }
+        }
+        if (selected == -1) continue;
+        std::swap(matrix[rank], matrix[selected]);
+        const mp64 inversePivot = powerMp(matrix[rank][column], MP_MOD - 2);
+        for (int current = column; current < columnCount; ++current) {
+            matrix[rank][current] = multiplyMp(matrix[rank][current], inversePivot);
+        }
+        for (int row = 0; row < rowCount; ++row) {
+            if (row == rank || matrix[row][column] == 0) continue;
+            const mp64 factor = matrix[row][column];
+            for (int current = column; current < columnCount; ++current) {
+                matrix[row][current] = normalizeMp(
+                    matrix[row][current] - multiplyMp(factor, matrix[rank][current])
+                );
+            }
+        }
+        ++rank;
+    }
+    return rank;
 }
 
 bool invertMatrixMp(MpMatrix matrix, MpMatrix& inverse) {
@@ -254,4 +322,330 @@ mp64 determinantLemmaMp(
         : multiplyMatrixVectorMp(inverse, left);
     const mp64 dot = transposedDot ? dotMp(left, transformed) : dotMp(right, transformed);
     return multiplyMp(determinantMp(matrix), normalizeMp(1 + dot));
+}
+
+std::vector<mp64> solveShermanMorrisonMp(
+    const MpMatrix& matrix,
+    const std::vector<mp64>& left,
+    const std::vector<mp64>& right,
+    const std::vector<mp64>& rhs,
+    bool transposedUpdate,
+    bool omitDenominator
+) {
+    MpMatrix inverse;
+    invertMatrixMp(matrix, inverse);
+    const std::vector<mp64> base = multiplyMatrixVectorMp(inverse, rhs);
+    const std::vector<mp64> direction = transposedUpdate
+        ? multiplyMatrixVectorMp(inverse, right)
+        : multiplyMatrixVectorMp(inverse, left);
+    const std::vector<mp64>& probe = transposedUpdate ? left : right;
+    const mp64 numerator = dotMp(probe, base);
+    const mp64 denominator = normalizeMp(1 + dotMp(probe, direction));
+    const mp64 scale = omitDenominator
+        ? numerator
+        : multiplyMp(numerator, powerMp(denominator, MP_MOD - 2));
+    std::vector<mp64> answer = base;
+    for (int index = 0; index < static_cast<int>(answer.size()); ++index) {
+        answer[index] = normalizeMp(answer[index] - multiplyMp(direction[index], scale));
+    }
+    return answer;
+}
+
+std::vector<mp64> multiplyTransposedRectVectorMp(
+    const MpMatrix& matrix,
+    const std::vector<mp64>& vector
+) {
+    const int rowCount = static_cast<int>(matrix.size());
+    const int columnCount = static_cast<int>(matrix.front().size());
+    std::vector<mp64> result(columnCount, 0);
+    for (int row = 0; row < rowCount; ++row) {
+        for (int column = 0; column < columnCount; ++column) {
+            result[column] = (result[column]
+                + multiplyMp(matrix[row][column], vector[row])) % MP_MOD;
+        }
+    }
+    return result;
+}
+
+std::vector<mp64> solveWoodburyMp(
+    const MpMatrix& matrix,
+    const MpMatrix& left,
+    const MpMatrix& right,
+    const std::vector<mp64>& rhs,
+    bool transposedCore,
+    bool diagonalCore
+) {
+    MpMatrix inverse;
+    invertMatrixMp(matrix, inverse);
+    const MpMatrix directions = transposedCore
+        ? multiplySquareByRectMp(inverse, right)
+        : multiplySquareByRectMp(inverse, left);
+    const MpMatrix& probe = transposedCore ? left : right;
+    const int size = static_cast<int>(matrix.size());
+    const int rank = static_cast<int>(left.front().size());
+    MpMatrix core(rank, std::vector<mp64>(rank, 0));
+    for (int row = 0; row < rank; ++row) {
+        for (int column = 0; column < rank; ++column) {
+            mp64 value = row == column ? 1 : 0;
+            for (int index = 0; index < size; ++index) {
+                value = (value
+                    + multiplyMp(probe[index][row], directions[index][column])) % MP_MOD;
+            }
+            core[row][column] = value;
+        }
+    }
+    const std::vector<mp64> base = multiplyMatrixVectorMp(inverse, rhs);
+    const std::vector<mp64> projected = multiplyTransposedRectVectorMp(probe, base);
+    std::vector<mp64> weights(rank, 0);
+    if (diagonalCore) {
+        for (int index = 0; index < rank; ++index) {
+            weights[index] = multiplyMp(projected[index], powerMp(core[index][index], MP_MOD - 2));
+        }
+    } else {
+        MpMatrix coreInverse;
+        invertMatrixMp(core, coreInverse);
+        weights = multiplyMatrixVectorMp(coreInverse, projected);
+    }
+    std::vector<mp64> answer = base;
+    for (int row = 0; row < size; ++row) {
+        mp64 correction = 0;
+        for (int column = 0; column < rank; ++column) {
+            correction = (correction
+                + multiplyMp(directions[row][column], weights[column])) % MP_MOD;
+        }
+        answer[row] = normalizeMp(answer[row] - correction);
+    }
+    return answer;
+}
+
+mp64 determinantWoodburyMp(
+    const MpMatrix& matrix,
+    const MpMatrix& left,
+    const MpMatrix& right,
+    bool transposedCore,
+    bool diagonalOnly
+) {
+    MpMatrix inverse;
+    invertMatrixMp(matrix, inverse);
+    const MpMatrix transformed = transposedCore
+        ? multiplySquareByRectMp(inverse, right)
+        : multiplySquareByRectMp(inverse, left);
+    const MpMatrix& probe = transposedCore ? left : right;
+    const int size = static_cast<int>(matrix.size());
+    const int rank = static_cast<int>(left.front().size());
+    MpMatrix core(rank, std::vector<mp64>(rank, 0));
+    for (int row = 0; row < rank; ++row) {
+        for (int column = 0; column < rank; ++column) {
+            mp64 value = row == column ? 1 : 0;
+            for (int index = 0; index < size; ++index) {
+                value = (value
+                    + multiplyMp(probe[index][row], transformed[index][column])) % MP_MOD;
+            }
+            core[row][column] = value;
+        }
+    }
+    if (diagonalOnly) {
+        mp64 answer = determinantMp(matrix);
+        for (int index = 0; index < rank; ++index) {
+            answer = multiplyMp(answer, core[index][index]);
+        }
+        return answer;
+    }
+    return multiplyMp(determinantMp(matrix), determinantMp(core));
+}
+
+mp64 determinantSchurComplementMp(
+    const MpMatrix& matrix,
+    const MpMatrix& upperRight,
+    const MpMatrix& lowerLeft,
+    const MpMatrix& lowerRight,
+    bool plusSign,
+    bool transposedProduct
+) {
+    MpMatrix inverse;
+    invertMatrixMp(matrix, inverse);
+    const int size = static_cast<int>(matrix.size());
+    const int blockSize = static_cast<int>(lowerRight.size());
+    MpMatrix transformed;
+    if (transposedProduct) {
+        MpMatrix lowerLeftTranspose(size, std::vector<mp64>(blockSize, 0));
+        for (int row = 0; row < blockSize; ++row) {
+            for (int column = 0; column < size; ++column) {
+                lowerLeftTranspose[column][row] = lowerLeft[row][column];
+            }
+        }
+        transformed = multiplySquareByRectMp(inverse, lowerLeftTranspose);
+    } else {
+        transformed = multiplySquareByRectMp(inverse, upperRight);
+    }
+    MpMatrix complement = lowerRight;
+    for (int row = 0; row < blockSize; ++row) {
+        for (int column = 0; column < blockSize; ++column) {
+            mp64 correction = 0;
+            for (int index = 0; index < size; ++index) {
+                const mp64 probe = transposedProduct
+                    ? upperRight[index][row]
+                    : lowerLeft[row][index];
+                correction = (correction
+                    + multiplyMp(probe, transformed[index][column])) % MP_MOD;
+            }
+            complement[row][column] = plusSign
+                ? normalizeMp(complement[row][column] + correction)
+                : normalizeMp(complement[row][column] - correction);
+        }
+    }
+    return multiplyMp(determinantMp(matrix), determinantMp(complement));
+}
+
+int rankSchurComplementMp(
+    const MpMatrix& matrix,
+    const MpMatrix& upperRight,
+    const MpMatrix& lowerLeft,
+    const MpMatrix& lowerRight,
+    bool plusSign,
+    bool transposedProduct
+) {
+    MpMatrix inverse;
+    invertMatrixMp(matrix, inverse);
+    const int size = static_cast<int>(matrix.size());
+    const int blockSize = static_cast<int>(lowerRight.size());
+    MpMatrix transformed;
+    if (transposedProduct) {
+        MpMatrix lowerLeftTranspose(size, std::vector<mp64>(blockSize, 0));
+        for (int row = 0; row < blockSize; ++row) {
+            for (int column = 0; column < size; ++column) {
+                lowerLeftTranspose[column][row] = lowerLeft[row][column];
+            }
+        }
+        transformed = multiplySquareByRectMp(inverse, lowerLeftTranspose);
+    } else {
+        transformed = multiplySquareByRectMp(inverse, upperRight);
+    }
+    MpMatrix complement = lowerRight;
+    for (int row = 0; row < blockSize; ++row) {
+        for (int column = 0; column < blockSize; ++column) {
+            mp64 correction = 0;
+            for (int index = 0; index < size; ++index) {
+                const mp64 probe = transposedProduct
+                    ? upperRight[index][row]
+                    : lowerLeft[row][index];
+                correction = (correction
+                    + multiplyMp(probe, transformed[index][column])) % MP_MOD;
+            }
+            complement[row][column] = plusSign
+                ? normalizeMp(complement[row][column] + correction)
+                : normalizeMp(complement[row][column] - correction);
+        }
+    }
+    return size + rankMatrixMp(complement);
+}
+
+std::vector<mp64> solveSchurComplementMp(
+    const MpMatrix& matrix,
+    const MpMatrix& upperRight,
+    const MpMatrix& lowerLeft,
+    const MpMatrix& lowerRight,
+    const std::vector<mp64>& upperRhs,
+    const std::vector<mp64>& lowerRhs,
+    bool plusSign,
+    bool transposedProduct
+) {
+    MpMatrix inverse;
+    invertMatrixMp(matrix, inverse);
+    const int size = static_cast<int>(matrix.size());
+    const int blockSize = static_cast<int>(lowerRight.size());
+    const std::vector<mp64> baseUpper = multiplyMatrixVectorMp(inverse, upperRhs);
+    MpMatrix transformed;
+    std::vector<mp64> reducedRhs(blockSize, 0);
+    if (transposedProduct) {
+        MpMatrix lowerLeftTranspose(size, std::vector<mp64>(blockSize, 0));
+        for (int row = 0; row < blockSize; ++row) {
+            for (int column = 0; column < size; ++column) {
+                lowerLeftTranspose[column][row] = lowerLeft[row][column];
+            }
+        }
+        transformed = multiplySquareByRectMp(inverse, lowerLeftTranspose);
+        const std::vector<mp64> transposedProjection =
+            multiplyTransposedRectVectorMp(upperRight, baseUpper);
+        for (int row = 0; row < blockSize; ++row) {
+            reducedRhs[row] = plusSign
+                ? normalizeMp(lowerRhs[row] + transposedProjection[row])
+                : normalizeMp(lowerRhs[row] - transposedProjection[row]);
+        }
+    } else {
+        transformed = multiplySquareByRectMp(inverse, upperRight);
+        const std::vector<mp64> projection = multiplyRectVectorMp(lowerLeft, baseUpper);
+        for (int row = 0; row < blockSize; ++row) {
+            reducedRhs[row] = plusSign
+                ? normalizeMp(lowerRhs[row] + projection[row])
+                : normalizeMp(lowerRhs[row] - projection[row]);
+        }
+    }
+    MpMatrix complement = lowerRight;
+    for (int row = 0; row < blockSize; ++row) {
+        for (int column = 0; column < blockSize; ++column) {
+            mp64 correction = 0;
+            for (int index = 0; index < size; ++index) {
+                const mp64 probe = transposedProduct
+                    ? upperRight[index][row]
+                    : lowerLeft[row][index];
+                correction = (correction
+                    + multiplyMp(probe, transformed[index][column])) % MP_MOD;
+            }
+            complement[row][column] = plusSign
+                ? normalizeMp(complement[row][column] + correction)
+                : normalizeMp(complement[row][column] - correction);
+        }
+    }
+    MpMatrix complementInverse;
+    if (!invertMatrixMp(complement, complementInverse)) {
+        return std::vector<mp64>(size + blockSize, 0);
+    }
+    const std::vector<mp64> lowerSolution =
+        multiplyMatrixVectorMp(complementInverse, reducedRhs);
+    const std::vector<mp64> upperCorrection =
+        multiplyMatrixVectorMp(inverse, multiplyRectVectorMp(upperRight, lowerSolution));
+    std::vector<mp64> answer = baseUpper;
+    for (int index = 0; index < size; ++index) {
+        answer[index] = normalizeMp(answer[index] - upperCorrection[index]);
+    }
+    answer.insert(answer.end(), lowerSolution.begin(), lowerSolution.end());
+    return answer;
+}
+
+MpMatrix inverseSchurComplementMp(
+    const MpMatrix& matrix,
+    const MpMatrix& upperRight,
+    const MpMatrix& lowerLeft,
+    const MpMatrix& lowerRight,
+    bool plusSign,
+    bool transposedProduct
+) {
+    const int size = static_cast<int>(matrix.size());
+    const int blockSize = static_cast<int>(lowerRight.size());
+    const int totalSize = size + blockSize;
+    MpMatrix inverse(totalSize, std::vector<mp64>(totalSize, 0));
+    for (int column = 0; column < totalSize; ++column) {
+        std::vector<mp64> upperRhs(size, 0);
+        std::vector<mp64> lowerRhs(blockSize, 0);
+        if (column < size) {
+            upperRhs[column] = 1;
+        } else {
+            lowerRhs[column - size] = 1;
+        }
+        const std::vector<mp64> solution = solveSchurComplementMp(
+            matrix,
+            upperRight,
+            lowerLeft,
+            lowerRight,
+            upperRhs,
+            lowerRhs,
+            plusSign,
+            transposedProduct
+        );
+        for (int row = 0; row < totalSize; ++row) {
+            inverse[row][column] = solution[row];
+        }
+    }
+    return inverse;
 }
